@@ -172,7 +172,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - **Property 6: Puzzle Matches Configuration**
     - **Validates: Requirements 4.4**
   
-  - [ ] 8.3 Implement SelectWordUseCase
+  - [x] 8.3 Implement SelectWordUseCase
     - Create `src/application/use-cases/SelectWordUseCase.js`
     - Integrate word selection validation and puzzle state updates
     - _Requirements: 6.4, 6.5, 6.6_
