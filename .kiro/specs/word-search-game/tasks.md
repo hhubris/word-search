@@ -36,7 +36,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Create `src/domain/entities/Grid.js` with Grid class and methods
     - _Requirements: 3.6_
   
-  - [ ] 3.2 Create Word entity
+  - [x] 3.2 Create Word entity
     - Create `src/domain/entities/Word.js` with Word class
     - Implement getPositions() method to calculate all cell positions
     - _Requirements: 3.1, 3.2, 3.3_
