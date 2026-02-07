@@ -12,7 +12,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
   - Already complete: React 19, Vite, TanStack Router, TanStack Query, Tailwind CSS v4 installed
 
 - [ ] 2. Create domain layer foundation
-  - [ ] 2.1 Implement core value objects and enums
+  - [x] 2.1 Implement core value objects and enums
     - Create `src/domain/value-objects/Position.js` with Position class
     - Create `src/domain/value-objects/Direction.js` with Direction enum and helper functions
     - Create `src/domain/value-objects/Difficulty.js` with Difficulty enum and DifficultyConfig
