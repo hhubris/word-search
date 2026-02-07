@@ -35,77 +35,98 @@ function HomeScreen() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="max-w-2xl w-full bg-white rounded-2xl shadow-xl p-8">
-        <div className="text-center mb-8">
-          <h1 className="text-5xl font-bold text-indigo-600 mb-2">Word Search</h1>
-          <p className="text-gray-600">Find hidden words in the grid!</p>
+    <div style={{ minHeight: '100vh', padding: '20px', backgroundColor: '#f0f0f0' }}>
+      <div style={{ maxWidth: '800px', margin: '0 auto', backgroundColor: 'white', padding: '40px', borderRadius: '8px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <h1 style={{ fontSize: '48px', color: '#4F46E5', marginBottom: '10px' }}>Word Search</h1>
+          <p style={{ color: '#666' }}>Find hidden words in the grid!</p>
         </div>
 
-        <div className="space-y-6">
-          {/* Category Selection */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-3">
-              Choose a Category
-            </label>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {CATEGORIES.map((cat) => (
-                <button
-                  key={cat.value}
-                  onClick={() => setCategory(cat.value)}
-                  className={`px-4 py-3 rounded-lg font-medium transition-all ${
-                    category === cat.value
-                      ? 'bg-indigo-600 text-white shadow-md'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  {cat.label}
-                </button>
-              ))}
-            </div>
+        <div style={{ marginBottom: '30px' }}>
+          <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '15px' }}>
+            Choose a Category
+          </label>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat.value}
+                onClick={() => setCategory(cat.value)}
+                style={{
+                  padding: '12px',
+                  border: category === cat.value ? '2px solid #4F46E5' : '1px solid #ddd',
+                  backgroundColor: category === cat.value ? '#4F46E5' : 'white',
+                  color: category === cat.value ? 'white' : '#333',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontWeight: category === cat.value ? 'bold' : 'normal',
+                }}
+              >
+                {cat.label}
+              </button>
+            ))}
           </div>
-
-          {/* Difficulty Selection */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-3">
-              Choose Difficulty
-            </label>
-            <div className="space-y-2">
-              {DIFFICULTIES.map((diff) => (
-                <button
-                  key={diff.value}
-                  onClick={() => setDifficulty(diff.value)}
-                  className={`w-full px-6 py-4 rounded-lg text-left transition-all ${
-                    difficulty === diff.value
-                      ? 'bg-indigo-600 text-white shadow-md'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  <div className="font-semibold">{diff.label}</div>
-                  <div className={`text-sm ${difficulty === diff.value ? 'text-indigo-100' : 'text-gray-500'}`}>
-                    {diff.description}
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Start Button */}
-          <button
-            onClick={handleStartGame}
-            className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-4 px-8 rounded-lg text-lg hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl"
-          >
-            Start Game
-          </button>
-
-          {/* High Scores Link */}
-          <button
-            onClick={() => navigate({ to: '/high-scores' })}
-            className="w-full bg-gray-100 text-gray-700 font-semibold py-3 px-6 rounded-lg hover:bg-gray-200 transition-all"
-          >
-            View High Scores
-          </button>
         </div>
+
+        <div style={{ marginBottom: '30px' }}>
+          <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '15px' }}>
+            Choose Difficulty
+          </label>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
+            {DIFFICULTIES.map((diff) => (
+              <button
+                key={diff.value}
+                onClick={() => setDifficulty(diff.value)}
+                style={{
+                  padding: '16px',
+                  border: difficulty === diff.value ? '2px solid #4F46E5' : '1px solid #ddd',
+                  backgroundColor: difficulty === diff.value ? '#4F46E5' : 'white',
+                  color: difficulty === diff.value ? 'white' : '#333',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  textAlign: 'center',
+                }}
+              >
+                <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>{diff.label}</div>
+                <div style={{ fontSize: '12px', opacity: 0.8 }}>{diff.description}</div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <button
+          onClick={handleStartGame}
+          style={{
+            width: '100%',
+            padding: '16px',
+            backgroundColor: '#4F46E5',
+            color: 'white',
+            border: 'none',
+            borderRadius: '6px',
+            fontSize: '18px',
+            fontWeight: 'bold',
+            cursor: 'pointer',
+            marginBottom: '10px',
+          }}
+        >
+          Start Game
+        </button>
+
+        <button
+          onClick={() => navigate({ to: '/high-scores' })}
+          style={{
+            width: '100%',
+            padding: '12px',
+            backgroundColor: '#f0f0f0',
+            color: '#333',
+            border: '1px solid #ddd',
+            borderRadius: '6px',
+            fontSize: '16px',
+            fontWeight: '600',
+            cursor: 'pointer',
+          }}
+        >
+          View High Scores
+        </button>
       </div>
     </div>
   );
