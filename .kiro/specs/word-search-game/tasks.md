@@ -79,7 +79,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - **Property 11: Word Validation**
     - **Validates: Requirements 6.3, 6.4**
   
-  - [ ] 4.3 Create ScoringService
+  - [x] 4.3 Create ScoringService
     - Create `src/domain/services/ScoringService.js`
     - Implement calculateScore() with difficulty multipliers and time bonuses
     - _Requirements: 8.1, 8.2_
