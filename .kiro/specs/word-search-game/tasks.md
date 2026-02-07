@@ -153,7 +153,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - **Property 21: Data Persistence Round Trip (High Scores)**
     - **Validates: Requirements 9.1, 9.2, 9.6, 12.1, 12.3**
   
-  - [ ] 7.6 Implement ThemeRepositoryImpl
+  - [x] 7.6 Implement ThemeRepositoryImpl
     - Create `src/infrastructure/repositories/ThemeRepositoryImpl.js`
     - Implement getTheme() and saveTheme()
     - _Requirements: 10.5, 12.2, 12.4_
