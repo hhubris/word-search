@@ -1,0 +1,17 @@
+[
+  "ocean", "sea", "lake", "river", "stream", "creek", "brook", "pond", "bay", "gulf",
+  "strait", "channel", "sound", "inlet", "cove", "harbor", "port", "marina", "dock", "pier",
+  "mountain", "hill", "peak", "summit", "ridge", "cliff", "canyon", "gorge", "valley", "ravine",
+  "plateau", "mesa", "butte", "plain", "prairie", "steppe", "savanna", "tundra", "taiga", "desert",
+  "oasis", "dune", "beach", "shore", "coast", "island", "atoll", "reef", "lagoon", "delta",
+  "forest", "jungle", "woodland", "grove", "thicket", "swamp", "marsh", "bog", "fen", "wetland",
+  "glacier", "iceberg", "ice", "snow", "frost", "hail", "sleet", "rain", "drizzle", "mist",
+  "fog", "cloud", "storm", "thunder", "lightning", "tornado", "hurricane", "typhoon", "cyclone", "monsoon",
+  "wind", "breeze", "gale", "gust", "draft", "air", "sky", "sun", "moon", "star",
+  "planet", "earth", "mars", "venus", "jupiter", "saturn", "uranus", "neptune", "mercury", "pluto",
+  "asia", "africa", "europe", "america", "oceania", "arctic", "antarctic", "north", "south", "east",
+  "west", "pole", "equator", "tropic", "latitude", "longitude", "meridian", "parallel", "zone", "region",
+  "country", "nation", "state", "province", "county", "city", "town", "village", "hamlet", "borough",
+  "capital", "metro", "urban", "rural", "suburb", "downtown", "uptown", "district", "quarter", "ward",
+  "road", "street", "avenue", "lane", "alley", "path", "trail", "route", "highway", "freeway"
+]

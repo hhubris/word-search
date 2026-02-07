@@ -1,0 +1,17 @@
+[
+  "computer", "laptop", "desktop", "tablet", "phone", "mobile", "device", "gadget", "hardware", "software",
+  "app", "program", "code", "script", "algorithm", "data", "database", "server", "client", "network",
+  "internet", "web", "website", "browser", "search", "engine", "google", "email", "message", "chat",
+  "social", "media", "facebook", "twitter", "instagram", "youtube", "tiktok", "snapchat", "linkedin", "reddit",
+  "cloud", "storage", "backup", "sync", "upload", "download", "stream", "buffer", "cache", "cookie",
+  "pixel", "screen", "display", "monitor", "keyboard", "mouse", "trackpad", "touchscreen", "stylus", "pen",
+  "printer", "scanner", "copier", "fax", "modem", "router", "switch", "hub", "gateway", "firewall",
+  "wifi", "bluetooth", "nfc", "rfid", "gps", "satellite", "antenna", "signal", "frequency", "bandwidth",
+  "byte", "bit", "kilobyte", "megabyte", "gigabyte", "terabyte", "petabyte", "ram", "rom", "cpu",
+  "gpu", "ssd", "hdd", "usb", "hdmi", "port", "cable", "cord", "charger", "battery",
+  "power", "voltage", "current", "circuit", "chip", "processor", "memory", "disk", "drive", "flash",
+  "camera", "lens", "sensor", "pixel", "megapixel", "zoom", "focus", "exposure", "shutter", "aperture",
+  "video", "audio", "sound", "speaker", "headphone", "earphone", "earbud", "mic", "microphone", "record",
+  "play", "pause", "stop", "rewind", "forward", "volume", "mute", "bass", "treble", "equalizer",
+  "robot", "drone", "ai", "machine", "learning", "neural", "network", "algorithm", "model", "training"
+]

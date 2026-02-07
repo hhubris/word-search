@@ -1,0 +1,17 @@
+[
+  "action", "comedy", "drama", "horror", "thriller", "mystery", "romance", "scifi", "fantasy", "adventure",
+  "western", "musical", "animated", "documentary", "biopic", "noir", "silent", "indie", "foreign", "classic",
+  "actor", "actress", "star", "lead", "support", "extra", "cast", "ensemble", "cameo", "role",
+  "director", "producer", "writer", "screenwriter", "editor", "cinematographer", "composer", "designer", "costume", "makeup",
+  "camera", "lens", "shot", "angle", "frame", "focus", "zoom", "pan", "tilt", "dolly",
+  "crane", "steadicam", "handheld", "tracking", "aerial", "pov", "closeup", "medium", "wide", "long",
+  "scene", "sequence", "montage", "flashback", "cutaway", "insert", "establishing", "master", "coverage", "pickup",
+  "take", "cut", "fade", "dissolve", "wipe", "transition", "edit", "splice", "trim", "clip",
+  "sound", "audio", "dialogue", "voiceover", "narration", "dubbing", "foley", "sfx", "music", "score",
+  "soundtrack", "theme", "cue", "underscore", "source", "diegetic", "ambient", "atmos", "room", "tone",
+  "light", "lighting", "key", "fill", "back", "rim", "practical", "natural", "ambient", "mood",
+  "color", "grade", "lut", "contrast", "saturation", "hue", "exposure", "gamma", "black", "white",
+  "script", "screenplay", "dialogue", "action", "scene", "act", "beat", "arc", "plot", "story",
+  "character", "protagonist", "antagonist", "hero", "villain", "sidekick", "mentor", "foil", "archetype", "trope",
+  "genre", "subgenre", "hybrid", "crossover", "parody", "satire", "spoof", "homage", "remake", "reboot"
+]

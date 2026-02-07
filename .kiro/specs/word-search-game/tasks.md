@@ -108,7 +108,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
   - Ensure all domain tests pass, ask the user if questions arise.
 
 - [ ] 6. Create infrastructure layer - word data
-  - [ ] 6.1 Generate word lists for all categories
+  - [x] 6.1 Generate word lists for all categories
     - Create `src/infrastructure/word-data/animals.js` with 500+ words (3-8 chars)
     - Create `src/infrastructure/word-data/sports.js` with 500+ words (3-8 chars)
     - Create `src/infrastructure/word-data/science.js` with 500+ words (3-8 chars)

@@ -1,0 +1,17 @@
+[
+  "pizza", "pasta", "rice", "bread", "cheese", "butter", "milk", "egg", "bacon", "ham",
+  "chicken", "turkey", "beef", "pork", "lamb", "fish", "shrimp", "crab", "lobster", "clam",
+  "oyster", "mussel", "scallop", "squid", "octopus", "tuna", "salmon", "trout", "cod", "halibut",
+  "apple", "banana", "orange", "grape", "lemon", "lime", "peach", "pear", "plum", "cherry",
+  "berry", "melon", "mango", "papaya", "kiwi", "fig", "date", "apricot", "nectarine", "tangerine",
+  "carrot", "potato", "tomato", "onion", "garlic", "pepper", "celery", "lettuce", "spinach", "kale",
+  "broccoli", "cabbage", "cauliflower", "brussels", "asparagus", "artichoke", "eggplant", "zucchini", "squash", "pumpkin",
+  "corn", "peas", "beans", "lentils", "chickpea", "soybean", "tofu", "tempeh", "seitan", "quinoa",
+  "oats", "wheat", "barley", "rye", "millet", "bulgur", "couscous", "farro", "spelt", "kamut",
+  "sugar", "honey", "syrup", "molasses", "jam", "jelly", "preserve", "marmalade", "compote", "chutney",
+  "salt", "pepper", "spice", "herb", "basil", "oregano", "thyme", "rosemary", "sage", "mint",
+  "parsley", "cilantro", "dill", "chive", "tarragon", "bay", "cumin", "coriander", "turmeric", "ginger",
+  "cinnamon", "nutmeg", "clove", "allspice", "cardamom", "saffron", "vanilla", "cocoa", "chocolate", "coffee",
+  "tea", "juice", "soda", "water", "wine", "beer", "cider", "liquor", "vodka", "rum",
+  "whiskey", "brandy", "gin", "tequila", "sake", "mead", "port", "sherry", "vermouth", "liqueur"
+]

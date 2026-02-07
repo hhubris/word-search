@@ -1,0 +1,17 @@
+[
+  "guitar", "piano", "drums", "violin", "cello", "bass", "flute", "clarinet", "oboe", "bassoon",
+  "saxophone", "trumpet", "trombone", "tuba", "horn", "cornet", "bugle", "harp", "lyre", "lute",
+  "banjo", "mandolin", "ukulele", "sitar", "zither", "dulcimer", "accordion", "harmonica", "organ", "keyboard",
+  "synth", "sampler", "sequencer", "drum", "cymbal", "snare", "tom", "kick", "hihat", "ride",
+  "crash", "splash", "china", "gong", "bell", "chime", "triangle", "tambourine", "maracas", "shaker",
+  "bongo", "conga", "djembe", "tabla", "timpani", "xylophone", "marimba", "vibraphone", "glockenspiel", "celesta",
+  "note", "chord", "scale", "key", "pitch", "tone", "octave", "interval", "harmony", "melody",
+  "rhythm", "beat", "tempo", "meter", "time", "measure", "bar", "rest", "pause", "fermata",
+  "sharp", "flat", "natural", "accidental", "clef", "treble", "bass", "alto", "tenor", "staff",
+  "ledger", "line", "space", "notation", "score", "sheet", "music", "song", "tune", "piece",
+  "symphony", "concerto", "sonata", "suite", "prelude", "fugue", "canon", "rondo", "scherzo", "minuet",
+  "waltz", "march", "polka", "mazurka", "tango", "samba", "rumba", "salsa", "swing", "jazz",
+  "blues", "rock", "pop", "folk", "country", "rap", "hip", "hop", "reggae", "ska",
+  "punk", "metal", "grunge", "indie", "alternative", "classical", "baroque", "romantic", "modern", "contemporary",
+  "opera", "aria", "recitative", "chorus", "ensemble", "orchestra", "band", "quartet", "quintet", "sextet"
+]
