@@ -1,9 +1,9 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useEffect, useState, useRef } from 'react';
-import { useGameSession } from '../../application/hooks/useGameSession';
-import { useTimer } from '../../application/hooks/useTimer';
-import { Selection } from '../../domain/value-objects/Selection';
-import { Position } from '../../domain/value-objects/Position';
+import { useGameSession } from '../application/hooks/useGameSession';
+import { useTimer } from '../application/hooks/useTimer';
+import { Selection } from '../domain/value-objects/Selection';
+import { Position } from '../domain/value-objects/Position';
 
 export const Route = createFileRoute('/game')({
   component: GameScreen,

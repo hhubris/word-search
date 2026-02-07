@@ -346,7 +346,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - _Requirements: 4.1, 4.2, 4.3_
 
 - [ ] 16. Implement presentation layer - UI components (High Scores and Theme)
-  - [ ] 16.1 Create HighScoresScreen component
+  - [x] 16.1 Create HighScoresScreen component
     - Create `src/presentation/components/HighScoresScreen.jsx`
     - Display three columns: Easy, Medium, Hard
     - Show top 10 scores per difficulty, sorted highest to lowest
