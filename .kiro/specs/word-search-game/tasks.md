@@ -140,7 +140,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Test word filtering by length
     - _Requirements: 1.1, 1.4, 1.5_
   
-  - [ ] 7.4 Implement HighScoreRepositoryImpl
+  - [x] 7.4 Implement HighScoreRepositoryImpl
     - Create `src/infrastructure/repositories/HighScoreRepositoryImpl.js`
     - Implement getHighScores(), saveHighScore(), getTopScores()
     - Ensure top 10 limit per difficulty
