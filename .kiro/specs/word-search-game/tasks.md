@@ -41,7 +41,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Implement getPositions() method to calculate all cell positions
     - _Requirements: 3.1, 3.2, 3.3_
   
-  - [ ] 3.3 Create Puzzle entity
+  - [x] 3.3 Create Puzzle entity
     - Create `src/domain/entities/Puzzle.js` with Puzzle class
     - Implement word tracking and completion logic
     - _Requirements: 3.4, 6.5, 6.6_
