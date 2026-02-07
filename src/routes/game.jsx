@@ -160,27 +160,13 @@ function GameScreen() {
     return selectedPositions.some(pos => pos.row === row && pos.col === col);
   };
 
-  // Memoize found word positions to avoid expensive lookups on every render
-  const foundWordPositions = useMemo(() => {
-    if (!gameSession) return new Set();
+  // Memoize found words for drawing circles
+  const foundWords = useMemo(() => {
+    if (!gameSession) return [];
     
     const puzzle = gameSession.getPuzzle();
-    const posSet = new Set();
-    
-    puzzle.words.forEach(word => {
-      if (word.isFound()) {
-        word.getPositions().forEach(pos => {
-          posSet.add(`${pos.row},${pos.col}`);
-        });
-      }
-    });
-    
-    return posSet;
+    return puzzle.words.filter(word => word.isFound());
   }, [gameSession, renderKey]); // Re-compute when renderKey changes (word found)
-
-  const isCellInFoundWord = (row, col) => {
-    return foundWordPositions.has(`${row},${col}`);
-  };
 
   if (isLoading) {
     return (
@@ -290,7 +276,7 @@ function GameScreen() {
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '20px' }}>
           {/* Grid */}
-          <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '8px' }}>
+          <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '8px', overflow: 'visible' }}>
             <div 
               ref={gridRef}
               style={{ 
@@ -299,13 +285,13 @@ function GameScreen() {
                 gap: '4px',
                 maxWidth: '600px',
                 margin: '0 auto',
+                position: 'relative',
               }}
             >
               {Array.from({ length: gridSize }).map((_, row) =>
                 Array.from({ length: gridSize }).map((_, col) => {
                   const cell = grid.getCell(row, col);
                   const isSelected = isCellSelected(row, col);
-                  const isInFoundWord = isCellInFoundWord(row, col);
                   
                   return (
                     <div
@@ -317,17 +303,9 @@ function GameScreen() {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        backgroundColor: isInFoundWord 
-                          ? '#d1fae5' 
-                          : isSelected 
-                            ? '#ddd6fe' 
-                            : '#f9fafb',
+                        backgroundColor: isSelected ? '#ddd6fe' : '#f9fafb',
                         border: '2px solid',
-                        borderColor: isInFoundWord 
-                          ? '#10b981' 
-                          : isSelected 
-                            ? '#7c3aed' 
-                            : '#e5e7eb',
+                        borderColor: isSelected ? '#7c3aed' : '#e5e7eb',
                         borderRadius: '4px',
                         fontSize: '20px',
                         fontWeight: 'bold',
@@ -341,6 +319,64 @@ function GameScreen() {
                   );
                 })
               )}
+              
+              {/* SVG overlay for drawing circles around found words */}
+              <svg
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  pointerEvents: 'none',
+                  overflow: 'visible',
+                }}
+                viewBox={`0 0 ${gridSize} ${gridSize}`}
+                preserveAspectRatio="none"
+              >
+                {foundWords.map((word, index) => {
+                  const positions = word.getPositions();
+                  if (positions.length === 0) return null;
+                  
+                  const start = positions[0];
+                  const end = positions[positions.length - 1];
+                  
+                  // Calculate center points for start and end
+                  const x1 = start.col + 0.5;
+                  const y1 = start.row + 0.5;
+                  const x2 = end.col + 0.5;
+                  const y2 = end.row + 0.5;
+                  
+                  // Calculate center point of the word
+                  const cx = (x1 + x2) / 2;
+                  const cy = (y1 + y2) / 2;
+                  
+                  // Calculate length and angle
+                  const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+                  const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+                  
+                  // Rounded rectangle dimensions
+                  const width = length + 0.7; // Extended length
+                  const height = 0.7; // Height of the rounded rect
+                  const radius = height / 2; // Fully rounded ends
+                  
+                  return (
+                    <rect
+                      key={`circle-${index}`}
+                      x={cx - width / 2}
+                      y={cy - height / 2}
+                      width={width}
+                      height={height}
+                      rx={radius}
+                      ry={radius}
+                      fill="none"
+                      stroke="#10b981"
+                      strokeWidth="0.08"
+                      transform={`rotate(${angle} ${cx} ${cy})`}
+                    />
+                  );
+                })}
+              </svg>
             </div>
           </div>
 
