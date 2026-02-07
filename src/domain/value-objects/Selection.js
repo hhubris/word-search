@@ -53,11 +53,8 @@ export class Selection {
   getText(grid) {
     return this.positions
       .map(pos => {
-        if (pos.row >= 0 && pos.row < grid.cells.length &&
-            pos.col >= 0 && pos.col < grid.cells[pos.row].length) {
-          return grid.cells[pos.row][pos.col];
-        }
-        return '';
+        const cell = grid.getCell(pos.row, pos.col);
+        return cell ? cell.getLetter() : '';
       })
       .join('')
       .toUpperCase();

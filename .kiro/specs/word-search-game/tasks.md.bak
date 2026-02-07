@@ -67,7 +67,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - _Requirements: 3.6, 7.4, 8.1_
 
 - [ ] 4. Implement domain services
-  - [x] 4.1 Create WordSelectionService
+  - [ ] 4.1 Create WordSelectionService
     - Create `src/domain/services/WordSelectionService.js`
     - Implement validateSelection() method
     - Implement determineDirection() method
