@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export const Route = createFileRoute('/')({
   component: HomeScreen,
@@ -22,10 +22,31 @@ const DIFFICULTIES = [
   { value: 'HARD', label: 'Hard', description: '3 min timer, 8 directions' },
 ];
 
+const STORAGE_KEY_CATEGORY = 'word-search-last-category';
+const STORAGE_KEY_DIFFICULTY = 'word-search-last-difficulty';
+
 function HomeScreen() {
   const navigate = useNavigate();
-  const [category, setCategory] = useState('ANIMALS');
-  const [difficulty, setDifficulty] = useState('MEDIUM');
+  
+  // Load saved preferences from localStorage
+  const [category, setCategory] = useState(() => {
+    const saved = localStorage.getItem(STORAGE_KEY_CATEGORY);
+    return saved || 'ANIMALS';
+  });
+  
+  const [difficulty, setDifficulty] = useState(() => {
+    const saved = localStorage.getItem(STORAGE_KEY_DIFFICULTY);
+    return saved || 'MEDIUM';
+  });
+
+  // Save to localStorage whenever selections change
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY_CATEGORY, category);
+  }, [category]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY_DIFFICULTY, difficulty);
+  }, [difficulty]);
 
   const handleStartGame = () => {
     navigate({ 

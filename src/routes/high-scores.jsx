@@ -8,17 +8,18 @@ export const Route = createFileRoute('/high-scores')({
     return {
       newScore: search.newScore === true,
       score: search.score || null,
+      difficulty: search.difficulty || null,
     };
   },
 });
 
 function HighScoresScreen() {
   const navigate = useNavigate();
-  const { newScore, score } = Route.useSearch();
+  const { newScore, score, difficulty } = Route.useSearch();
   const [highScores, setHighScores] = useState({ EASY: [], MEDIUM: [], HARD: [] });
   const [initials, setInitials] = useState('');
-  const [selectedDifficulty, setSelectedDifficulty] = useState(null);
-  const [showInitialsForm, setShowInitialsForm] = useState(false);
+  const [selectedDifficulty, setSelectedDifficulty] = useState(difficulty);
+  const [showInitialsForm, setShowInitialsForm] = useState(newScore && score && difficulty);
 
   const container = getContainer();
   const { getHighScoresUseCase, saveHighScoreUseCase } = container;
@@ -26,6 +27,14 @@ function HighScoresScreen() {
   useEffect(() => {
     loadHighScores();
   }, []);
+
+  useEffect(() => {
+    // Auto-show form if coming from game with new score
+    if (newScore && score && difficulty) {
+      setShowInitialsForm(true);
+      setSelectedDifficulty(difficulty);
+    }
+  }, [newScore, score, difficulty]);
 
   const loadHighScores = () => {
     const easy = getHighScoresUseCase.executeForDifficulty('EASY');
@@ -74,75 +83,6 @@ function HighScoresScreen() {
           <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: '#4F46E5', margin: 0 }}>High Scores</h1>
           <div style={{ width: '120px' }}></div>
         </div>
-
-        {/* New Score Message */}
-        {newScore && !showInitialsForm && (
-          <div style={{
-            backgroundColor: '#d1fae5',
-            color: '#059669',
-            padding: '20px',
-            borderRadius: '8px',
-            marginBottom: '20px',
-            textAlign: 'center',
-            border: '2px solid #10b981',
-          }}>
-            <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '10px' }}>🎉 Congratulations!</h2>
-            <p style={{ fontSize: '18px', marginBottom: '15px' }}>You achieved a high score: {score}</p>
-            <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
-              <button
-                onClick={() => {
-                  setShowInitialsForm(true);
-                  setSelectedDifficulty('EASY');
-                }}
-                style={{
-                  padding: '10px 20px',
-                  backgroundColor: '#10b981',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '6px',
-                  cursor: 'pointer',
-                  fontWeight: 'bold',
-                }}
-              >
-                Easy
-              </button>
-              <button
-                onClick={() => {
-                  setShowInitialsForm(true);
-                  setSelectedDifficulty('MEDIUM');
-                }}
-                style={{
-                  padding: '10px 20px',
-                  backgroundColor: '#f59e0b',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '6px',
-                  cursor: 'pointer',
-                  fontWeight: 'bold',
-                }}
-              >
-                Medium
-              </button>
-              <button
-                onClick={() => {
-                  setShowInitialsForm(true);
-                  setSelectedDifficulty('HARD');
-                }}
-                style={{
-                  padding: '10px 20px',
-                  backgroundColor: '#dc2626',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '6px',
-                  cursor: 'pointer',
-                  fontWeight: 'bold',
-                }}
-              >
-                Hard
-              </button>
-            </div>
-          </div>
-        )}
 
         {/* Initials Form */}
         {showInitialsForm && (

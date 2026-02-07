@@ -411,7 +411,10 @@ function GameScreen() {
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 <button
-                  onClick={() => navigate({ to: '/high-scores' })}
+                  onClick={() => navigate({ 
+                    to: '/high-scores', 
+                    search: { newScore: true, score: finalScore, difficulty: difficulty }
+                  })}
                   style={{
                     padding: '14px 24px',
                     backgroundColor: '#4F46E5',
