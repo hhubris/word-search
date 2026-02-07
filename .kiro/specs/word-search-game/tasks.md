@@ -90,7 +90,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Test score with all words found vs partial completion
     - _Requirements: 8.1, 8.2_
   
-  - [ ] 4.5 Create PuzzleGeneratorService (core logic)
+  - [x] 4.5 Create PuzzleGeneratorService (core logic)
     - Create `src/domain/services/PuzzleGeneratorService.js`
     - Implement placeWord() method with direction constraints
     - Implement findIntersections() method
