@@ -46,7 +46,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Implement word tracking and completion logic
     - _Requirements: 3.4, 6.5, 6.6_
   
-  - [ ] 3.4 Create GameSession entity
+  - [x] 3.4 Create GameSession entity
     - Create `src/domain/entities/GameSession.js` with GameSession class
     - Implement timer logic and score calculation
     - _Requirements: 7.1, 7.2, 7.3, 7.4, 8.1, 8.2_
