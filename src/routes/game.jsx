@@ -25,6 +25,8 @@ function GameScreen() {
   const [isSelecting, setIsSelecting] = useState(false);
   const [selectedPositions, setSelectedPositions] = useState([]);
   const [feedback, setFeedback] = useState(null); // { type: 'success' | 'error', message: string }
+  const [showGameOver, setShowGameOver] = useState(false);
+  const [finalScore, setFinalScore] = useState(0);
   const gridRef = useRef(null);
 
   useEffect(() => {
@@ -54,20 +56,13 @@ function GameScreen() {
     stopTimer();
     const result = endGame();
     
-    // Show completion message
-    setTimeout(() => {
-      if (result.isHighScore) {
-        navigate({ to: '/high-scores', search: { newScore: true, score: result.score } });
-      } else {
-        alert(`Game Over!\n\nScore: ${result.score}\n\nClick OK to return home.`);
-        navigate({ to: '/' });
-      }
-    }, 500);
+    setFinalScore(result.score);
+    setShowGameOver(true);
   };
 
   // Mouse/touch handlers for word selection
   const handleCellMouseDown = (row, col) => {
-    if (!gameSession || gameSession.isEnded()) return;
+    if (!gameSession || gameSession.isEnded() || timeRemaining === 0) return;
     
     setIsSelecting(true);
     setSelectedPositions([new Position(row, col)]);
@@ -75,7 +70,7 @@ function GameScreen() {
   };
 
   const handleCellMouseEnter = (row, col) => {
-    if (!isSelecting) return;
+    if (!isSelecting || !gameSession || gameSession.isEnded() || timeRemaining === 0) return;
     
     const newPos = new Position(row, col);
     
@@ -365,6 +360,73 @@ function GameScreen() {
             </div>
           </div>
         </div>
+
+        {/* Game Over Modal */}
+        {showGameOver && (
+          <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000,
+          }}>
+            <div style={{
+              backgroundColor: 'white',
+              padding: '40px',
+              borderRadius: '12px',
+              maxWidth: '400px',
+              width: '90%',
+              textAlign: 'center',
+            }}>
+              <h2 style={{ fontSize: '32px', fontWeight: 'bold', color: '#4F46E5', marginBottom: '20px' }}>
+                Game Over!
+              </h2>
+              <div style={{ marginBottom: '30px' }}>
+                <div style={{ fontSize: '16px', color: '#666', marginBottom: '10px' }}>Your Score</div>
+                <div style={{ fontSize: '48px', fontWeight: 'bold', color: '#4F46E5' }}>
+                  {finalScore}
+                </div>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <button
+                  onClick={() => navigate({ to: '/high-scores' })}
+                  style={{
+                    padding: '14px 24px',
+                    backgroundColor: '#4F46E5',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '6px',
+                    fontSize: '16px',
+                    fontWeight: 'bold',
+                    cursor: 'pointer',
+                  }}
+                >
+                  View High Scores
+                </button>
+                <button
+                  onClick={() => navigate({ to: '/' })}
+                  style={{
+                    padding: '14px 24px',
+                    backgroundColor: '#f0f0f0',
+                    color: '#333',
+                    border: '1px solid #ddd',
+                    borderRadius: '6px',
+                    fontSize: '16px',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Back to Home
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
