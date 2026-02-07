@@ -264,7 +264,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - _Requirements: 10.2, 10.4, 10.5_
 
 - [ ] 13. Implement presentation layer - UI components (Grid and Word List)
-  - [ ] 13.1 Create PuzzleGrid component
+  - [x] 13.1 Create PuzzleGrid component
     - Create `src/presentation/components/PuzzleGrid.jsx`
     - Render grid cells with letters
     - Handle mouse down/move/up events for selection

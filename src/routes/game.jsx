@@ -1,4 +1,9 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { useEffect, useState, useRef } from 'react';
+import { useGameSession } from '../../application/hooks/useGameSession';
+import { useTimer } from '../../application/hooks/useTimer';
+import { Selection } from '../../domain/value-objects/Selection';
+import { Position } from '../../domain/value-objects/Position';
 
 export const Route = createFileRoute('/game')({
   component: GameScreen,
@@ -13,33 +18,312 @@ export const Route = createFileRoute('/game')({
 function GameScreen() {
   const navigate = useNavigate();
   const { category, difficulty } = Route.useSearch();
+  const { gameSession, startGame, selectWord, endGame, isLoading, error, isPuzzleComplete } = useGameSession();
+  const { timeRemaining, formattedTime, start: startTimer, stop: stopTimer } = useTimer();
+  
+  // Selection state
+  const [isSelecting, setIsSelecting] = useState(false);
+  const [selectedPositions, setSelectedPositions] = useState([]);
+  const [feedback, setFeedback] = useState(null); // { type: 'success' | 'error', message: string }
+  const gridRef = useRef(null);
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="bg-white rounded-lg shadow-md p-4 mb-4 flex justify-between items-center">
+  useEffect(() => {
+    // Start the game when component mounts
+    startGame(category, difficulty).then((session) => {
+      // Start timer if there's a timer duration
+      const timerDuration = session.getTimerDuration();
+      if (timerDuration) {
+        startTimer(timerDuration, () => {
+          // Timer expired - end game
+          handleGameEnd();
+        });
+      }
+    });
+  }, [category, difficulty]);
+
+  // Check for puzzle completion
+  useEffect(() => {
+    if (isPuzzleComplete && gameSession && !gameSession.isEnded()) {
+      handleGameEnd();
+    }
+  }, [isPuzzleComplete]);
+
+  const handleGameEnd = () => {
+    if (!gameSession || gameSession.isEnded()) return;
+    
+    stopTimer();
+    const result = endGame();
+    
+    // Show completion message
+    setTimeout(() => {
+      if (result.isHighScore) {
+        navigate({ to: '/high-scores', search: { newScore: true, score: result.score } });
+      } else {
+        alert(`Game Over!\n\nScore: ${result.score}\n\nClick OK to return home.`);
+        navigate({ to: '/' });
+      }
+    }, 500);
+  };
+
+  // Mouse/touch handlers for word selection
+  const handleCellMouseDown = (row, col) => {
+    if (!gameSession || gameSession.isEnded()) return;
+    
+    setIsSelecting(true);
+    setSelectedPositions([new Position(row, col)]);
+    setFeedback(null);
+  };
+
+  const handleCellMouseEnter = (row, col) => {
+    if (!isSelecting) return;
+    
+    const newPos = new Position(row, col);
+    
+    // Check if this position is already in the selection
+    const alreadySelected = selectedPositions.some(
+      pos => pos.row === row && pos.col === col
+    );
+    
+    if (!alreadySelected) {
+      setSelectedPositions(prev => [...prev, newPos]);
+    }
+  };
+
+  const handleMouseUp = () => {
+    if (!isSelecting || selectedPositions.length === 0) {
+      setIsSelecting(false);
+      return;
+    }
+    
+    setIsSelecting(false);
+    
+    // Create selection and validate
+    const selection = new Selection(selectedPositions);
+    
+    try {
+      const result = selectWord(selection);
+      
+      if (result.isCorrect) {
+        setFeedback({ type: 'success', message: `Found: ${result.word.getText()}!` });
+        setTimeout(() => setFeedback(null), 2000);
+      } else if (result.isValid) {
+        setFeedback({ type: 'error', message: 'Not a word in the list' });
+        setTimeout(() => setFeedback(null), 1500);
+      } else {
+        setFeedback({ type: 'error', message: 'Invalid selection' });
+        setTimeout(() => setFeedback(null), 1500);
+      }
+    } catch (err) {
+      console.error('Selection error:', err);
+      setFeedback({ type: 'error', message: err.message });
+      setTimeout(() => setFeedback(null), 1500);
+    }
+    
+    setSelectedPositions([]);
+  };
+
+  const isCellSelected = (row, col) => {
+    return selectedPositions.some(pos => pos.row === row && pos.col === col);
+  };
+
+  const isCellInFoundWord = (row, col) => {
+    if (!gameSession) return false;
+    
+    const puzzle = gameSession.getPuzzle();
+    const cell = puzzle.grid.getCell(row, col);
+    
+    return cell && cell.getWords().some(word => word.isFound());
+  };
+
+  if (isLoading) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ textAlign: 'center' }}>
+          <h2 style={{ fontSize: '24px', marginBottom: '10px' }}>Generating puzzle...</h2>
+          <p style={{ color: '#666' }}>Please wait</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ textAlign: 'center' }}>
+          <h2 style={{ fontSize: '24px', color: 'red', marginBottom: '10px' }}>Error</h2>
+          <p style={{ color: '#666', marginBottom: '20px' }}>{error}</p>
           <button
             onClick={() => navigate({ to: '/' })}
-            className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all"
+            style={{
+              padding: '10px 20px',
+              backgroundColor: '#4F46E5',
+              color: 'white',
+              border: 'none',
+              borderRadius: '6px',
+              cursor: 'pointer',
+            }}
           >
-            ← Back to Home
+            Back to Home
           </button>
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-indigo-600">Word Search</h1>
-            <p className="text-sm text-gray-600">
+        </div>
+      </div>
+    );
+  }
+
+  if (!gameSession) {
+    return null;
+  }
+
+  const puzzle = gameSession.getPuzzle();
+  const grid = puzzle.grid;
+  const words = puzzle.words;
+  const gridSize = grid.rows;
+
+  return (
+    <div 
+      style={{ minHeight: '100vh', padding: '20px', backgroundColor: '#f0f0f0' }}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseUp}
+    >
+      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        {/* Header */}
+        <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '8px', marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <button
+            onClick={() => navigate({ to: '/' })}
+            style={{
+              padding: '10px 20px',
+              backgroundColor: '#f0f0f0',
+              border: '1px solid #ddd',
+              borderRadius: '6px',
+              cursor: 'pointer',
+            }}
+          >
+            ← Back
+          </button>
+          
+          <div style={{ textAlign: 'center' }}>
+            <h1 style={{ fontSize: '24px', color: '#4F46E5', margin: 0 }}>Word Search</h1>
+            <p style={{ fontSize: '14px', color: '#666', margin: '5px 0 0 0' }}>
               {category} • {difficulty}
             </p>
           </div>
-          <div className="w-24"></div> {/* Spacer for centering */}
+
+          <div style={{ textAlign: 'right' }}>
+            {timeRemaining !== null && (
+              <div>
+                <div style={{ fontSize: '12px', color: '#666' }}>Time</div>
+                <div style={{ fontSize: '24px', fontWeight: 'bold', color: timeRemaining < 30 ? 'red' : '#333' }}>
+                  {formattedTime}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Game Area Placeholder */}
-        <div className="bg-white rounded-lg shadow-md p-8">
-          <div className="text-center text-gray-600">
-            <p className="text-xl mb-4">Game screen coming soon!</p>
-            <p className="text-sm">Category: {category}</p>
-            <p className="text-sm">Difficulty: {difficulty}</p>
+        {/* Feedback message */}
+        {feedback && (
+          <div style={{
+            backgroundColor: feedback.type === 'success' ? '#d1fae5' : '#fee2e2',
+            color: feedback.type === 'success' ? '#059669' : '#dc2626',
+            padding: '15px',
+            borderRadius: '8px',
+            marginBottom: '20px',
+            textAlign: 'center',
+            fontWeight: 'bold',
+            border: '2px solid',
+            borderColor: feedback.type === 'success' ? '#10b981' : '#ef4444',
+          }}>
+            {feedback.message}
+          </div>
+        )}
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '20px' }}>
+          {/* Grid */}
+          <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '8px' }}>
+            <div 
+              ref={gridRef}
+              style={{ 
+                display: 'grid', 
+                gridTemplateColumns: `repeat(${gridSize}, 1fr)`,
+                gap: '4px',
+                maxWidth: '600px',
+                margin: '0 auto',
+              }}
+            >
+              {Array.from({ length: gridSize }).map((_, row) =>
+                Array.from({ length: gridSize }).map((_, col) => {
+                  const cell = grid.getCell(row, col);
+                  const isSelected = isCellSelected(row, col);
+                  const isInFoundWord = isCellInFoundWord(row, col);
+                  
+                  return (
+                    <div
+                      key={`${row}-${col}`}
+                      onMouseDown={() => handleCellMouseDown(row, col)}
+                      onMouseEnter={() => handleCellMouseEnter(row, col)}
+                      style={{
+                        aspectRatio: '1',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: isInFoundWord 
+                          ? '#d1fae5' 
+                          : isSelected 
+                            ? '#ddd6fe' 
+                            : '#f9fafb',
+                        border: '2px solid',
+                        borderColor: isInFoundWord 
+                          ? '#10b981' 
+                          : isSelected 
+                            ? '#7c3aed' 
+                            : '#e5e7eb',
+                        borderRadius: '4px',
+                        fontSize: '20px',
+                        fontWeight: 'bold',
+                        cursor: 'pointer',
+                        userSelect: 'none',
+                        transition: 'all 0.15s ease',
+                      }}
+                    >
+                      {cell ? cell.getLetter() : ''}
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          </div>
+
+          {/* Word List */}
+          <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '8px' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '15px' }}>
+              Find these words:
+            </h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {words.map((word, index) => (
+                <div
+                  key={index}
+                  style={{
+                    padding: '10px',
+                    backgroundColor: word.isFound() ? '#d1fae5' : '#f9fafb',
+                    border: '1px solid',
+                    borderColor: word.isFound() ? '#10b981' : '#e5e7eb',
+                    borderRadius: '6px',
+                    textDecoration: word.isFound() ? 'line-through' : 'none',
+                    color: word.isFound() ? '#059669' : '#333',
+                    fontWeight: '500',
+                  }}
+                >
+                  {word.getText()}
+                </div>
+              ))}
+            </div>
+
+            <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#f0f0f0', borderRadius: '6px' }}>
+              <div style={{ fontSize: '14px', color: '#666', marginBottom: '5px' }}>Progress</div>
+              <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#4F46E5' }}>
+                {puzzle.getFoundWordCount()} / {puzzle.getTotalWordCount()}
+              </div>
+            </div>
           </div>
         </div>
       </div>
