@@ -31,7 +31,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - _Requirements: 1.1, 2.1, 6.2_
 
 - [ ] 3. Implement domain entities
-  - [ ] 3.1 Create Cell and Grid entities
+  - [x] 3.1 Create Cell and Grid entities
     - Create `src/domain/entities/Cell.js` with Cell class
     - Create `src/domain/entities/Grid.js` with Grid class and methods
     - _Requirements: 3.6_
