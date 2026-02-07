@@ -181,7 +181,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - **Property 12: Found Word State Update**
     - **Validates: Requirements 6.5, 6.6**
   
-  - [ ] 8.5 Implement EndGameUseCase
+  - [x] 8.5 Implement EndGameUseCase
     - Create `src/application/use-cases/EndGameUseCase.js`
     - Integrate scoring and high score qualification check
     - _Requirements: 8.1, 8.2, 8.4_
@@ -191,12 +191,12 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - **Property 15: High Score Qualification**
     - **Validates: Requirements 7.5, 7.6, 8.1, 8.2, 8.4**
   
-  - [ ] 8.7 Implement SaveHighScoreUseCase
+  - [x] 8.7 Implement SaveHighScoreUseCase
     - Create `src/application/use-cases/SaveHighScoreUseCase.js`
     - Handle high score creation and persistence
     - _Requirements: 9.3, 9.4_
   
-  - [ ] 8.8 Implement GetHighScoresUseCase
+  - [x] 8.8 Implement GetHighScoresUseCase
     - Create `src/application/use-cases/GetHighScoresUseCase.js`
     - Retrieve and format high scores by difficulty
     - _Requirements: 9.1, 9.5, 9.6_
