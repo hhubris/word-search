@@ -125,7 +125,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - **Validates: Requirements 1.4, 1.5**
 
 - [ ] 7. Create infrastructure layer - storage and repositories
-  - [ ] 7.1 Implement LocalStorageAdapter
+  - [x] 7.1 Implement LocalStorageAdapter
     - Create `src/infrastructure/storage/LocalStorageAdapter.js`
     - Implement get(), set(), remove() methods with error handling
     - _Requirements: 12.1, 12.2_
