@@ -104,7 +104,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - **Property 4: No Accidental Words**
     - **Validates: Requirements 3.1, 3.2, 3.3, 3.4, 3.5**
 
-- [ ] 5. Checkpoint - Domain layer complete
+- [x] 5. Checkpoint - Domain layer complete
   - Ensure all domain tests pass, ask the user if questions arise.
 
 - [ ] 6. Create infrastructure layer - word data
