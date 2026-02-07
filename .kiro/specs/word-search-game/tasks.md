@@ -51,7 +51,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Implement timer logic and score calculation
     - _Requirements: 7.1, 7.2, 7.3, 7.4, 8.1, 8.2_
   
-  - [ ] 3.5 Create HighScore entity
+  - [x] 3.5 Create HighScore entity
     - Create `src/domain/entities/HighScore.js` with HighScore class
     - _Requirements: 9.1, 9.2, 9.3, 9.4_
   
