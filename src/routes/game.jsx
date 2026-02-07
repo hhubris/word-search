@@ -84,9 +84,39 @@ function GameScreen() {
       pos => pos.row === row && pos.col === col
     );
     
-    if (!alreadySelected) {
-      setSelectedPositions(prev => [...prev, newPos]);
+    if (alreadySelected) return;
+    
+    // If we have at least one position, enforce direction constraint
+    if (selectedPositions.length > 0) {
+      const lastPos = selectedPositions[selectedPositions.length - 1];
+      const rowDiff = row - lastPos.row;
+      const colDiff = col - lastPos.col;
+      
+      // Check if the new position is adjacent (1 step away in any direction)
+      const isAdjacent = Math.abs(rowDiff) <= 1 && Math.abs(colDiff) <= 1 && (rowDiff !== 0 || colDiff !== 0);
+      
+      if (!isAdjacent) return;
+      
+      // If we have 2+ positions, enforce same direction
+      if (selectedPositions.length >= 2) {
+        const firstPos = selectedPositions[0];
+        const secondPos = selectedPositions[1];
+        const dirRow = secondPos.row - firstPos.row;
+        const dirCol = secondPos.col - firstPos.col;
+        
+        // Normalize direction to -1, 0, or 1
+        const normDirRow = dirRow === 0 ? 0 : dirRow / Math.abs(dirRow);
+        const normDirCol = dirCol === 0 ? 0 : dirCol / Math.abs(dirCol);
+        
+        // Check if new position follows the same direction
+        const normRowDiff = rowDiff === 0 ? 0 : rowDiff / Math.abs(rowDiff);
+        const normColDiff = colDiff === 0 ? 0 : colDiff / Math.abs(colDiff);
+        
+        if (normDirRow !== normRowDiff || normDirCol !== normColDiff) return;
+      }
     }
+    
+    setSelectedPositions(prev => [...prev, newPos]);
   };
 
   const handleMouseUp = () => {
@@ -130,9 +160,14 @@ function GameScreen() {
     if (!gameSession) return false;
     
     const puzzle = gameSession.getPuzzle();
-    const cell = puzzle.grid.getCell(row, col);
     
-    return cell && cell.getWords().some(word => word.isFound());
+    // Check if any found word contains this position
+    return puzzle.words.some(word => {
+      if (!word.isFound()) return false;
+      
+      const positions = word.getPositions();
+      return positions.some(pos => pos.row === row && pos.col === col);
+    });
   };
 
   if (isLoading) {
@@ -177,7 +212,7 @@ function GameScreen() {
   const puzzle = gameSession.getPuzzle();
   const grid = puzzle.grid;
   const words = puzzle.words;
-  const gridSize = grid.rows;
+  const gridSize = grid.getSize();
 
   return (
     <div 
@@ -221,21 +256,25 @@ function GameScreen() {
         </div>
 
         {/* Feedback message */}
-        {feedback && (
-          <div style={{
-            backgroundColor: feedback.type === 'success' ? '#d1fae5' : '#fee2e2',
-            color: feedback.type === 'success' ? '#059669' : '#dc2626',
-            padding: '15px',
-            borderRadius: '8px',
-            marginBottom: '20px',
-            textAlign: 'center',
-            fontWeight: 'bold',
-            border: '2px solid',
-            borderColor: feedback.type === 'success' ? '#10b981' : '#ef4444',
-          }}>
-            {feedback.message}
-          </div>
-        )}
+        <div style={{
+          minHeight: '60px',
+          marginBottom: '20px',
+        }}>
+          {feedback && (
+            <div style={{
+              backgroundColor: feedback.type === 'success' ? '#d1fae5' : '#fee2e2',
+              color: feedback.type === 'success' ? '#059669' : '#dc2626',
+              padding: '15px',
+              borderRadius: '8px',
+              textAlign: 'center',
+              fontWeight: 'bold',
+              border: '2px solid',
+              borderColor: feedback.type === 'success' ? '#10b981' : '#ef4444',
+            }}>
+              {feedback.message}
+            </div>
+          )}
+        </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '20px' }}>
           {/* Grid */}
@@ -299,7 +338,7 @@ function GameScreen() {
               Find these words:
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {words.map((word, index) => (
+              {[...words].sort((a, b) => a.getText().localeCompare(b.getText())).map((word, index) => (
                 <div
                   key={index}
                   style={{
