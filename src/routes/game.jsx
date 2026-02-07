@@ -4,6 +4,7 @@ import { useGameSession } from '../application/hooks/useGameSession';
 import { useTimer } from '../application/hooks/useTimer';
 import { Selection } from '../domain/value-objects/Selection';
 import { Position } from '../domain/value-objects/Position';
+import { getContainer } from '../application/container';
 
 export const Route = createFileRoute('/game')({
   component: GameScreen,
@@ -27,6 +28,7 @@ function GameScreen() {
   const [feedback, setFeedback] = useState(null); // { type: 'success' | 'error', message: string }
   const [showGameOver, setShowGameOver] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
+  const [initials, setInitials] = useState('');
   const [renderKey, setRenderKey] = useState(0); // Force re-render when words are found
   const gridRef = useRef(null);
 
@@ -59,6 +61,25 @@ function GameScreen() {
     
     setFinalScore(result.score);
     setShowGameOver(true);
+  };
+
+  const handleSaveAndNavigate = () => {
+    if (!initials || initials.length === 0) return;
+    
+    try {
+      const container = getContainer();
+      const { saveHighScoreUseCase } = container;
+      saveHighScoreUseCase.execute(initials, finalScore, difficulty);
+      
+      // Navigate to high scores with the saved score highlighted
+      navigate({ 
+        to: '/high-scores', 
+        search: { highlightScore: finalScore, difficulty: difficulty }
+      });
+    } catch (err) {
+      console.error('Error saving score:', err);
+      alert('Error saving score: ' + err.message);
+    }
   };
 
   // Mouse/touch handlers for word selection
@@ -441,28 +462,53 @@ function GameScreen() {
               </h2>
               <div style={{ marginBottom: '30px' }}>
                 <div style={{ fontSize: '16px', color: '#666', marginBottom: '10px' }}>Your Score</div>
-                <div style={{ fontSize: '48px', fontWeight: 'bold', color: '#4F46E5' }}>
+                <div style={{ fontSize: '48px', fontWeight: 'bold', color: '#4F46E5', marginBottom: '20px' }}>
                   {finalScore}
                 </div>
+                <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#333', marginBottom: '15px' }}>
+                  Enter Your Initials
+                </div>
+                <input
+                  type="text"
+                  value={initials}
+                  onChange={(e) => setInitials(e.target.value.slice(0, 3).toUpperCase())}
+                  placeholder="ABC"
+                  maxLength={3}
+                  autoFocus
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter' && initials.length > 0) {
+                      handleSaveAndNavigate();
+                    }
+                  }}
+                  style={{
+                    padding: '12px 20px',
+                    fontSize: '24px',
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                    textTransform: 'uppercase',
+                    border: '2px solid #4F46E5',
+                    borderRadius: '6px',
+                    width: '120px',
+                    marginBottom: '20px',
+                  }}
+                />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 <button
-                  onClick={() => navigate({ 
-                    to: '/high-scores', 
-                    search: { newScore: true, score: finalScore, difficulty: difficulty }
-                  })}
+                  onClick={handleSaveAndNavigate}
+                  disabled={initials.length === 0}
                   style={{
                     padding: '14px 24px',
-                    backgroundColor: '#4F46E5',
+                    backgroundColor: initials.length === 0 ? '#ccc' : '#4F46E5',
                     color: 'white',
                     border: 'none',
                     borderRadius: '6px',
                     fontSize: '16px',
                     fontWeight: 'bold',
-                    cursor: 'pointer',
+                    cursor: initials.length === 0 ? 'not-allowed' : 'pointer',
                   }}
                 >
-                  View High Scores
+                  Save & View High Scores
                 </button>
                 <button
                   onClick={() => navigate({ to: '/' })}
@@ -477,7 +523,7 @@ function GameScreen() {
                     cursor: 'pointer',
                   }}
                 >
-                  Back to Home
+                  Skip & Go Home
                 </button>
               </div>
             </div>

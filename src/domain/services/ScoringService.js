@@ -19,14 +19,17 @@ export class ScoringService {
     // Completion bonus: 500 points for finding all words
     const completionBonus = wordsFound === totalWords ? 500 : 0;
     
-    // Time bonus: 10 points per second remaining (if timed)
+    // Time bonus: Square root scaling for balance between linear and exponential
+    // This rewards speed but not too aggressively
     let timeBonus = 0;
     const timerDuration = gameSession.getTimerDuration();
     if (timerDuration !== null) {
       const endTime = gameSession.getEndTime() || Date.now();
       const elapsedSeconds = Math.floor((endTime - gameSession.getStartTime()) / 1000);
       const remainingSeconds = Math.max(0, timerDuration - elapsedSeconds);
-      timeBonus = remainingSeconds * 10;
+      // Use square root for a curve between linear and exponential
+      // Multiply by 30 to scale appropriately
+      timeBonus = Math.floor(Math.sqrt(remainingSeconds) * 30);
     }
     
     // Difficulty multiplier: Easy 1.0x, Medium 1.5x, Hard 2.0x

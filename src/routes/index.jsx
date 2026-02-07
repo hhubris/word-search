@@ -17,7 +17,7 @@ const CATEGORIES = [
 ];
 
 const DIFFICULTIES = [
-  { value: 'EASY', label: 'Easy', description: 'No timer, 2 directions' },
+  { value: 'EASY', label: 'Easy', description: '10 min timer, 2 directions' },
   { value: 'MEDIUM', label: 'Medium', description: '5 min timer, 4 directions' },
   { value: 'HARD', label: 'Hard', description: '3 min timer, 8 directions' },
 ];

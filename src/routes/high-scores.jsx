@@ -9,13 +9,14 @@ export const Route = createFileRoute('/high-scores')({
       newScore: search.newScore === true,
       score: search.score || null,
       difficulty: search.difficulty || null,
+      highlightScore: search.highlightScore || null,
     };
   },
 });
 
 function HighScoresScreen() {
   const navigate = useNavigate();
-  const { newScore, score, difficulty } = Route.useSearch();
+  const { newScore, score, difficulty, highlightScore } = Route.useSearch();
   const [highScores, setHighScores] = useState({ EASY: [], MEDIUM: [], HARD: [] });
   const [initials, setInitials] = useState('');
   const [selectedDifficulty, setSelectedDifficulty] = useState(difficulty);
@@ -159,24 +160,29 @@ function HighScoresScreen() {
               {highScores.EASY.length === 0 ? (
                 <p style={{ textAlign: 'center', color: '#999', padding: '20px' }}>No scores yet</p>
               ) : (
-                highScores.EASY.map((score, index) => (
-                  <div
-                    key={index}
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      padding: '12px',
-                      backgroundColor: index === 0 ? '#fef3c7' : '#f9fafb',
-                      border: '1px solid',
-                      borderColor: index === 0 ? '#f59e0b' : '#e5e7eb',
-                      borderRadius: '6px',
-                    }}
-                  >
-                    <span style={{ fontWeight: 'bold', color: '#666' }}>#{index + 1}</span>
-                    <span style={{ fontWeight: 'bold', color: '#333' }}>{score.getInitials()}</span>
-                    <span style={{ fontWeight: 'bold', color: '#10b981' }}>{score.getScore()}</span>
-                  </div>
-                ))
+                highScores.EASY.map((score, index) => {
+                  const isHighlighted = highlightScore && difficulty === 'EASY' && score.getScore() === highlightScore;
+                  return (
+                    <div
+                      key={index}
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        padding: '12px',
+                        backgroundColor: isHighlighted ? '#ddd6fe' : index === 0 ? '#fef3c7' : '#f9fafb',
+                        border: isHighlighted ? '3px solid #7c3aed' : '1px solid',
+                        borderColor: isHighlighted ? '#7c3aed' : index === 0 ? '#f59e0b' : '#e5e7eb',
+                        borderRadius: '6px',
+                        transform: isHighlighted ? 'scale(1.05)' : 'scale(1)',
+                        transition: 'all 0.3s ease',
+                      }}
+                    >
+                      <span style={{ fontWeight: 'bold', color: '#666' }}>#{index + 1}</span>
+                      <span style={{ fontWeight: 'bold', color: '#333' }}>{score.getInitials()}</span>
+                      <span style={{ fontWeight: 'bold', color: '#10b981' }}>{score.getScore()}</span>
+                    </div>
+                  );
+                })
               )}
             </div>
           </div>
@@ -190,24 +196,29 @@ function HighScoresScreen() {
               {highScores.MEDIUM.length === 0 ? (
                 <p style={{ textAlign: 'center', color: '#999', padding: '20px' }}>No scores yet</p>
               ) : (
-                highScores.MEDIUM.map((score, index) => (
-                  <div
-                    key={index}
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      padding: '12px',
-                      backgroundColor: index === 0 ? '#fef3c7' : '#f9fafb',
-                      border: '1px solid',
-                      borderColor: index === 0 ? '#f59e0b' : '#e5e7eb',
-                      borderRadius: '6px',
-                    }}
-                  >
-                    <span style={{ fontWeight: 'bold', color: '#666' }}>#{index + 1}</span>
-                    <span style={{ fontWeight: 'bold', color: '#333' }}>{score.getInitials()}</span>
-                    <span style={{ fontWeight: 'bold', color: '#f59e0b' }}>{score.getScore()}</span>
-                  </div>
-                ))
+                highScores.MEDIUM.map((score, index) => {
+                  const isHighlighted = highlightScore && difficulty === 'MEDIUM' && score.getScore() === highlightScore;
+                  return (
+                    <div
+                      key={index}
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        padding: '12px',
+                        backgroundColor: isHighlighted ? '#ddd6fe' : index === 0 ? '#fef3c7' : '#f9fafb',
+                        border: isHighlighted ? '3px solid #7c3aed' : '1px solid',
+                        borderColor: isHighlighted ? '#7c3aed' : index === 0 ? '#f59e0b' : '#e5e7eb',
+                        borderRadius: '6px',
+                        transform: isHighlighted ? 'scale(1.05)' : 'scale(1)',
+                        transition: 'all 0.3s ease',
+                      }}
+                    >
+                      <span style={{ fontWeight: 'bold', color: '#666' }}>#{index + 1}</span>
+                      <span style={{ fontWeight: 'bold', color: '#333' }}>{score.getInitials()}</span>
+                      <span style={{ fontWeight: 'bold', color: '#f59e0b' }}>{score.getScore()}</span>
+                    </div>
+                  );
+                })
               )}
             </div>
           </div>
@@ -221,24 +232,29 @@ function HighScoresScreen() {
               {highScores.HARD.length === 0 ? (
                 <p style={{ textAlign: 'center', color: '#999', padding: '20px' }}>No scores yet</p>
               ) : (
-                highScores.HARD.map((score, index) => (
-                  <div
-                    key={index}
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      padding: '12px',
-                      backgroundColor: index === 0 ? '#fef3c7' : '#f9fafb',
-                      border: '1px solid',
-                      borderColor: index === 0 ? '#f59e0b' : '#e5e7eb',
-                      borderRadius: '6px',
-                    }}
-                  >
-                    <span style={{ fontWeight: 'bold', color: '#666' }}>#{index + 1}</span>
-                    <span style={{ fontWeight: 'bold', color: '#333' }}>{score.getInitials()}</span>
-                    <span style={{ fontWeight: 'bold', color: '#dc2626' }}>{score.getScore()}</span>
-                  </div>
-                ))
+                highScores.HARD.map((score, index) => {
+                  const isHighlighted = highlightScore && difficulty === 'HARD' && score.getScore() === highlightScore;
+                  return (
+                    <div
+                      key={index}
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        padding: '12px',
+                        backgroundColor: isHighlighted ? '#ddd6fe' : index === 0 ? '#fef3c7' : '#f9fafb',
+                        border: isHighlighted ? '3px solid #7c3aed' : '1px solid',
+                        borderColor: isHighlighted ? '#7c3aed' : index === 0 ? '#f59e0b' : '#e5e7eb',
+                        borderRadius: '6px',
+                        transform: isHighlighted ? 'scale(1.05)' : 'scale(1)',
+                        transition: 'all 0.3s ease',
+                      }}
+                    >
+                      <span style={{ fontWeight: 'bold', color: '#666' }}>#{index + 1}</span>
+                      <span style={{ fontWeight: 'bold', color: '#333' }}>{score.getInitials()}</span>
+                      <span style={{ fontWeight: 'bold', color: '#dc2626' }}>{score.getScore()}</span>
+                    </div>
+                  );
+                })
               )}
             </div>
           </div>
