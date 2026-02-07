@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import { useGameSession } from '../application/hooks/useGameSession';
 import { useTimer } from '../application/hooks/useTimer';
 import { Selection } from '../domain/value-objects/Selection';
@@ -27,6 +27,7 @@ function GameScreen() {
   const [feedback, setFeedback] = useState(null); // { type: 'success' | 'error', message: string }
   const [showGameOver, setShowGameOver] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
+  const [renderKey, setRenderKey] = useState(0); // Force re-render when words are found
   const gridRef = useRef(null);
 
   useEffect(() => {
@@ -73,6 +74,16 @@ function GameScreen() {
     if (!isSelecting || !gameSession || gameSession.isEnded() || timeRemaining === 0) return;
     
     const newPos = new Position(row, col);
+    
+    // Check if this is the previous position (backtracking)
+    if (selectedPositions.length >= 2) {
+      const secondToLast = selectedPositions[selectedPositions.length - 2];
+      if (secondToLast.row === row && secondToLast.col === col) {
+        // Remove the last position (backtrack)
+        setSelectedPositions(prev => prev.slice(0, -1));
+        return;
+      }
+    }
     
     // Check if this position is already in the selection
     const alreadySelected = selectedPositions.some(
@@ -128,14 +139,12 @@ function GameScreen() {
     try {
       const result = selectWord(selection);
       
-      if (result.isCorrect) {
+      if (result.found) {
         setFeedback({ type: 'success', message: `Found: ${result.word.getText()}!` });
         setTimeout(() => setFeedback(null), 2000);
-      } else if (result.isValid) {
-        setFeedback({ type: 'error', message: 'Not a word in the list' });
-        setTimeout(() => setFeedback(null), 1500);
+        setRenderKey(k => k + 1); // Force re-render to update found word highlights
       } else {
-        setFeedback({ type: 'error', message: 'Invalid selection' });
+        setFeedback({ type: 'error', message: 'Not a word in the list' });
         setTimeout(() => setFeedback(null), 1500);
       }
     } catch (err) {
@@ -151,18 +160,26 @@ function GameScreen() {
     return selectedPositions.some(pos => pos.row === row && pos.col === col);
   };
 
-  const isCellInFoundWord = (row, col) => {
-    if (!gameSession) return false;
+  // Memoize found word positions to avoid expensive lookups on every render
+  const foundWordPositions = useMemo(() => {
+    if (!gameSession) return new Set();
     
     const puzzle = gameSession.getPuzzle();
+    const posSet = new Set();
     
-    // Check if any found word contains this position
-    return puzzle.words.some(word => {
-      if (!word.isFound()) return false;
-      
-      const positions = word.getPositions();
-      return positions.some(pos => pos.row === row && pos.col === col);
+    puzzle.words.forEach(word => {
+      if (word.isFound()) {
+        word.getPositions().forEach(pos => {
+          posSet.add(`${pos.row},${pos.col}`);
+        });
+      }
     });
+    
+    return posSet;
+  }, [gameSession, renderKey]); // Re-compute when renderKey changes (word found)
+
+  const isCellInFoundWord = (row, col) => {
+    return foundWordPositions.has(`${row},${col}`);
   };
 
   if (isLoading) {

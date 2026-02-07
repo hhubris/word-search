@@ -28,14 +28,14 @@ function HighScoresScreen() {
   }, []);
 
   const loadHighScores = () => {
-    const easy = getHighScoresUseCase.execute('EASY');
-    const medium = getHighScoresUseCase.execute('MEDIUM');
-    const hard = getHighScoresUseCase.execute('HARD');
+    const easy = getHighScoresUseCase.executeForDifficulty('EASY');
+    const medium = getHighScoresUseCase.executeForDifficulty('MEDIUM');
+    const hard = getHighScoresUseCase.executeForDifficulty('HARD');
     
     setHighScores({
-      EASY: easy,
-      MEDIUM: medium,
-      HARD: hard,
+      EASY: easy || [],
+      MEDIUM: medium || [],
+      HARD: hard || [],
     });
   };
 

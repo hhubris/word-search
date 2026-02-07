@@ -8,12 +8,14 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",
+    "test:run": "vitest run",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest --coverage",
     "test:property": "vitest --grep 'Property'",
     "test:unit": "vitest --grep -v 'Property'"
   },
   "dependencies": {
+    "@blex41/word-search": "^1.2.0",
     "@tanstack/react-query": "^5.62.0",
     "@tanstack/react-router": "^1.87.0",
     "react": "^19.0.0",

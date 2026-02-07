@@ -1,18 +1,18 @@
+import WordSearch from '@blex41/word-search';
 import { Grid } from '../entities/Grid.js';
 import { Word } from '../entities/Word.js';
 import { Puzzle } from '../entities/Puzzle.js';
 import { Position } from '../value-objects/Position.js';
-import { Direction, getDirectionsForDifficulty } from '../value-objects/Direction.js';
+import { Direction } from '../value-objects/Direction.js';
 import { getDifficultyConfig } from '../value-objects/Difficulty.js';
 
 /**
  * PuzzleGeneratorService
- * Domain service for generating word search puzzles
+ * Domain service for generating word search puzzles using @blex41/word-search
  */
 export class PuzzleGeneratorService {
   constructor() {
-    this.maxAttempts = 200;
-    this.maxGridSize = 12;
+    this.maxAttempts = 10;
   }
 
   /**
@@ -24,55 +24,40 @@ export class PuzzleGeneratorService {
    */
   generatePuzzle(category, difficulty, wordRepository) {
     const config = getDifficultyConfig(difficulty);
-    const allowedDirections = getDirectionsForDifficulty(difficulty);
     
-    for (let attempt = 0; attempt < this.maxAttempts; attempt++) {
-      try {
-        // Get words for category
-        const availableWords = wordRepository.getWordsByCategory(category);
-        
-        // Select random words
-        const selectedWords = this.selectRandomWords(availableWords, config.wordCount);
-        
-        // Determine grid size based on longest word
-        const gridSize = this.calculateGridSize(selectedWords);
-        
-        if (gridSize > this.maxGridSize) {
-          continue; // Try again with different words
-        }
-        
-        // Create grid
-        const grid = new Grid(gridSize);
-        
-        // Place words on grid
-        const placedWords = this.placeWords(grid, selectedWords, allowedDirections);
-        
-        if (placedWords.length < config.wordCount) {
-          continue; // Couldn't place all words, try again
-        }
-        
-        // Check intersection requirement (at least 50%)
-        if (!this.meetsIntersectionRequirement(placedWords)) {
-          continue; // Not enough intersections, try again
-        }
-        
-        // Fill empty cells
-        this.fillEmptyCells(grid);
-        
-        // Create and return puzzle
-        return new Puzzle(grid, placedWords, category, difficulty);
-        
-      } catch (error) {
-        // Continue to next attempt
-        continue;
-      }
-    }
+    // Get words for category
+    const availableWords = wordRepository.getWordsByCategory(category);
     
-    throw new Error(`Failed to generate puzzle after ${this.maxAttempts} attempts`);
+    // Select random words
+    const selectedWords = this.selectRandomWords(availableWords, config.wordCount);
+    
+    // Map difficulty to disabled directions
+    const disabledDirections = this.getDisabledDirections(difficulty);
+    
+    // Calculate grid size (aim for square grid that fits words)
+    const gridSize = this.calculateGridSize(selectedWords);
+    
+    // Create word search puzzle using the library
+    const options = {
+      cols: gridSize,
+      rows: gridSize,
+      disabledDirections: disabledDirections,
+      dictionary: selectedWords,
+      maxWords: config.wordCount,
+      backwardsProbability: 0.3,
+      upperCase: true,
+      diacritics: false,
+      maxRetries: this.maxAttempts
+    };
+    
+    const ws = new WordSearch(options);
+    
+    // Convert library output to our domain entities
+    return this.convertToPuzzle(ws);
   }
 
   /**
-   * Select random words from available list
+   * Select random words from available words
    * @param {Array} words - Available words
    * @param {number} count - Number of words to select
    * @returns {Array} Selected words
@@ -83,200 +68,117 @@ export class PuzzleGeneratorService {
   }
 
   /**
-   * Calculate appropriate grid size for words
-   * @param {Array} words - Words to place
+   * Calculate appropriate grid size
+   * @param {Array} words - Selected words
    * @returns {number} Grid size
    */
   calculateGridSize(words) {
     const longestWord = Math.max(...words.map(w => w.length));
-    const wordCount = words.length;
-    
-    // Larger grid for more words to allow intersections
-    let size = longestWord + Math.ceil(wordCount / 2);
-    size = Math.min(size, this.maxGridSize);
-    return Math.max(8, size); // Minimum 8x8
+    // Add some padding for better word placement
+    const size = Math.min(12, Math.max(8, longestWord + 2));
+    return size;
   }
 
   /**
-   * Place all words on the grid
-   * @param {Grid} grid - Grid to place words on
-   * @param {Array} words - Words to place
-   * @param {Array} allowedDirections - Allowed directions
-   * @returns {Array} Successfully placed Word entities
+   * Get disabled directions based on difficulty
+   * @param {string} difficulty - Difficulty level
+   * @returns {Array} Disabled direction codes
    */
-  placeWords(grid, words, allowedDirections) {
-    const placedWords = [];
+  getDisabledDirections(difficulty) {
+    switch (difficulty) {
+      case 'EASY':
+        // Only horizontal and vertical (disable all diagonals and backwards)
+        return ['NE', 'NW', 'SE', 'SW', 'N', 'W'];
+      case 'MEDIUM':
+        // Horizontal, vertical, and diagonals (disable backwards)
+        return ['N', 'W', 'NW', 'SW'];
+      case 'HARD':
+        // All directions allowed
+        return [];
+      default:
+        return [];
+    }
+  }
+
+  /**
+   * Convert WordSearch library output to our Puzzle entity
+   * @param {WordSearch} ws - WordSearch instance
+   * @returns {Puzzle} Puzzle entity
+   */
+  convertToPuzzle(ws) {
+    const libraryGrid = ws.grid;
+    const libraryWords = ws.words;
     
-    // Sort words by length (longest first) for better placement
-    const sortedWords = [...words].sort((a, b) => b.length - a.length);
+    // Create our Grid entity
+    const gridSize = libraryGrid.length;
+    const grid = new Grid(gridSize);
     
-    for (const wordText of sortedWords) {
-      const word = this.placeWord(grid, wordText, allowedDirections, placedWords);
-      if (word) {
-        placedWords.push(word);
+    // Fill grid with letters
+    for (let row = 0; row < gridSize; row++) {
+      for (let col = 0; col < gridSize; col++) {
+        grid.setLetter(row, col, libraryGrid[row][col]);
       }
     }
     
-    return placedWords;
-  }
-
-  /**
-   * Attempt to place a single word on the grid
-   * @param {Grid} grid - Grid to place word on
-   * @param {string} wordText - Word text to place
-   * @param {Array} allowedDirections - Allowed directions
-   * @param {Array} existingWords - Already placed words
-   * @returns {Word|null} Placed word or null if failed
-   */
-  placeWord(grid, wordText, allowedDirections, existingWords = []) {
-    const attempts = 50;
-    
-    for (let i = 0; i < attempts; i++) {
-      // Random direction from allowed
-      const direction = allowedDirections[Math.floor(Math.random() * allowedDirections.length)];
+    // Convert library words to our Word entities
+    const words = libraryWords.map((libWord, index) => {
+      // Get start and end positions
+      const startPos = new Position(libWord.path[0].y, libWord.path[0].x);
+      const endPos = new Position(
+        libWord.path[libWord.path.length - 1].y,
+        libWord.path[libWord.path.length - 1].x
+      );
       
-      // Random starting position
-      const maxRow = grid.getSize() - 1;
-      const maxCol = grid.getSize() - 1;
-      const startRow = Math.floor(Math.random() * (maxRow + 1));
-      const startCol = Math.floor(Math.random() * (maxCol + 1));
-      const startPos = new Position(startRow, startCol);
+      // Determine direction
+      const direction = this.determineDirection(startPos, endPos);
       
-      // Check if word fits
-      if (this.canPlaceWord(grid, wordText, startPos, direction, existingWords)) {
-        // Place the word
-        const wordId = `word-${Date.now()}-${Math.random()}`;
-        const word = new Word(wordId, wordText, startPos, direction);
-        
-        // Mark cells on grid
-        const positions = word.getPositions();
-        for (let j = 0; j < positions.length; j++) {
-          const pos = positions[j];
-          const letter = wordText[j].toUpperCase();
-          const cell = grid.getCell(pos.row, pos.col);
-          
-          if (cell && cell.isEmpty()) {
-            grid.setLetter(pos.row, pos.col, letter);
-          }
-          
-          // Add word ID to cell
-          const updatedCell = grid.getCell(pos.row, pos.col);
-          if (updatedCell) {
-            updatedCell.addWordId(wordId);
-          }
-        }
-        
-        return word;
-      }
-    }
-    
-    return null;
-  }
-
-  /**
-   * Check if a word can be placed at a position
-   * @param {Grid} grid - Grid to check
-   * @param {string} wordText - Word to place
-   * @param {Position} startPos - Starting position
-   * @param {Object} direction - Direction to place word
-   * @param {Array} existingWords - Already placed words
-   * @returns {boolean} True if word can be placed
-   */
-  canPlaceWord(grid, wordText, startPos, direction, existingWords) {
-    const positions = [];
-    let currentPos = startPos;
-    
-    // Calculate all positions
-    for (let i = 0; i < wordText.length; i++) {
-      if (!grid.isValidPosition(currentPos.row, currentPos.col)) {
-        return false; // Out of bounds
-      }
-      positions.push(currentPos);
-      currentPos = currentPos.add(direction);
-    }
-    
-    // Check each position
-    for (let i = 0; i < positions.length; i++) {
-      const pos = positions[i];
-      const cell = grid.getCell(pos.row, pos.col);
-      const letter = wordText[i].toUpperCase();
+      // Create Word entity
+      const word = new Word(
+        `word-${index}`,
+        libWord.clean,
+        startPos,
+        direction
+      );
       
-      if (!cell.isEmpty()) {
-        // Cell is occupied - must match the letter for intersection
-        if (cell.getLetter() !== letter) {
-          return false; // Letter mismatch
+      // Link word to grid cells
+      libWord.path.forEach(pos => {
+        const cell = grid.getCell(pos.y, pos.x);
+        if (cell) {
+          cell.addWordId(word.getId());
         }
-      }
-    }
+      });
+      
+      return word;
+    });
     
-    return true;
+    // Create and return Puzzle
+    return new Puzzle(grid, words);
   }
 
   /**
-   * Check if words meet intersection requirement (50%)
-   * @param {Array} words - Placed words
-   * @returns {boolean} True if requirement met
+   * Determine direction from start to end position
+   * @param {Position} start - Start position
+   * @param {Position} end - End position
+   * @returns {Object} Direction object
    */
-  meetsIntersectionRequirement(words) {
-    if (words.length === 0) return true;
+  determineDirection(start, end) {
+    const rowDiff = end.row - start.row;
+    const colDiff = end.col - start.col;
     
-    let wordsWithIntersections = 0;
+    // Normalize to -1, 0, or 1
+    const rowDir = rowDiff === 0 ? 0 : rowDiff / Math.abs(rowDiff);
+    const colDir = colDiff === 0 ? 0 : colDiff / Math.abs(colDiff);
     
-    for (const word of words) {
-      for (const otherWord of words) {
-        if (word !== otherWord && word.intersectsWith(otherWord)) {
-          wordsWithIntersections++;
-          break; // Count each word only once
-        }
-      }
-    }
+    // Map to our Direction enum
+    if (rowDir === 0 && colDir === 1) return Direction.RIGHT;
+    if (rowDir === 0 && colDir === -1) return Direction.LEFT;
+    if (rowDir === 1 && colDir === 0) return Direction.DOWN;
+    if (rowDir === -1 && colDir === 0) return Direction.UP;
+    if (rowDir === 1 && colDir === 1) return Direction.DOWN_RIGHT;
+    if (rowDir === 1 && colDir === -1) return Direction.DOWN_LEFT;
+    if (rowDir === -1 && colDir === 1) return Direction.UP_RIGHT;
+    if (rowDir === -1 && colDir === -1) return Direction.UP_LEFT;
     
-    const intersectionRatio = wordsWithIntersections / words.length;
-    return intersectionRatio >= 0.5;
-  }
-
-  /**
-   * Fill empty cells with random letters
-   * @param {Grid} grid - Grid to fill
-   */
-  fillEmptyCells(grid) {
-    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    
-    for (let row = 0; row < grid.getSize(); row++) {
-      for (let col = 0; col < grid.getSize(); col++) {
-        const cell = grid.getCell(row, col);
-        if (cell && cell.isEmpty()) {
-          const randomLetter = letters[Math.floor(Math.random() * letters.length)];
-          grid.setLetter(row, col, randomLetter);
-        }
-      }
-    }
-  }
-
-  /**
-   * Validate grid size
-   * @param {Grid} grid - Grid to validate
-   * @returns {boolean} True if valid
-   */
-  validateGridSize(grid) {
-    return grid.getSize() <= this.maxGridSize;
-  }
-
-  /**
-   * Find intersections between a word and existing words
-   * @param {Grid} grid - Current grid
-   * @param {Word} word - Word to check
-   * @param {Array} existingWords - Already placed words
-   * @returns {Array} Array of intersection positions
-   */
-  findIntersections(grid, word, existingWords) {
-    const intersections = [];
-    
-    for (const existingWord of existingWords) {
-      const wordIntersections = word.getIntersections(existingWord);
-      intersections.push(...wordIntersections);
-    }
-    
-    return intersections;
+    return Direction.RIGHT; // Default
   }
 }
