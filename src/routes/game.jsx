@@ -5,6 +5,7 @@ import { useTimer } from '../application/hooks/useTimer';
 import { Selection } from '../domain/value-objects/Selection';
 import { Position } from '../domain/value-objects/Position';
 import { getContainer } from '../application/container';
+import { ThemeSwitcher } from '../components/ui/ThemeSwitcher';
 
 export const Route = createFileRoute('/game')({
   component: GameScreen,
@@ -235,29 +236,35 @@ function GameScreen() {
 
   return (
     <div 
-      style={{ minHeight: '100vh', padding: '20px', backgroundColor: '#f0f0f0' }}
+      style={{ minHeight: '100vh', backgroundColor: 'var(--bg-primary)', padding: '20px' }}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
     >
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative' }}>
+        {/* Theme Switcher in top right */}
+        <div style={{ position: 'absolute', top: '0', right: '0', zIndex: 10 }}>
+          <ThemeSwitcher />
+        </div>
+        
         {/* Header */}
-        <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '8px', marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ backgroundColor: 'var(--bg-secondary)', padding: '20px', borderRadius: '8px', marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: '1px solid var(--border-color)' }}>
           <button
             onClick={() => navigate({ to: '/' })}
             style={{
               padding: '10px 20px',
-              backgroundColor: '#f0f0f0',
-              border: '1px solid #ddd',
+              backgroundColor: 'var(--bg-tertiary)',
+              border: '1px solid var(--border-color)',
               borderRadius: '6px',
               cursor: 'pointer',
+              color: 'var(--text-primary)',
             }}
           >
             ← Back
           </button>
           
           <div style={{ textAlign: 'center' }}>
-            <h1 style={{ fontSize: '24px', color: '#4F46E5', margin: 0 }}>Word Search</h1>
-            <p style={{ fontSize: '14px', color: '#666', margin: '5px 0 0 0' }}>
+            <h1 style={{ fontSize: '24px', color: 'var(--accent-color)', margin: 0 }}>Word Search</h1>
+            <p style={{ fontSize: '14px', color: 'var(--text-secondary)', margin: '5px 0 0 0' }}>
               {category} • {difficulty}
             </p>
           </div>
@@ -265,8 +272,8 @@ function GameScreen() {
           <div style={{ textAlign: 'right' }}>
             {timeRemaining !== null && (
               <div>
-                <div style={{ fontSize: '12px', color: '#666' }}>Time</div>
-                <div style={{ fontSize: '24px', fontWeight: 'bold', color: timeRemaining < 30 ? 'red' : '#333' }}>
+                <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Time</div>
+                <div style={{ fontSize: '24px', fontWeight: 'bold', color: timeRemaining < 30 ? '#ef4444' : 'var(--text-primary)' }}>
                   {formattedTime}
                 </div>
               </div>
@@ -297,7 +304,7 @@ function GameScreen() {
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '20px' }}>
           {/* Grid */}
-          <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '8px', overflow: 'visible' }}>
+          <div style={{ backgroundColor: 'var(--bg-secondary)', padding: '20px', borderRadius: '8px', overflow: 'visible', border: '1px solid var(--border-color)' }}>
             <div 
               ref={gridRef}
               style={{ 
@@ -324,15 +331,16 @@ function GameScreen() {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        backgroundColor: isSelected ? '#ddd6fe' : '#f9fafb',
+                        backgroundColor: isSelected ? '#ddd6fe' : 'var(--bg-tertiary)',
                         border: '2px solid',
-                        borderColor: isSelected ? '#7c3aed' : '#e5e7eb',
+                        borderColor: isSelected ? '#7c3aed' : 'var(--border-color)',
                         borderRadius: '4px',
                         fontSize: '20px',
                         fontWeight: 'bold',
                         cursor: 'pointer',
                         userSelect: 'none',
                         transition: 'all 0.15s ease',
+                        color: 'var(--text-primary)',
                       }}
                     >
                       {cell ? cell.getLetter() : ''}
@@ -402,8 +410,8 @@ function GameScreen() {
           </div>
 
           {/* Word List */}
-          <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '8px' }}>
-            <h3 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '15px' }}>
+          <div style={{ backgroundColor: 'var(--bg-secondary)', padding: '20px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '15px', color: 'var(--text-primary)' }}>
               Find these words:
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -412,12 +420,12 @@ function GameScreen() {
                   key={index}
                   style={{
                     padding: '10px',
-                    backgroundColor: word.isFound() ? '#d1fae5' : '#f9fafb',
+                    backgroundColor: word.isFound() ? '#d1fae5' : 'var(--bg-tertiary)',
                     border: '1px solid',
-                    borderColor: word.isFound() ? '#10b981' : '#e5e7eb',
+                    borderColor: word.isFound() ? '#10b981' : 'var(--border-color)',
                     borderRadius: '6px',
                     textDecoration: word.isFound() ? 'line-through' : 'none',
-                    color: word.isFound() ? '#059669' : '#333',
+                    color: word.isFound() ? '#059669' : 'var(--text-primary)',
                     fontWeight: '500',
                   }}
                 >
@@ -426,9 +434,9 @@ function GameScreen() {
               ))}
             </div>
 
-            <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#f0f0f0', borderRadius: '6px' }}>
-              <div style={{ fontSize: '14px', color: '#666', marginBottom: '5px' }}>Progress</div>
-              <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#4F46E5' }}>
+            <div style={{ marginTop: '20px', padding: '15px', backgroundColor: 'var(--bg-tertiary)', borderRadius: '6px', border: '1px solid var(--border-color)' }}>
+              <div style={{ fontSize: '14px', color: 'var(--text-secondary)', marginBottom: '5px' }}>Progress</div>
+              <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--accent-color)' }}>
                 {puzzle.getFoundWordCount()} / {puzzle.getTotalWordCount()}
               </div>
             </div>
@@ -450,22 +458,23 @@ function GameScreen() {
             zIndex: 1000,
           }}>
             <div style={{
-              backgroundColor: 'white',
+              backgroundColor: 'var(--bg-secondary)',
               padding: '40px',
               borderRadius: '12px',
               maxWidth: '400px',
               width: '90%',
               textAlign: 'center',
+              border: '2px solid var(--border-color)',
             }}>
-              <h2 style={{ fontSize: '32px', fontWeight: 'bold', color: '#4F46E5', marginBottom: '20px' }}>
+              <h2 style={{ fontSize: '32px', fontWeight: 'bold', color: 'var(--accent-color)', marginBottom: '20px' }}>
                 Game Over!
               </h2>
               <div style={{ marginBottom: '30px' }}>
-                <div style={{ fontSize: '16px', color: '#666', marginBottom: '10px' }}>Your Score</div>
-                <div style={{ fontSize: '48px', fontWeight: 'bold', color: '#4F46E5', marginBottom: '20px' }}>
+                <div style={{ fontSize: '16px', color: 'var(--text-secondary)', marginBottom: '10px' }}>Your Score</div>
+                <div style={{ fontSize: '48px', fontWeight: 'bold', color: 'var(--accent-color)', marginBottom: '20px' }}>
                   {finalScore}
                 </div>
-                <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#333', marginBottom: '15px' }}>
+                <div style={{ fontSize: '18px', fontWeight: 'bold', color: 'var(--text-primary)', marginBottom: '15px' }}>
                   Enter Your Initials
                 </div>
                 <input
@@ -486,10 +495,12 @@ function GameScreen() {
                     fontWeight: 'bold',
                     textAlign: 'center',
                     textTransform: 'uppercase',
-                    border: '2px solid #4F46E5',
+                    border: '2px solid var(--accent-color)',
                     borderRadius: '6px',
                     width: '120px',
                     marginBottom: '20px',
+                    backgroundColor: 'var(--bg-secondary)',
+                    color: 'var(--text-primary)',
                   }}
                 />
               </div>
@@ -499,7 +510,7 @@ function GameScreen() {
                   disabled={initials.length === 0}
                   style={{
                     padding: '14px 24px',
-                    backgroundColor: initials.length === 0 ? '#ccc' : '#4F46E5',
+                    backgroundColor: initials.length === 0 ? '#ccc' : 'var(--accent-color)',
                     color: 'white',
                     border: 'none',
                     borderRadius: '6px',
@@ -514,9 +525,9 @@ function GameScreen() {
                   onClick={() => navigate({ to: '/' })}
                   style={{
                     padding: '14px 24px',
-                    backgroundColor: '#f0f0f0',
-                    color: '#333',
-                    border: '1px solid #ddd',
+                    backgroundColor: 'var(--bg-tertiary)',
+                    color: 'var(--text-primary)',
+                    border: '1px solid var(--border-color)',
                     borderRadius: '6px',
                     fontSize: '16px',
                     fontWeight: '600',

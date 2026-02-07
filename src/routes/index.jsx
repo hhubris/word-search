@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
+import { ThemeSwitcher } from '../components/ui/ThemeSwitcher';
 
 export const Route = createFileRoute('/')({
   component: HomeScreen,
@@ -56,11 +57,16 @@ function HomeScreen() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', padding: '20px', backgroundColor: '#f0f0f0' }}>
-      <div style={{ maxWidth: '800px', margin: '0 auto', backgroundColor: 'white', padding: '40px', borderRadius: '8px' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--bg-primary)', padding: '20px' }}>
+      <div style={{ maxWidth: '800px', margin: '0 auto', backgroundColor: 'var(--bg-secondary)', padding: '40px', borderRadius: '8px', border: '1px solid var(--border-color)', position: 'relative' }}>
+        {/* Theme Switcher in top right */}
+        <div style={{ position: 'absolute', top: '15px', right: '15px' }}>
+          <ThemeSwitcher />
+        </div>
+        
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <h1 style={{ fontSize: '48px', color: '#4F46E5', marginBottom: '10px' }}>Word Search</h1>
-          <p style={{ color: '#666' }}>Find hidden words in the grid!</p>
+          <h1 style={{ fontSize: '48px', color: 'var(--accent-color)', marginBottom: '10px' }}>Word Search</h1>
+          <p style={{ color: 'var(--text-secondary)' }}>Find hidden words in the grid!</p>
         </div>
 
         <div style={{ marginBottom: '30px' }}>
@@ -74,9 +80,9 @@ function HomeScreen() {
                 onClick={() => setCategory(cat.value)}
                 style={{
                   padding: '12px',
-                  border: category === cat.value ? '2px solid #4F46E5' : '1px solid #ddd',
-                  backgroundColor: category === cat.value ? '#4F46E5' : 'white',
-                  color: category === cat.value ? 'white' : '#333',
+                  border: category === cat.value ? '2px solid var(--accent-color)' : '1px solid var(--border-color)',
+                  backgroundColor: category === cat.value ? 'var(--accent-color)' : 'var(--bg-secondary)',
+                  color: category === cat.value ? 'white' : 'var(--text-primary)',
                   borderRadius: '6px',
                   cursor: 'pointer',
                   fontWeight: category === cat.value ? 'bold' : 'normal',
@@ -99,9 +105,9 @@ function HomeScreen() {
                 onClick={() => setDifficulty(diff.value)}
                 style={{
                   padding: '16px',
-                  border: difficulty === diff.value ? '2px solid #4F46E5' : '1px solid #ddd',
-                  backgroundColor: difficulty === diff.value ? '#4F46E5' : 'white',
-                  color: difficulty === diff.value ? 'white' : '#333',
+                  border: difficulty === diff.value ? '2px solid var(--accent-color)' : '1px solid var(--border-color)',
+                  backgroundColor: difficulty === diff.value ? 'var(--accent-color)' : 'var(--bg-secondary)',
+                  color: difficulty === diff.value ? 'white' : 'var(--text-primary)',
                   borderRadius: '6px',
                   cursor: 'pointer',
                   textAlign: 'center',
@@ -119,7 +125,7 @@ function HomeScreen() {
           style={{
             width: '100%',
             padding: '16px',
-            backgroundColor: '#4F46E5',
+            backgroundColor: 'var(--accent-color)',
             color: 'white',
             border: 'none',
             borderRadius: '6px',
@@ -137,9 +143,9 @@ function HomeScreen() {
           style={{
             width: '100%',
             padding: '12px',
-            backgroundColor: '#f0f0f0',
-            color: '#333',
-            border: '1px solid #ddd',
+            backgroundColor: 'var(--bg-tertiary)',
+            color: 'var(--text-primary)',
+            border: '1px solid var(--border-color)',
             borderRadius: '6px',
             fontSize: '16px',
             fontWeight: '600',
