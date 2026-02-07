@@ -201,7 +201,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Retrieve and format high scores by difficulty
     - _Requirements: 9.1, 9.5, 9.6_
   
-  - [ ] 8.9 Implement ChangeThemeUseCase
+  - [x] 8.9 Implement ChangeThemeUseCase
     - Create `src/application/use-cases/ChangeThemeUseCase.js`
     - Handle theme cycling and persistence
     - _Requirements: 10.2, 10.4, 10.5_
