@@ -163,7 +163,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - **Validates: Requirements 10.5, 12.2, 12.4**
 
 - [ ] 8. Create application layer - use cases
-  - [ ] 8.1 Implement StartGameUseCase
+  - [x] 8.1 Implement StartGameUseCase
     - Create `src/application/use-cases/StartGameUseCase.js`
     - Wire together puzzle generation and game session creation
     - _Requirements: 4.3, 4.4_
