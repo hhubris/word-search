@@ -1,0 +1,74 @@
+I need to create a word search game that runs completely in the browser.
+
+The game must support the following categories of words:
+  * Animals
+  * Sports
+  * Science
+  * Food
+  * Geography
+  * Technology
+  * Music
+  * Movies
+
+For this tech demo, the word lists are going to be hard coded in the source.  I don't care where you get the words list from.  Try to get at least 500 words for each category.  Each word must be at least 3 characters and no more than 8.
+
+The game must support 3 difficulties:
+  * Easy => 8 words, no timer, words layed out left to right and top to bottom
+  * Medium => 12 words, 5 minute timer, words layed out left to right, top to bottom, and diagonally from top left to bottm right, and bottom left to top right
+  * Hard => 16 words, 3 minute timer, words layed out in all eight possible directions
+
+The opening scene must include a button bar at the top that
+  * First button will take you to a high scores list
+    * High scores will be saved for all 3 game categories
+    * 10 High scores for each game category will be saved
+    * The high scores will be displayed in columns, Easy, Medium and Hard
+    * The high scores will be sorted from highest to lowest
+    * If there are less than 10 high scores just leave the space empty
+  * Second button that will allow the user to switch between one of three themes
+    * Dark Mode
+    * Light Mode
+    * System Mode
+
+Below the button bar the application title should be displayed, centered, in a large font.  If you can use the font accidental presidency that would be awesome.  Make the application title easy to change, default it to "Word Search"
+
+Below that display the a Category section, with buttons to pick one of the categories.  Spread the buttons across two rows.
+
+Below that should be a difficulty selection.  The three difficulties should be displayed in order, with their constraints in smaller text.
+
+And finally there should be Start Game button that will begin the game.
+
+The player must select both a category and a difficulty before the start button becomes active.
+
+When the start button is active and the player clicks it, the app should advance to the game screen.
+
+Here is the first tricky part.
+
+The game needs to select the required number of words for the difficulty selected.  The words need to be laid out according to the rules for the difficulty, with at least half of the words crossing at least one other word.  Of course once the target words are layed out, the empty spaces need to be filled in with letters being sure to not randomly create one of the target words a second time.  The total size of the grid should be a square, which can be padded in any direction.  The total size of the grid can not exceed 12x12.  If it does, then you have an invalid puzzle, and need to try again.  How you replace words to fix the problem is completely up to you.
+
+The game scene needs to render the game board on the left with the words to be found in a list on the right, in alphabetical order.
+
+A timer must be displayed, and started after the game board is shown, if there is a timer for the selected difficutly.  The timer should count down from the starting value for the difficulty to zero.  When the timer reaches zero, or all words are found (see below) the timer should stop.
+
+When the user holds the left mouse button down over a range of letters they should be highlighted to indicate they are selected.  As a user drags the mouse, they should only be allowed to drag in the direction that makes sense from the first two letters selected.  For example, if the player clicks a letter, and then the next letter directly right of the first letter, then the user must be restricted to selecting letters in the horizontal row.  The same for verticals and diagonals.
+
+If the user selects a word that is in the word list, then the display must be updated to with the selected word surrounded by a circle, and the word in the list of words to found must be crossed out.
+
+If all of the words in the puzzle have been found, or the timer expires, the timer must stop and the players total score displayed over the game board.
+
+
+After the game is over, and the player clicks anywhere the home screen should be displayed, unless the player achieved a new high score that would be displayed, in which case the high score screen should be displayed, so that the player can enter their initials (up to 3 letters) and then the high score is saved, displayed and highlighted.
+
+
+All persistant data should be saved in the users browser.
+
+
+Even though this application will run in the browser, I want you to build a Clean Architecture.
+
+* Use React 19 + Javascript (no Typescript)
+* Use Vite.js for the build tool
+* Use TanStack Router
+* Use TanStack Query
+* Use Tailwind CSS v4
+
+
+If you have any questions, please ask me.

@@ -1,0 +1,20 @@
+# Mise configuration for Word Search Game project
+
+[tools]
+# Node.js - Required for React, Vite, and all npm packages
+node = "22"
+
+# pnpm - Fast, disk space efficient package manager (alternative to npm)
+# Recommended for modern JavaScript projects
+"npm:pnpm" = "latest"
+
+[env]
+# Set pnpm to use the project's node_modules
+PNPM_HOME = "{{config_root}}/node_modules/.bin"
+
+[tasks]
+# Convenient tasks for development
+install = "pnpm install"
+dev = "pnpm run dev"
+build = "pnpm run build"
+preview = "pnpm run preview"
