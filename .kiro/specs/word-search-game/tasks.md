@@ -241,7 +241,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Integrate with SelectWordUseCase and EndGameUseCase
     - _Requirements: 6.1, 6.4, 8.1, 8.2_
   
-  - [ ] 12.2 Create useTimer hook
+  - [x] 12.2 Create useTimer hook
     - Create `src/presentation/hooks/useTimer.js`
     - Implement countdown logic with setInterval
     - Handle timer stop on game end
