@@ -130,7 +130,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Implement get(), set(), remove() methods with error handling
     - _Requirements: 12.1, 12.2_
   
-  - [ ] 7.2 Implement WordRepositoryImpl
+  - [x] 7.2 Implement WordRepositoryImpl
     - Create `src/infrastructure/repositories/WordRepositoryImpl.js`
     - Implement getWordsByCategory() and getAllCategories()
     - _Requirements: 1.1, 1.4, 1.5_
