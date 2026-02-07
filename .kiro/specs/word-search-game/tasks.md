@@ -211,11 +211,11 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - **Property 20: Theme Application**
     - **Validates: Requirements 10.2, 10.4**
 
-- [ ] 9. Checkpoint - Core logic complete
+- [x] 9. Checkpoint - Core logic complete
   - Ensure all domain, infrastructure, and application tests pass, ask the user if questions arise.
 
-- [ ] 10. Create dependency injection container
-  - [ ] 10.1 Set up service container
+- [x] 10. Create dependency injection container
+  - [x] 10.1 Set up service container
     - Create `src/application/container.js`
     - Wire all dependencies (repositories, services, use cases)
     - Export configured use cases for presentation layer
