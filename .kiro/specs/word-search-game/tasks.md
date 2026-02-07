@@ -221,21 +221,21 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Export configured use cases for presentation layer
     - _Requirements: 13.6_
 
-- [ ] 11. Set up routing with TanStack Router
-  - [ ] 11.1 Configure router
+- [x] 11. Set up routing with TanStack Router
+  - [x] 11.1 Configure router
     - Create `src/presentation/routes/index.js`
     - Define routes: '/' (home), '/game' (game screen), '/high-scores' (high scores)
     - Configure route tree
     - _Requirements: 13.3_
   
-  - [ ] 11.2 Create route components
+  - [x] 11.2 Create route components
     - Create `src/presentation/routes/HomeRoute.jsx`
     - Create `src/presentation/routes/GameRoute.jsx`
     - Create `src/presentation/routes/HighScoresRoute.jsx`
     - _Requirements: 4.3, 8.5, 8.6_
 
 - [ ] 12. Implement presentation layer - custom hooks
-  - [ ] 12.1 Create useGameSession hook
+  - [x] 12.1 Create useGameSession hook
     - Create `src/presentation/hooks/useGameSession.js`
     - Manage game session state and word selection
     - Integrate with SelectWordUseCase and EndGameUseCase
