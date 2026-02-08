@@ -4,12 +4,13 @@
 
 This implementation plan breaks down the word search game into incremental coding tasks following Clean Architecture principles. The implementation proceeds from the domain layer outward, ensuring core business logic is solid before building infrastructure and UI layers. Each major component includes property-based tests to validate correctness properties from the design document.
 
-The project setup (Task 1) is already complete with React 19, Vite, TanStack Router, TanStack Query, and Tailwind CSS v4 installed.
+The project setup (Task 1) is already complete with React 19, Vite, TanStack Router, and TanStack Query installed. Note: Tailwind CSS v4 was initially installed but inline styles are used instead (see Decision Record 004).
 
 ## Tasks
 
 - [x] 1. Project setup and dependencies
-  - Already complete: React 19, Vite, TanStack Router, TanStack Query, Tailwind CSS v4 installed
+  - Already complete: React 19, Vite, TanStack Router, TanStack Query installed
+  - Note: Tailwind CSS v4 was initially installed but not used (see Decision Record 004)
 
 - [ ] 2. Create domain layer foundation
   - [x] 2.1 Implement core value objects and enums
