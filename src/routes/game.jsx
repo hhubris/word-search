@@ -1,11 +1,13 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useEffect, useState, useRef, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { useGameSession } from '../application/hooks/useGameSession';
 import { useTimer } from '../application/hooks/useTimer';
 import { Selection } from '../domain/value-objects/Selection';
-import { Position } from '../domain/value-objects/Position';
 import { getContainer } from '../application/container';
 import { ThemeSwitcher } from '../components/ui/ThemeSwitcher';
+import { PuzzleGrid } from '../components/game/PuzzleGrid';
+import { WordList } from '../components/game/WordList';
+import { Timer } from '../components/game/Timer';
 
 export const Route = createFileRoute('/game')({
   component: GameScreen,
@@ -23,15 +25,12 @@ function GameScreen() {
   const { gameSession, startGame, selectWord, endGame, isLoading, error, isPuzzleComplete } = useGameSession();
   const { timeRemaining, formattedTime, start: startTimer, stop: stopTimer } = useTimer();
   
-  // Selection state
-  const [isSelecting, setIsSelecting] = useState(false);
-  const [selectedPositions, setSelectedPositions] = useState([]);
-  const [feedback, setFeedback] = useState(null); // { type: 'success' | 'error', message: string }
+  // Game state
+  const [feedback, setFeedback] = useState(null);
   const [showGameOver, setShowGameOver] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
   const [initials, setInitials] = useState('');
-  const [renderKey, setRenderKey] = useState(0); // Force re-render when words are found
-  const gridRef = useRef(null);
+  const [foundWords, setFoundWords] = useState([]);
 
   useEffect(() => {
     // Start the game when component mounts
@@ -44,6 +43,9 @@ function GameScreen() {
           handleGameEnd();
         });
       }
+      
+      // Initialize found words
+      updateFoundWords(session);
     });
   }, [category, difficulty]);
 
@@ -53,6 +55,19 @@ function GameScreen() {
       handleGameEnd();
     }
   }, [isPuzzleComplete]);
+
+  // Update found words when game session changes
+  useEffect(() => {
+    if (gameSession) {
+      updateFoundWords(gameSession);
+    }
+  }, [gameSession]);
+
+  const updateFoundWords = (session) => {
+    const puzzle = session.getPuzzle();
+    const found = puzzle.words.filter(word => word.isFound());
+    setFoundWords(found);
+  };
 
   const handleGameEnd = () => {
     if (!gameSession || gameSession.isEnded()) return;
@@ -83,80 +98,12 @@ function GameScreen() {
     }
   };
 
-  // Mouse/touch handlers for word selection
-  const handleCellMouseDown = (row, col) => {
+  // Handle selection from PuzzleGrid component
+  const handleSelectionComplete = (selectedCells) => {
     if (!gameSession || gameSession.isEnded() || timeRemaining === 0) return;
     
-    setIsSelecting(true);
-    setSelectedPositions([new Position(row, col)]);
-    setFeedback(null);
-  };
-
-  const handleCellMouseEnter = (row, col) => {
-    if (!isSelecting || !gameSession || gameSession.isEnded() || timeRemaining === 0) return;
-    
-    const newPos = new Position(row, col);
-    
-    // Check if this is the previous position (backtracking)
-    if (selectedPositions.length >= 2) {
-      const secondToLast = selectedPositions[selectedPositions.length - 2];
-      if (secondToLast.row === row && secondToLast.col === col) {
-        // Remove the last position (backtrack)
-        setSelectedPositions(prev => prev.slice(0, -1));
-        return;
-      }
-    }
-    
-    // Check if this position is already in the selection
-    const alreadySelected = selectedPositions.some(
-      pos => pos.row === row && pos.col === col
-    );
-    
-    if (alreadySelected) return;
-    
-    // If we have at least one position, enforce direction constraint
-    if (selectedPositions.length > 0) {
-      const lastPos = selectedPositions[selectedPositions.length - 1];
-      const rowDiff = row - lastPos.row;
-      const colDiff = col - lastPos.col;
-      
-      // Check if the new position is adjacent (1 step away in any direction)
-      const isAdjacent = Math.abs(rowDiff) <= 1 && Math.abs(colDiff) <= 1 && (rowDiff !== 0 || colDiff !== 0);
-      
-      if (!isAdjacent) return;
-      
-      // If we have 2+ positions, enforce same direction
-      if (selectedPositions.length >= 2) {
-        const firstPos = selectedPositions[0];
-        const secondPos = selectedPositions[1];
-        const dirRow = secondPos.row - firstPos.row;
-        const dirCol = secondPos.col - firstPos.col;
-        
-        // Normalize direction to -1, 0, or 1
-        const normDirRow = dirRow === 0 ? 0 : dirRow / Math.abs(dirRow);
-        const normDirCol = dirCol === 0 ? 0 : dirCol / Math.abs(dirCol);
-        
-        // Check if new position follows the same direction
-        const normRowDiff = rowDiff === 0 ? 0 : rowDiff / Math.abs(rowDiff);
-        const normColDiff = colDiff === 0 ? 0 : colDiff / Math.abs(colDiff);
-        
-        if (normDirRow !== normRowDiff || normDirCol !== normColDiff) return;
-      }
-    }
-    
-    setSelectedPositions(prev => [...prev, newPos]);
-  };
-
-  const handleMouseUp = () => {
-    if (!isSelecting || selectedPositions.length === 0) {
-      setIsSelecting(false);
-      return;
-    }
-    
-    setIsSelecting(false);
-    
     // Create selection and validate
-    const selection = new Selection(selectedPositions);
+    const selection = new Selection(selectedCells);
     
     try {
       const result = selectWord(selection);
@@ -164,7 +111,9 @@ function GameScreen() {
       if (result.found) {
         setFeedback({ type: 'success', message: `Found: ${result.word.getText()}!` });
         setTimeout(() => setFeedback(null), 2000);
-        setRenderKey(k => k + 1); // Force re-render to update found word highlights
+        
+        // Update found words
+        updateFoundWords(gameSession);
       } else {
         setFeedback({ type: 'error', message: 'Not a word in the list' });
         setTimeout(() => setFeedback(null), 1500);
@@ -174,21 +123,7 @@ function GameScreen() {
       setFeedback({ type: 'error', message: err.message });
       setTimeout(() => setFeedback(null), 1500);
     }
-    
-    setSelectedPositions([]);
   };
-
-  const isCellSelected = (row, col) => {
-    return selectedPositions.some(pos => pos.row === row && pos.col === col);
-  };
-
-  // Memoize found words for drawing circles
-  const foundWords = useMemo(() => {
-    if (!gameSession) return [];
-    
-    const puzzle = gameSession.getPuzzle();
-    return puzzle.words.filter(word => word.isFound());
-  }, [gameSession, renderKey]); // Re-compute when renderKey changes (word found)
 
   if (isLoading) {
     return (
@@ -232,14 +167,10 @@ function GameScreen() {
   const puzzle = gameSession.getPuzzle();
   const grid = puzzle.grid;
   const words = puzzle.words;
-  const gridSize = grid.getSize();
+  const foundWordIds = foundWords.map(w => w.id);
 
   return (
-    <div 
-      style={{ minHeight: '100vh', backgroundColor: 'var(--bg-primary)', padding: '20px' }}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseUp}
-    >
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--bg-primary)', padding: '20px' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative' }}>
         {/* Theme Switcher in top right */}
         <div style={{ position: 'absolute', top: '0', right: '0', zIndex: 10 }}>
@@ -269,23 +200,11 @@ function GameScreen() {
             </p>
           </div>
 
-          <div style={{ textAlign: 'right' }}>
-            {timeRemaining !== null && (
-              <div>
-                <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Time</div>
-                <div style={{ fontSize: '24px', fontWeight: 'bold', color: timeRemaining < 30 ? '#ef4444' : 'var(--text-primary)' }}>
-                  {formattedTime}
-                </div>
-              </div>
-            )}
-          </div>
+          <Timer timeRemaining={timeRemaining} formattedTime={formattedTime} />
         </div>
 
         {/* Feedback message */}
-        <div style={{
-          minHeight: '60px',
-          marginBottom: '20px',
-        }}>
+        <div style={{ minHeight: '60px', marginBottom: '20px' }}>
           {feedback && (
             <div style={{
               backgroundColor: feedback.type === 'success' ? '#d1fae5' : '#fee2e2',
@@ -304,136 +223,18 @@ function GameScreen() {
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '20px' }}>
           {/* Grid */}
-          <div style={{ backgroundColor: 'var(--bg-secondary)', padding: '20px', borderRadius: '8px', overflow: 'visible', border: '1px solid var(--border-color)' }}>
-            <div 
-              ref={gridRef}
-              style={{ 
-                display: 'grid', 
-                gridTemplateColumns: `repeat(${gridSize}, 1fr)`,
-                gap: '4px',
-                maxWidth: '600px',
-                margin: '0 auto',
-                position: 'relative',
-              }}
-            >
-              {Array.from({ length: gridSize }).map((_, row) =>
-                Array.from({ length: gridSize }).map((_, col) => {
-                  const cell = grid.getCell(row, col);
-                  const isSelected = isCellSelected(row, col);
-                  
-                  return (
-                    <div
-                      key={`${row}-${col}`}
-                      onMouseDown={() => handleCellMouseDown(row, col)}
-                      onMouseEnter={() => handleCellMouseEnter(row, col)}
-                      style={{
-                        aspectRatio: '1',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        backgroundColor: isSelected ? '#ddd6fe' : 'var(--bg-tertiary)',
-                        border: '2px solid',
-                        borderColor: isSelected ? '#7c3aed' : 'var(--border-color)',
-                        borderRadius: '4px',
-                        fontSize: '20px',
-                        fontWeight: 'bold',
-                        cursor: 'pointer',
-                        userSelect: 'none',
-                        transition: 'all 0.15s ease',
-                        color: 'var(--text-primary)',
-                      }}
-                    >
-                      {cell ? cell.getLetter() : ''}
-                    </div>
-                  );
-                })
-              )}
-              
-              {/* SVG overlay for drawing circles around found words */}
-              <svg
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: '100%',
-                  pointerEvents: 'none',
-                  overflow: 'visible',
-                }}
-                viewBox={`0 0 ${gridSize} ${gridSize}`}
-                preserveAspectRatio="none"
-              >
-                {foundWords.map((word, index) => {
-                  const positions = word.getPositions();
-                  if (positions.length === 0) return null;
-                  
-                  const start = positions[0];
-                  const end = positions[positions.length - 1];
-                  
-                  // Calculate center points for start and end
-                  const x1 = start.col + 0.5;
-                  const y1 = start.row + 0.5;
-                  const x2 = end.col + 0.5;
-                  const y2 = end.row + 0.5;
-                  
-                  // Calculate center point of the word
-                  const cx = (x1 + x2) / 2;
-                  const cy = (y1 + y2) / 2;
-                  
-                  // Calculate length and angle
-                  const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-                  const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
-                  
-                  // Rounded rectangle dimensions
-                  const width = length + 0.7; // Extended length
-                  const height = 0.7; // Height of the rounded rect
-                  const radius = height / 2; // Fully rounded ends
-                  
-                  return (
-                    <rect
-                      key={`circle-${index}`}
-                      x={cx - width / 2}
-                      y={cy - height / 2}
-                      width={width}
-                      height={height}
-                      rx={radius}
-                      ry={radius}
-                      fill="none"
-                      stroke="#10b981"
-                      strokeWidth="0.08"
-                      transform={`rotate(${angle} ${cx} ${cy})`}
-                    />
-                  );
-                })}
-              </svg>
-            </div>
+          <div style={{ backgroundColor: 'var(--bg-secondary)', padding: '20px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+            <PuzzleGrid 
+              grid={grid} 
+              foundWords={foundWords}
+              onSelectionComplete={handleSelectionComplete}
+            />
           </div>
 
           {/* Word List */}
           <div style={{ backgroundColor: 'var(--bg-secondary)', padding: '20px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-            <h3 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '15px', color: 'var(--text-primary)' }}>
-              Find these words:
-            </h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {[...words].sort((a, b) => a.getText().localeCompare(b.getText())).map((word, index) => (
-                <div
-                  key={index}
-                  style={{
-                    padding: '10px',
-                    backgroundColor: word.isFound() ? '#d1fae5' : 'var(--bg-tertiary)',
-                    border: '1px solid',
-                    borderColor: word.isFound() ? '#10b981' : 'var(--border-color)',
-                    borderRadius: '6px',
-                    textDecoration: word.isFound() ? 'line-through' : 'none',
-                    color: word.isFound() ? '#059669' : 'var(--text-primary)',
-                    fontWeight: '500',
-                  }}
-                >
-                  {word.getText()}
-                </div>
-              ))}
-            </div>
-
+            <WordList words={words} foundWordIds={foundWordIds} />
+            
             <div style={{ marginTop: '20px', padding: '15px', backgroundColor: 'var(--bg-tertiary)', borderRadius: '6px', border: '1px solid var(--border-color)' }}>
               <div style={{ fontSize: '14px', color: 'var(--text-secondary)', marginBottom: '5px' }}>Progress</div>
               <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--accent-color)' }}>

@@ -292,17 +292,17 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - **Validates: Requirements 5.2**
 
 - [ ] 14. Implement presentation layer - UI components (Timer and Game Screen)
-  - [ ] 14.1 Create Timer component
+  - [x] 14.1 Create Timer component
     - Create `src/presentation/components/Timer.jsx`
     - Display countdown in MM:SS format
     - Update every second
     - _Requirements: 5.3, 7.2, 7.3, 7.4_
   
-  - [ ] 14.2 Write property test for timer display
+  - [x] 14.2 Write property test for timer display
     - **Property 6: Timer Display Based on Difficulty**
     - **Validates: Requirements 5.3, 5.4**
   
-  - [ ] 14.3 Create GameScreen component
+  - [x] 14.3 Create GameScreen component
     - Create `src/presentation/components/GameScreen.jsx`
     - Layout: Grid on left, WordList on right, Timer at top
     - Show score overlay on game completion
