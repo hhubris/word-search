@@ -350,7 +350,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Test navigation on Start click
     - _Requirements: 4.1, 4.2, 4.3_
 
-- [ ] 16. Implement presentation layer - UI components (High Scores and Theme)
+- [x] 16. Implement presentation layer - UI components (High Scores and Theme)
   - [x] 16.1 Create HighScoresScreen component
     - Create `src/presentation/components/HighScoresScreen.jsx`
     - Display three columns: Easy, Medium, Hard
@@ -365,7 +365,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Test new score highlighting
     - _Requirements: 9.3, 9.6, 9.8_
   
-  - [ ] 16.3 Create ThemeSwitcher component
+  - [x] 16.3 Create ThemeSwitcher component
     - Create `src/presentation/components/ThemeSwitcher.jsx`
     - Button to cycle through themes
     - Apply theme to document root
