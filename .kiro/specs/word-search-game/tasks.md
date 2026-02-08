@@ -275,7 +275,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Highlight selected cells and found words
     - _Requirements: 5.1, 6.1, 6.2, 6.3, 6.5_
   
-  - [ ]* 13.2 Write unit tests for PuzzleGrid
+  - [x] 13.2 Write unit tests for PuzzleGrid
     - Test cell rendering
     - Test selection state updates
     - Test found word highlighting
@@ -287,7 +287,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Cross out found words
     - _Requirements: 5.2, 6.6_
   
-  - [ ]* 13.4 Write property test for word list sorting
+  - [x] 13.4 Write property test for word list sorting
     - **Property 5: Word List Alphabetical Sorting**
     - **Validates: Requirements 5.2**
 
@@ -298,7 +298,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Update every second
     - _Requirements: 5.3, 7.2, 7.3, 7.4_
   
-  - [ ]* 14.2 Write property test for timer display
+  - [ ] 14.2 Write property test for timer display
     - **Property 6: Timer Display Based on Difficulty**
     - **Validates: Requirements 5.3, 5.4**
   
@@ -309,7 +309,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Handle click to navigate after game end
     - _Requirements: 5.1, 5.2, 5.3, 8.3, 8.4, 8.5, 8.6_
   
-  - [ ]* 14.4 Write integration tests for GameScreen
+  - [ ] 14.4 Write integration tests for GameScreen
     - Test game flow: selection → validation → completion
     - Test timer expiration handling
     - Test navigation after game end
@@ -322,7 +322,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Highlight selected category
     - _Requirements: 1.1, 1.2, 1.3_
   
-  - [ ]* 15.2 Write property test for selection state
+  - [ ] 15.2 Write property test for selection state
     - **Property 22: Selection State Management**
     - **Validates: Requirements 1.3, 2.5**
   
@@ -340,11 +340,11 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - _Requirements: 4.1, 4.2, 4.3, 11.1, 11.2, 11.3, 11.4, 11.5, 11.6_
     - **Note:** Button bar removed per Decision Record 001
   
-  - [ ]* 15.5 Write property test for Start button enablement
+  - [ ] 15.5 Write property test for Start button enablement
     - **Property 21: Start Button Enablement**
     - **Validates: Requirements 4.2**
   
-  - [ ]* 15.6 Write unit tests for HomeScreen
+  - [ ] 15.6 Write unit tests for HomeScreen
     - Test initial button state (disabled)
     - Test button enablement after selections
     - Test navigation on Start click
@@ -359,7 +359,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Include initials input form when qualifying
     - _Requirements: 9.1, 9.2, 9.3, 9.5, 9.6, 9.7, 9.8_
   
-  - [ ]* 16.2 Write unit tests for HighScoresScreen
+  - [ ] 16.2 Write unit tests for HighScoresScreen
     - Test score display and sorting
     - Test initials input validation (max 3 chars)
     - Test new score highlighting
@@ -373,7 +373,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - _Requirements: 10.1, 10.2, 10.4_
     - **Note:** Standalone component, not in button bar per Decision Record 001
   
-  - [ ]* 16.4 Create ButtonBar component (OBSOLETE)
+  - [ ] 16.4 Create ButtonBar component (OBSOLETE)
     - **Status:** Not implemented - removed per Decision Record 001
     - Original plan was to create button bar with high scores and theme switcher
     - Implementation uses standalone ThemeSwitcher in top right corner instead
@@ -430,7 +430,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Display loading states
     - _Requirements: 3.7_
   
-  - [ ]* 20.4 Write unit tests for error scenarios
+  - [ ] 20.4 Write unit tests for error scenarios
     - Test storage failures
     - Test puzzle generation retries
     - Test timer edge cases (tab backgrounding)

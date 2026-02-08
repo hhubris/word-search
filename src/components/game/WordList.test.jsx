@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { WordList } from './WordList.jsx';
+import * as fc from 'fast-check';
 
 describe('WordList', () => {
   const mockWords = [
@@ -163,6 +164,94 @@ describe('WordList', () => {
       listItems.forEach((item) => {
         expect(item).toHaveStyle({ textDecoration: 'line-through' });
       });
+    });
+  });
+
+  describe('property-based tests', () => {
+    // Feature: word-search-game, Property 5: Word List Alphabetical Sorting
+    it('Property 5: words should always be displayed in alphabetical order', () => {
+      fc.assert(
+        fc.property(
+          // Generate an array of 3-15 random words
+          fc.array(
+            fc.record({
+              id: fc.uuid(),
+              text: fc.string({ minLength: 3, maxLength: 8 }).map(s => 
+                s.toUpperCase().replace(/[^A-Z]/g, 'A')
+              ),
+            }),
+            { minLength: 3, maxLength: 15 }
+          ),
+          (words) => {
+            // Filter out empty texts
+            const validWords = words.filter(w => w.text.length >= 3);
+            if (validWords.length === 0) return true; // Skip empty arrays
+
+            // Render the WordList with random words
+            const { unmount } = render(<WordList words={validWords} />);
+
+            // Get all rendered list items
+            const listItems = screen.getAllByRole('listitem');
+            const renderedTexts = listItems.map((item) => item.textContent);
+
+            // Expected alphabetically sorted order
+            const expectedTexts = validWords
+              .map((w) => w.text)
+              .sort((a, b) => a.localeCompare(b));
+
+            // Verify the rendered order matches alphabetical order
+            expect(renderedTexts).toEqual(expectedTexts);
+
+            // Cleanup
+            unmount();
+          }
+        ),
+        { numRuns: 100 }
+      );
+    });
+
+    it('Property 5: alphabetical order should be maintained regardless of input order', () => {
+      fc.assert(
+        fc.property(
+          // Generate words and shuffle them
+          fc.array(
+            fc.record({
+              id: fc.uuid(),
+              text: fc.string({ minLength: 3, maxLength: 8 }).map(s => 
+                s.toUpperCase().replace(/[^A-Z]/g, 'A')
+              ),
+            }),
+            { minLength: 5, maxLength: 10 }
+          ),
+          (words) => {
+            // Filter out empty texts
+            const validWords = words.filter(w => w.text.length >= 3);
+            if (validWords.length === 0) return true; // Skip empty arrays
+
+            // Create a shuffled copy
+            const shuffled = [...validWords].sort(() => Math.random() - 0.5);
+
+            // Render with shuffled words
+            const { unmount } = render(<WordList words={shuffled} />);
+
+            // Get rendered order
+            const listItems = screen.getAllByRole('listitem');
+            const renderedTexts = listItems.map((item) => item.textContent);
+
+            // Expected sorted order
+            const expectedTexts = validWords
+              .map((w) => w.text)
+              .sort((a, b) => a.localeCompare(b));
+
+            // Should be in alphabetical order regardless of input order
+            expect(renderedTexts).toEqual(expectedTexts);
+
+            // Cleanup
+            unmount();
+          }
+        ),
+        { numRuns: 100 }
+      );
     });
   });
 });
