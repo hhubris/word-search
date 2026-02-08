@@ -36,35 +36,35 @@ describe('Timer', () => {
       render(<Timer timeRemaining={120} formattedTime="02:00" />);
 
       const timeElement = screen.getByText('02:00');
-      expect(timeElement).toHaveStyle({ color: '#3b82f6' });
+      expect(timeElement).toHaveClass('text-timer-normal');
     });
 
     it('should use orange color for warning time (31-60 seconds)', () => {
       render(<Timer timeRemaining={45} formattedTime="00:45" />);
 
       const timeElement = screen.getByText('00:45');
-      expect(timeElement).toHaveStyle({ color: '#f59e0b' });
+      expect(timeElement).toHaveClass('text-timer-warning');
     });
 
     it('should use red color for critical time (<= 30 seconds)', () => {
       render(<Timer timeRemaining={15} formattedTime="00:15" />);
 
       const timeElement = screen.getByText('00:15');
-      expect(timeElement).toHaveStyle({ color: '#ef4444' });
+      expect(timeElement).toHaveClass('text-timer-critical');
     });
 
     it('should use red color at exactly 30 seconds', () => {
       render(<Timer timeRemaining={30} formattedTime="00:30" />);
 
       const timeElement = screen.getByText('00:30');
-      expect(timeElement).toHaveStyle({ color: '#ef4444' });
+      expect(timeElement).toHaveClass('text-timer-critical');
     });
 
     it('should use orange color at exactly 60 seconds', () => {
       render(<Timer timeRemaining={60} formattedTime="01:00" />);
 
       const timeElement = screen.getByText('01:00');
-      expect(timeElement).toHaveStyle({ color: '#f59e0b' });
+      expect(timeElement).toHaveClass('text-timer-warning');
     });
   });
 
@@ -99,21 +99,21 @@ describe('Timer', () => {
       render(<Timer timeRemaining={0} formattedTime="00:00" />);
 
       expect(screen.getByText('00:00')).toBeInTheDocument();
-      expect(screen.getByText('00:00')).toHaveStyle({ color: '#ef4444' });
+      expect(screen.getByText('00:00')).toHaveClass('text-timer-critical');
     });
 
     it('should handle very large time values', () => {
       render(<Timer timeRemaining={10000} formattedTime="166:40" />);
 
       expect(screen.getByText('166:40')).toBeInTheDocument();
-      expect(screen.getByText('166:40')).toHaveStyle({ color: '#3b82f6' });
+      expect(screen.getByText('166:40')).toHaveClass('text-timer-normal');
     });
 
     it('should handle timeRemaining of 1 second', () => {
       render(<Timer timeRemaining={1} formattedTime="00:01" />);
 
       expect(screen.getByText('00:01')).toBeInTheDocument();
-      expect(screen.getByText('00:01')).toHaveStyle({ color: '#ef4444' });
+      expect(screen.getByText('00:01')).toHaveClass('text-timer-critical');
     });
   });
 
@@ -180,13 +180,13 @@ describe('Timer', () => {
 
             const timeElement = screen.getByText(formattedTime);
 
-            // Verify color based on time remaining
+            // Verify color class based on time remaining
             if (timeRemaining <= 30) {
-              expect(timeElement).toHaveStyle({ color: '#ef4444' }); // Red
+              expect(timeElement).toHaveClass('text-timer-critical');
             } else if (timeRemaining <= 60) {
-              expect(timeElement).toHaveStyle({ color: '#f59e0b' }); // Orange
+              expect(timeElement).toHaveClass('text-timer-warning');
             } else {
-              expect(timeElement).toHaveStyle({ color: '#3b82f6' }); // Blue
+              expect(timeElement).toHaveClass('text-timer-normal');
             }
 
             unmount();

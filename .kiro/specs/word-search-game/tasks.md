@@ -380,14 +380,14 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - This task can be skipped
 
 - [ ] 17. Implement component styling
-  - [ ] 17.1 Define style constants and theme variables
+  - [x] 17.1 Define style constants and theme variables
     - Create `src/presentation/styles/theme.js` with color schemes and spacing
     - Define light/dark/system theme color palettes
     - Create reusable style constants
     - _Requirements: 10.1, 11.3, 13.5_
     - **Note:** Using inline styles per Decision Record 004
   
-  - [ ] 17.2 Style all components
+  - [x] 17.2 Style all components
     - Apply inline styles to all components
     - Ensure responsive design with JavaScript media queries
     - Implement theme-aware styling (light/dark mode)

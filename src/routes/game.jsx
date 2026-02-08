@@ -127,10 +127,10 @@ function GameScreen() {
 
   if (isLoading) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ textAlign: 'center' }}>
-          <h2 style={{ fontSize: '24px', marginBottom: '10px' }}>Generating puzzle...</h2>
-          <p style={{ color: '#666' }}>Please wait</p>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl mb-2.5">Generating puzzle...</h2>
+          <p className="text-secondary">Please wait</p>
         </div>
       </div>
     );
@@ -138,20 +138,13 @@ function GameScreen() {
 
   if (error) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ textAlign: 'center' }}>
-          <h2 style={{ fontSize: '24px', color: 'red', marginBottom: '10px' }}>Error</h2>
-          <p style={{ color: '#666', marginBottom: '20px' }}>{error}</p>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl text-error mb-2.5">Error</h2>
+          <p className="text-secondary mb-5">{error}</p>
           <button
             onClick={() => navigate({ to: '/' })}
-            style={{
-              padding: '10px 20px',
-              backgroundColor: '#4F46E5',
-              color: 'white',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: 'pointer',
-            }}
+            className="px-5 py-2.5 bg-accent text-white border-none rounded-md cursor-pointer"
           >
             Back to Home
           </button>
@@ -170,60 +163,50 @@ function GameScreen() {
   const foundWordIds = foundWords.map(w => w.id);
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: 'var(--bg-primary)', padding: '20px' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative' }}>
+    <div className="min-h-screen bg-primary p-5">
+      <div className="max-w-[1200px] mx-auto relative">
         {/* Theme Switcher in top right */}
-        <div style={{ position: 'absolute', top: '0', right: '0', zIndex: 10 }}>
+        <div className="absolute top-0 right-0 z-10">
           <ThemeSwitcher />
         </div>
         
         {/* Header */}
-        <div style={{ backgroundColor: 'var(--bg-secondary)', padding: '20px', borderRadius: '8px', marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: '1px solid var(--border-color)' }}>
+        <div className="bg-secondary p-5 rounded-lg mb-5 flex justify-between items-center border border-border">
           <button
             onClick={() => navigate({ to: '/' })}
-            style={{
-              padding: '10px 20px',
-              backgroundColor: 'var(--bg-tertiary)',
-              border: '1px solid var(--border-color)',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              color: 'var(--text-primary)',
-            }}
+            className="px-5 py-2.5 bg-tertiary border border-border rounded-md cursor-pointer text-primary"
           >
             ← Back
           </button>
           
-          <div style={{ textAlign: 'center' }}>
-            <h1 style={{ fontSize: '24px', color: 'var(--accent-color)', margin: 0 }}>Word Search</h1>
-            <p style={{ fontSize: '14px', color: 'var(--text-secondary)', margin: '5px 0 0 0' }}>
+          <div className="text-center flex-1">
+            <h1 className="text-2xl text-accent m-0">Word Search</h1>
+            <p className="text-sm text-secondary mt-1 mb-0">
               {category} • {difficulty}
             </p>
           </div>
 
-          <Timer timeRemaining={timeRemaining} formattedTime={formattedTime} />
+          <div className="min-w-[120px]">
+            <Timer timeRemaining={timeRemaining} formattedTime={formattedTime} />
+          </div>
         </div>
 
         {/* Feedback message */}
-        <div style={{ minHeight: '60px', marginBottom: '20px' }}>
+        <div className="min-h-[60px] mb-5">
           {feedback && (
-            <div style={{
-              backgroundColor: feedback.type === 'success' ? '#d1fae5' : '#fee2e2',
-              color: feedback.type === 'success' ? '#059669' : '#dc2626',
-              padding: '15px',
-              borderRadius: '8px',
-              textAlign: 'center',
-              fontWeight: 'bold',
-              border: '2px solid',
-              borderColor: feedback.type === 'success' ? '#10b981' : '#ef4444',
-            }}>
+            <div className={`p-4 rounded-lg text-center font-bold border-2 ${
+              feedback.type === 'success' 
+                ? 'bg-success-light text-success border-success' 
+                : 'bg-error-light text-error border-error'
+            }`}>
               {feedback.message}
             </div>
           )}
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '20px' }}>
+        <div className="grid grid-cols-[1fr_300px] gap-5">
           {/* Grid */}
-          <div style={{ backgroundColor: 'var(--bg-secondary)', padding: '20px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+          <div className="bg-secondary p-5 rounded-lg border border-border">
             <PuzzleGrid 
               grid={grid} 
               foundWords={foundWords}
@@ -232,12 +215,12 @@ function GameScreen() {
           </div>
 
           {/* Word List */}
-          <div style={{ backgroundColor: 'var(--bg-secondary)', padding: '20px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+          <div className="bg-secondary p-5 rounded-lg border border-border">
             <WordList words={words} foundWordIds={foundWordIds} />
             
-            <div style={{ marginTop: '20px', padding: '15px', backgroundColor: 'var(--bg-tertiary)', borderRadius: '6px', border: '1px solid var(--border-color)' }}>
-              <div style={{ fontSize: '14px', color: 'var(--text-secondary)', marginBottom: '5px' }}>Progress</div>
-              <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--accent-color)' }}>
+            <div className="mt-5 p-4 bg-tertiary rounded-md border border-border">
+              <div className="text-sm text-secondary mb-1">Progress</div>
+              <div className="text-2xl font-bold text-accent">
                 {puzzle.getFoundWordCount()} / {puzzle.getTotalWordCount()}
               </div>
             </div>
@@ -246,36 +229,17 @@ function GameScreen() {
 
         {/* Game Over Modal */}
         {showGameOver && (
-          <div style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.7)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 1000,
-          }}>
-            <div style={{
-              backgroundColor: 'var(--bg-secondary)',
-              padding: '40px',
-              borderRadius: '12px',
-              maxWidth: '400px',
-              width: '90%',
-              textAlign: 'center',
-              border: '2px solid var(--border-color)',
-            }}>
-              <h2 style={{ fontSize: '32px', fontWeight: 'bold', color: 'var(--accent-color)', marginBottom: '20px' }}>
+          <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[1000]">
+            <div className="bg-secondary p-10 rounded-xl max-w-[400px] w-[90%] text-center border-2 border-border">
+              <h2 className="text-[32px] font-bold text-accent mb-5">
                 Game Over!
               </h2>
-              <div style={{ marginBottom: '30px' }}>
-                <div style={{ fontSize: '16px', color: 'var(--text-secondary)', marginBottom: '10px' }}>Your Score</div>
-                <div style={{ fontSize: '48px', fontWeight: 'bold', color: 'var(--accent-color)', marginBottom: '20px' }}>
+              <div className="mb-8">
+                <div className="text-base text-secondary mb-2.5">Your Score</div>
+                <div className="text-5xl font-bold text-accent mb-5">
                   {finalScore}
                 </div>
-                <div style={{ fontSize: '18px', fontWeight: 'bold', color: 'var(--text-primary)', marginBottom: '15px' }}>
+                <div className="text-lg font-bold text-primary mb-4">
                   Enter Your Initials
                 </div>
                 <input
@@ -290,50 +254,24 @@ function GameScreen() {
                       handleSaveAndNavigate();
                     }
                   }}
-                  style={{
-                    padding: '12px 20px',
-                    fontSize: '24px',
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                    textTransform: 'uppercase',
-                    border: '2px solid var(--accent-color)',
-                    borderRadius: '6px',
-                    width: '120px',
-                    marginBottom: '20px',
-                    backgroundColor: 'var(--bg-secondary)',
-                    color: 'var(--text-primary)',
-                  }}
+                  className="px-5 py-3 text-2xl font-bold text-center uppercase border-2 border-accent rounded-md w-[120px] mb-5 bg-secondary text-primary"
                 />
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <div className="flex flex-col gap-2.5">
                 <button
                   onClick={handleSaveAndNavigate}
                   disabled={initials.length === 0}
-                  style={{
-                    padding: '14px 24px',
-                    backgroundColor: initials.length === 0 ? '#ccc' : 'var(--accent-color)',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '6px',
-                    fontSize: '16px',
-                    fontWeight: 'bold',
-                    cursor: initials.length === 0 ? 'not-allowed' : 'pointer',
-                  }}
+                  className={`px-6 py-3.5 text-base font-bold rounded-md ${
+                    initials.length === 0 
+                      ? 'bg-gray-300 cursor-not-allowed' 
+                      : 'bg-accent cursor-pointer'
+                  } text-white border-none`}
                 >
                   Save & View High Scores
                 </button>
                 <button
                   onClick={() => navigate({ to: '/' })}
-                  style={{
-                    padding: '14px 24px',
-                    backgroundColor: 'var(--bg-tertiary)',
-                    color: 'var(--text-primary)',
-                    border: '1px solid var(--border-color)',
-                    borderRadius: '6px',
-                    fontSize: '16px',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                  }}
+                  className="px-6 py-3.5 bg-tertiary text-primary border border-border rounded-md text-base font-semibold cursor-pointer"
                 >
                   Skip & Go Home
                 </button>

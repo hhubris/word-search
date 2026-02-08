@@ -36,29 +36,10 @@ export function ThemeSwitcher() {
   return (
     <button
       onClick={cycleTheme}
-      style={{
-        padding: '6px 12px',
-        backgroundColor: 'var(--bg-tertiary)',
-        border: '1px solid var(--border-color)',
-        borderRadius: '6px',
-        cursor: 'pointer',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '6px',
-        fontSize: '12px',
-        fontWeight: '600',
-        color: 'var(--text-primary)',
-        transition: 'all 0.2s ease',
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.opacity = '0.8';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.opacity = '1';
-      }}
+      className="px-3 py-1.5 bg-tertiary border border-border rounded-md cursor-pointer flex items-center gap-1.5 text-xs font-semibold text-primary transition-all duration-200 hover:opacity-80"
       title={`Current theme: ${getThemeLabel()}. Click to cycle.`}
     >
-      <span style={{ fontSize: '14px' }}>{getThemeIcon()}</span>
+      <span className="text-sm">{getThemeIcon()}</span>
       <span>{getThemeLabel()}</span>
     </button>
   );

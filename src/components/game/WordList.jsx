@@ -16,18 +16,17 @@ export function WordList({ words, foundWordIds = [] }) {
   const foundSet = useMemo(() => new Set(foundWordIds), [foundWordIds]);
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.title}>Words to Find</h2>
-      <ul style={styles.list}>
+    <div className="flex flex-col p-5 min-w-[200px]">
+      <h2 className="text-2xl font-bold mb-4 text-center">Words to Find</h2>
+      <ul className="list-none p-0 m-0">
         {sortedWords.map((word) => {
           const isFound = foundSet.has(word.id);
           return (
             <li
               key={word.id}
-              style={{
-                ...styles.listItem,
-                ...(isFound ? styles.foundWord : {}),
-              }}
+              className={`text-lg px-3 py-2 mb-1 rounded transition-all duration-200 ${
+                isFound ? 'line-through opacity-50 text-gray-500' : ''
+              }`}
             >
               {word.text}
             </li>
@@ -37,35 +36,3 @@ export function WordList({ words, foundWordIds = [] }) {
     </div>
   );
 }
-
-const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    padding: '20px',
-    minWidth: '200px',
-  },
-  title: {
-    fontSize: '1.5rem',
-    fontWeight: 'bold',
-    marginBottom: '16px',
-    textAlign: 'center',
-  },
-  list: {
-    listStyle: 'none',
-    padding: 0,
-    margin: 0,
-  },
-  listItem: {
-    fontSize: '1.125rem',
-    padding: '8px 12px',
-    marginBottom: '4px',
-    borderRadius: '4px',
-    transition: 'all 0.2s ease',
-  },
-  foundWord: {
-    textDecoration: 'line-through',
-    opacity: 0.5,
-    color: '#888',
-  },
-};

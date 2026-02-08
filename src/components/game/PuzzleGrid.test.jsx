@@ -76,7 +76,7 @@ describe('PuzzleGrid', () => {
       fireEvent.mouseDown(firstCell);
 
       // Cell should have selected styling
-      expect(firstCell).toHaveStyle({ backgroundColor: '#3b82f6' });
+      expect(firstCell).toHaveClass('bg-blue-500');
     });
 
     it('should clear selection on mouse up', () => {
@@ -88,7 +88,7 @@ describe('PuzzleGrid', () => {
       fireEvent.mouseUp(firstCell);
 
       // Selection should be cleared
-      expect(firstCell).not.toHaveStyle({ backgroundColor: '#3b82f6' });
+      expect(firstCell).not.toHaveClass('bg-blue-500');
     });
 
     it('should select multiple cells in a line', () => {
@@ -102,8 +102,8 @@ describe('PuzzleGrid', () => {
       fireEvent.mouseEnter(cellB);
 
       // Both cells should be selected
-      expect(cellA).toHaveStyle({ backgroundColor: '#3b82f6' });
-      expect(cellB).toHaveStyle({ backgroundColor: '#3b82f6' });
+      expect(cellA).toHaveClass('bg-blue-500');
+      expect(cellB).toHaveClass('bg-blue-500');
     });
 
     it('should call onSelectionComplete when selection is finished', () => {
@@ -139,7 +139,7 @@ describe('PuzzleGrid', () => {
       render(<PuzzleGrid grid={grid} foundWords={[word]} />);
 
       const cellA = screen.getByText('A');
-      expect(cellA).toHaveStyle({ backgroundColor: '#10b981' });
+      expect(cellA).toHaveClass('bg-green-500');
     });
 
     it('should not highlight cells that are not part of found words', () => {
@@ -150,7 +150,7 @@ describe('PuzzleGrid', () => {
       render(<PuzzleGrid grid={grid} foundWords={[word]} />);
 
       const cellD = screen.getByText('D');
-      expect(cellD).not.toHaveStyle({ backgroundColor: '#10b981' });
+      expect(cellD).not.toHaveClass('bg-green-500');
     });
 
     it('should handle multiple found words', () => {
@@ -165,8 +165,8 @@ describe('PuzzleGrid', () => {
       const cellA = screen.getByText('A');
       const cellF = screen.getByText('F');
 
-      expect(cellA).toHaveStyle({ backgroundColor: '#10b981' });
-      expect(cellF).toHaveStyle({ backgroundColor: '#10b981' });
+      expect(cellA).toHaveClass('bg-green-500');
+      expect(cellF).toHaveClass('bg-green-500');
     });
 
     it('should handle empty foundWords array', () => {
@@ -174,7 +174,7 @@ describe('PuzzleGrid', () => {
       render(<PuzzleGrid grid={grid} foundWords={[]} />);
 
       const cellA = screen.getByText('A');
-      expect(cellA).not.toHaveStyle({ backgroundColor: '#10b981' });
+      expect(cellA).not.toHaveClass('bg-green-500');
     });
   });
 
@@ -190,12 +190,12 @@ describe('PuzzleGrid', () => {
       fireEvent.mouseDown(cellA);
       fireEvent.mouseEnter(cellB); // Horizontal move - should work
       
-      expect(cellB).toHaveStyle({ backgroundColor: '#3b82f6' });
+      expect(cellB).toHaveClass('bg-blue-500');
 
       fireEvent.mouseEnter(cellF); // Vertical move - should be ignored
       
       // cellF should not be selected because it's in a different direction
-      expect(cellF).not.toHaveStyle({ backgroundColor: '#3b82f6' });
+      expect(cellF).not.toHaveClass('bg-blue-500');
     });
 
     it('should allow selection in established direction only', () => {
@@ -250,20 +250,19 @@ describe('PuzzleGrid', () => {
       fireEvent.mouseEnter(cellC);
 
       // Should handle all movements without errors
-      expect(cellC).toHaveStyle({ backgroundColor: '#3b82f6' });
+      expect(cellC).toHaveClass('bg-blue-500');
     });
 
     it('should not select when not in selecting mode', () => {
       const grid = createTestGrid(3);
       render(<PuzzleGrid grid={grid} />);
 
-      const cellA = screen.getByText('A');
       const cellB = screen.getByText('B');
 
       // Enter cell without mouse down first
       fireEvent.mouseEnter(cellB);
 
-      expect(cellB).not.toHaveStyle({ backgroundColor: '#3b82f6' });
+      expect(cellB).not.toHaveClass('bg-blue-500');
     });
   });
 
@@ -289,7 +288,7 @@ describe('PuzzleGrid', () => {
       const lastCell = cells[cells.length - 1];
 
       fireEvent.mouseDown(lastCell);
-      expect(lastCell).toHaveStyle({ backgroundColor: '#3b82f6' });
+      expect(lastCell).toHaveClass('bg-blue-500');
     });
 
     it('should handle very small grid (2x2)', () => {
@@ -312,7 +311,7 @@ describe('PuzzleGrid', () => {
       fireEvent.mouseEnter(cellA); // Back to start
 
       // Should only have start cell selected
-      expect(cellA).toHaveStyle({ backgroundColor: '#3b82f6' });
+      expect(cellA).toHaveClass('bg-blue-500');
     });
   });
 });

@@ -1,29 +1,38 @@
 @import "tailwindcss";
 
-@theme {
-  --font-family-title: "Accidental Presidency", "Comic Sans MS", cursive;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* Light mode (default) */
-:root.light {
+/* CSS Variables for theming */
+:root {
   --bg-primary: #f3f4f6;
   --bg-secondary: #ffffff;
   --bg-tertiary: #f9fafb;
   --text-primary: #111827;
   --text-secondary: #6b7280;
   --border-color: #e5e7eb;
-  --border-color-dark: #d1d5db;
   --accent-color: #4F46E5;
   --accent-hover: #4338CA;
+  
+  /* Game-specific colors */
+  --success: #10b981;
+  --success-light: #d1fae5;
+  --error: #dc2626;
+  --error-light: #fee2e2;
+  --warning: #f59e0b;
+  --warning-light: #fef3c7;
+  --highlight: #7c3aed;
+  --highlight-bg: #ddd6fe;
+  
+  /* Difficulty colors */
+  --difficulty-easy: #10b981;
+  --difficulty-medium: #f59e0b;
+  --difficulty-hard: #dc2626;
+  
+  /* Timer colors */
+  --timer-normal: #3b82f6;
+  --timer-warning: #f59e0b;
+  --timer-critical: #dc2626;
 }
 
-/* Dark mode */
+/* Dark mode overrides */
 :root.dark {
   --bg-primary: #0f172a;
   --bg-secondary: #1e293b;
@@ -31,7 +40,6 @@
   --text-primary: #f1f5f9;
   --text-secondary: #94a3b8;
   --border-color: #475569;
-  --border-color-dark: #64748b;
   --accent-color: #6366F1;
   --accent-hover: #818CF8;
 }
@@ -49,3 +57,114 @@ body {
   width: 100%;
   min-height: 100vh;
 }
+
+/* Custom utility classes */
+.bg-primary {
+  background-color: var(--bg-primary) !important;
+}
+
+.bg-secondary {
+  background-color: var(--bg-secondary) !important;
+}
+
+.bg-tertiary {
+  background-color: var(--bg-tertiary) !important;
+}
+
+.text-primary {
+  color: var(--text-primary) !important;
+}
+
+.text-secondary {
+  color: var(--text-secondary) !important;
+}
+
+.border-color,
+.border-border {
+  border-color: var(--border-color) !important;
+}
+
+.accent-color {
+  color: var(--accent-color) !important;
+}
+
+.text-accent {
+  color: var(--accent-color) !important;
+}
+
+.bg-accent {
+  background-color: var(--accent-color) !important;
+}
+
+.bg-accent:hover {
+  background-color: var(--accent-hover) !important;
+}
+
+.text-success {
+  color: var(--success) !important;
+}
+
+.bg-success-light {
+  background-color: var(--success-light) !important;
+}
+
+.border-success {
+  border-color: var(--success) !important;
+}
+
+.text-error {
+  color: var(--error) !important;
+}
+
+.bg-error-light {
+  background-color: var(--error-light) !important;
+}
+
+.border-error {
+  border-color: var(--error) !important;
+}
+
+.text-warning {
+  color: var(--warning) !important;
+}
+
+.bg-warning-light {
+  background-color: var(--warning-light) !important;
+}
+
+.border-warning {
+  border-color: var(--warning) !important;
+}
+
+.bg-highlight-bg {
+  background-color: var(--highlight-bg) !important;
+}
+
+.border-highlight {
+  border-color: var(--highlight) !important;
+}
+
+.text-difficulty-easy {
+  color: var(--difficulty-easy) !important;
+}
+
+.text-difficulty-medium {
+  color: var(--difficulty-medium) !important;
+}
+
+.text-difficulty-hard {
+  color: var(--difficulty-hard) !important;
+}
+
+.text-timer-normal {
+  color: var(--timer-normal) !important;
+}
+
+.text-timer-warning {
+  color: var(--timer-warning) !important;
+}
+
+.text-timer-critical {
+  color: var(--timer-critical) !important;
+}
+

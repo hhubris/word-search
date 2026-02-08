@@ -11,24 +11,20 @@ const CATEGORIES = [
 
 export function CategorySelector({ selectedCategory, onCategorySelect }) {
   return (
-    <div style={{ marginBottom: '30px' }}>
-      <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '15px' }}>
+    <div className="mb-8">
+      <label className="block font-bold mb-4 text-primary">
         Choose a Category
       </label>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
+      <div className="grid grid-cols-4 gap-2.5">
         {CATEGORIES.map((cat) => (
           <button
             key={cat.value}
             onClick={() => onCategorySelect(cat.value)}
-            style={{
-              padding: '12px',
-              border: selectedCategory === cat.value ? '2px solid var(--accent-color)' : '1px solid var(--border-color)',
-              backgroundColor: selectedCategory === cat.value ? 'var(--accent-color)' : 'var(--bg-secondary)',
-              color: selectedCategory === cat.value ? 'white' : 'var(--text-primary)',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              fontWeight: selectedCategory === cat.value ? 'bold' : 'normal',
-            }}
+            className={`p-3 rounded-md cursor-pointer transition-all ${
+              selectedCategory === cat.value
+                ? 'border-2 border-[var(--accent-color)] bg-accent text-white font-bold'
+                : 'border border-color bg-secondary text-primary hover:border-[var(--accent-color)]'
+            }`}
           >
             {cat.label}
           </button>

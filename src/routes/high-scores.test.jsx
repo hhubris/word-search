@@ -99,11 +99,7 @@ describe('HighScoresScreen', () => {
       return [];
     });
 
-    const { container } = render(<HighScoresScreen />);
-    
-    // Find the Easy column
-    const easyColumn = container.querySelector('div:has(> h2:first-child)');
-    const scoreElements = easyColumn.querySelectorAll('div[style*="display: flex"]');
+    render(<HighScoresScreen />);
     
     // Verify scores are displayed
     expect(screen.getByText('AAA')).toBeInTheDocument();

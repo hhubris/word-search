@@ -10,47 +10,19 @@ export function Timer({ timeRemaining, formattedTime }) {
     return null;
   }
 
-  // Determine color based on remaining time
-  const getTimerColor = () => {
-    if (timeRemaining <= 30) return '#ef4444'; // Red for last 30 seconds
-    if (timeRemaining <= 60) return '#f59e0b'; // Orange for last minute
-    return '#3b82f6'; // Blue for normal
+  // Determine color class based on remaining time
+  const getTimerColorClass = () => {
+    if (timeRemaining <= 30) return 'text-timer-critical'; // Red for last 30 seconds
+    if (timeRemaining <= 60) return 'text-timer-warning'; // Orange for last minute
+    return 'text-timer-normal'; // Blue for normal
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.label}>Time Remaining</div>
-      <div 
-        style={{
-          ...styles.time,
-          color: getTimerColor(),
-        }}
-      >
+    <div className="flex flex-col items-center p-4 gap-2">
+      <div className="text-sm font-medium uppercase tracking-wide opacity-70">Time Remaining</div>
+      <div className={`text-4xl font-bold font-mono transition-colors duration-300 ${getTimerColorClass()}`}>
         {formattedTime || '--:--'}
       </div>
     </div>
   );
 }
-
-const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: '16px',
-    gap: '8px',
-  },
-  label: {
-    fontSize: '0.875rem',
-    fontWeight: '500',
-    textTransform: 'uppercase',
-    letterSpacing: '0.05em',
-    opacity: 0.7,
-  },
-  time: {
-    fontSize: '2.5rem',
-    fontWeight: 'bold',
-    fontFamily: 'monospace',
-    transition: 'color 0.3s ease',
-  },
-};

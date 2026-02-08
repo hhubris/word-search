@@ -6,27 +6,23 @@ const DIFFICULTIES = [
 
 export function DifficultySelector({ selectedDifficulty, onDifficultySelect }) {
   return (
-    <div style={{ marginBottom: '30px' }}>
-      <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '15px' }}>
+    <div className="mb-8">
+      <label className="block font-bold mb-4 text-primary">
         Choose Difficulty
       </label>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
+      <div className="grid grid-cols-3 gap-2.5">
         {DIFFICULTIES.map((diff) => (
           <button
             key={diff.value}
             onClick={() => onDifficultySelect(diff.value)}
-            style={{
-              padding: '16px',
-              border: selectedDifficulty === diff.value ? '2px solid var(--accent-color)' : '1px solid var(--border-color)',
-              backgroundColor: selectedDifficulty === diff.value ? 'var(--accent-color)' : 'var(--bg-secondary)',
-              color: selectedDifficulty === diff.value ? 'white' : 'var(--text-primary)',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              textAlign: 'center',
-            }}
+            className={`p-4 rounded-md cursor-pointer text-center transition-all ${
+              selectedDifficulty === diff.value
+                ? 'border-2 border-[var(--accent-color)] bg-accent text-white'
+                : 'border border-color bg-secondary text-primary hover:border-[var(--accent-color)]'
+            }`}
           >
-            <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>{diff.label}</div>
-            <div style={{ fontSize: '12px', opacity: 0.8 }}>{diff.description}</div>
+            <div className="font-bold mb-1">{diff.label}</div>
+            <div className="text-xs opacity-80">{diff.description}</div>
           </button>
         ))}
       </div>

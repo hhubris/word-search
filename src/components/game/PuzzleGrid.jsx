@@ -159,13 +159,13 @@ export function PuzzleGrid({ grid, foundWords = [], onSelectionComplete }) {
 
   return (
     <div 
-      style={styles.container}
+      className="flex justify-center items-center p-5 select-none"
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
     >
       <div 
+        className="grid gap-0.5 bg-tertiary p-0.5 rounded"
         style={{
-          ...styles.grid,
           gridTemplateColumns: `repeat(${grid.size}, 1fr)`,
         }}
       >
@@ -178,11 +178,14 @@ export function PuzzleGrid({ grid, foundWords = [], onSelectionComplete }) {
             return (
               <div
                 key={`${row}-${col}`}
-                style={{
-                  ...styles.cell,
-                  ...(isSelected ? styles.selectedCell : {}),
-                  ...(isFound ? styles.foundCell : {}),
-                }}
+                className={`
+                  aspect-square flex justify-center items-center
+                  text-xl font-bold cursor-pointer transition-all
+                  min-w-[40px] min-h-[40px]
+                  ${isSelected ? 'bg-blue-500 text-white' : ''}
+                  ${isFound ? 'bg-green-500 text-white' : ''}
+                  ${!isSelected && !isFound ? 'bg-secondary text-primary' : ''}
+                `}
                 onMouseDown={() => handleMouseDown(row, col)}
                 onMouseEnter={() => handleMouseEnter(row, col)}
               >
@@ -195,41 +198,3 @@ export function PuzzleGrid({ grid, foundWords = [], onSelectionComplete }) {
     </div>
   );
 }
-
-const styles = {
-  container: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: '20px',
-    userSelect: 'none',
-  },
-  grid: {
-    display: 'grid',
-    gap: '2px',
-    backgroundColor: '#ccc',
-    padding: '2px',
-    borderRadius: '4px',
-  },
-  cell: {
-    aspectRatio: '1',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    fontSize: '1.25rem',
-    fontWeight: 'bold',
-    cursor: 'pointer',
-    transition: 'all 0.15s ease',
-    minWidth: '40px',
-    minHeight: '40px',
-  },
-  selectedCell: {
-    backgroundColor: '#3b82f6',
-    color: '#fff',
-  },
-  foundCell: {
-    backgroundColor: '#10b981',
-    color: '#fff',
-  },
-};

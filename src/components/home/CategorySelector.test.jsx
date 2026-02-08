@@ -27,18 +27,18 @@ describe('CategorySelector', () => {
             btn => btn.textContent === selectedCategory.charAt(0) + selectedCategory.slice(1).toLowerCase()
           );
 
-          // Verify the selected category has active styling
+          // Verify the selected category has active styling (Tailwind classes)
           expect(selectedButton).toBeDefined();
-          expect(selectedButton.style.border).toContain('2px solid');
-          expect(selectedButton.style.backgroundColor).toBe('var(--accent-color)');
-          expect(selectedButton.style.fontWeight).toBe('bold');
+          expect(selectedButton).toHaveClass('border-2');
+          expect(selectedButton).toHaveClass('bg-accent');
+          expect(selectedButton).toHaveClass('font-bold');
 
           // Verify non-selected categories don't have active styling
           const otherButtons = Array.from(buttons).filter(btn => btn !== selectedButton);
           otherButtons.forEach(btn => {
-            expect(btn.style.border).toContain('1px solid');
-            expect(btn.style.backgroundColor).toBe('var(--bg-secondary)');
-            expect(btn.style.fontWeight).toBe('normal');
+            expect(btn).toHaveClass('border');
+            expect(btn).toHaveClass('bg-secondary');
+            expect(btn).not.toHaveClass('font-bold');
           });
         }
       ),
@@ -70,12 +70,12 @@ describe('CategorySelector', () => {
 
   test('highlights selected category', () => {
     const onCategorySelect = vi.fn();
-    const { container } = render(
+    render(
       <CategorySelector selectedCategory="SPORTS" onCategorySelect={onCategorySelect} />
     );
     
     const sportsButton = screen.getByText('Sports');
-    expect(sportsButton.style.border).toContain('2px solid');
-    expect(sportsButton.style.backgroundColor).toBe('var(--accent-color)');
+    expect(sportsButton).toHaveClass('border-2');
+    expect(sportsButton).toHaveClass('bg-accent');
   });
 });

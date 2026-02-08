@@ -27,16 +27,16 @@ describe('DifficultySelector', () => {
             btn => btn.querySelector('div').textContent === selectedDifficulty.charAt(0) + selectedDifficulty.slice(1).toLowerCase()
           );
 
-          // Verify the selected difficulty has active styling
+          // Verify the selected difficulty has active styling (Tailwind classes)
           expect(selectedButton).toBeDefined();
-          expect(selectedButton.style.border).toContain('2px solid');
-          expect(selectedButton.style.backgroundColor).toBe('var(--accent-color)');
+          expect(selectedButton).toHaveClass('border-2');
+          expect(selectedButton).toHaveClass('bg-accent');
 
           // Verify non-selected difficulties don't have active styling
           const otherButtons = Array.from(buttons).filter(btn => btn !== selectedButton);
           otherButtons.forEach(btn => {
-            expect(btn.style.border).toContain('1px solid');
-            expect(btn.style.backgroundColor).toBe('var(--bg-secondary)');
+            expect(btn).toHaveClass('border');
+            expect(btn).toHaveClass('bg-secondary');
           });
         }
       ),
@@ -72,12 +72,12 @@ describe('DifficultySelector', () => {
 
   test('highlights selected difficulty', () => {
     const onDifficultySelect = vi.fn();
-    const { container } = render(
+    render(
       <DifficultySelector selectedDifficulty="HARD" onDifficultySelect={onDifficultySelect} />
     );
     
     const hardButton = screen.getByText('Hard').closest('button');
-    expect(hardButton.style.border).toContain('2px solid');
-    expect(hardButton.style.backgroundColor).toBe('var(--accent-color)');
+    expect(hardButton).toHaveClass('border-2');
+    expect(hardButton).toHaveClass('bg-accent');
   });
 });

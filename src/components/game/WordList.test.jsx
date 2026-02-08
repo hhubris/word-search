@@ -85,8 +85,8 @@ describe('WordList', () => {
       const appleItem = screen.getByText('APPLE');
       const bananaItem = screen.getByText('BANANA');
 
-      expect(appleItem).toHaveStyle({ textDecoration: 'line-through' });
-      expect(bananaItem).toHaveStyle({ textDecoration: 'line-through' });
+      expect(appleItem).toHaveClass('line-through');
+      expect(bananaItem).toHaveClass('line-through');
     });
 
     it('should not cross out words that are not found', () => {
@@ -95,8 +95,8 @@ describe('WordList', () => {
       const zebraItem = screen.getByText('ZEBRA');
       const monkeyItem = screen.getByText('MONKEY');
 
-      expect(zebraItem).not.toHaveStyle({ textDecoration: 'line-through' });
-      expect(monkeyItem).not.toHaveStyle({ textDecoration: 'line-through' });
+      expect(zebraItem).not.toHaveClass('line-through');
+      expect(monkeyItem).not.toHaveClass('line-through');
     });
 
     it('should handle empty foundWordIds array', () => {
@@ -104,7 +104,7 @@ describe('WordList', () => {
 
       const listItems = screen.getAllByRole('listitem');
       listItems.forEach((item) => {
-        expect(item).not.toHaveStyle({ textDecoration: 'line-through' });
+        expect(item).not.toHaveClass('line-through');
       });
     });
 
@@ -113,7 +113,7 @@ describe('WordList', () => {
 
       const listItems = screen.getAllByRole('listitem');
       listItems.forEach((item) => {
-        expect(item).not.toHaveStyle({ textDecoration: 'line-through' });
+        expect(item).not.toHaveClass('line-through');
       });
     });
 
@@ -121,15 +121,15 @@ describe('WordList', () => {
       const { rerender } = render(<WordList words={mockWords} foundWordIds={['2']} />);
 
       let appleItem = screen.getByText('APPLE');
-      expect(appleItem).toHaveStyle({ textDecoration: 'line-through' });
+      expect(appleItem).toHaveClass('line-through');
 
       rerender(<WordList words={mockWords} foundWordIds={['2', '3']} />);
 
       appleItem = screen.getByText('APPLE');
       const monkeyItem = screen.getByText('MONKEY');
 
-      expect(appleItem).toHaveStyle({ textDecoration: 'line-through' });
-      expect(monkeyItem).toHaveStyle({ textDecoration: 'line-through' });
+      expect(appleItem).toHaveClass('line-through');
+      expect(monkeyItem).toHaveClass('line-through');
     });
   });
 
@@ -162,7 +162,7 @@ describe('WordList', () => {
 
       const listItems = screen.getAllByRole('listitem');
       listItems.forEach((item) => {
-        expect(item).toHaveStyle({ textDecoration: 'line-through' });
+        expect(item).toHaveClass('line-through');
       });
     });
   });

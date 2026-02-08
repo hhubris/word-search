@@ -9,34 +9,10 @@ export function ButtonBar() {
   const navigate = useNavigate();
 
   return (
-    <div style={{
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      padding: '15px 20px',
-      backgroundColor: 'var(--bg-secondary)',
-      borderBottom: '2px solid var(--border-color)',
-      marginBottom: '20px',
-    }}>
+    <div className="flex justify-between items-center px-5 py-[15px] bg-secondary border-b-2 border-color mb-5">
       <button
         onClick={() => navigate({ to: '/high-scores' })}
-        style={{
-          padding: '10px 20px',
-          backgroundColor: 'var(--accent-color)',
-          color: 'white',
-          border: 'none',
-          borderRadius: '6px',
-          cursor: 'pointer',
-          fontSize: '14px',
-          fontWeight: '600',
-          transition: 'all 0.2s ease',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = 'var(--accent-hover)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = 'var(--accent-color)';
-        }}
+        className="px-5 py-2.5 bg-accent text-white border-0 rounded-md cursor-pointer text-sm font-semibold transition-all hover:bg-[var(--accent-hover)]"
       >
         🏆 High Scores
       </button>

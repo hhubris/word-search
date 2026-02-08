@@ -66,92 +66,49 @@ function HighScoresScreen() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: 'var(--bg-primary)', padding: '20px' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative' }}>
+    <div className="min-h-screen bg-primary p-5">
+      <div className="max-w-[1200px] mx-auto relative">
         {/* Theme Switcher in top right */}
-        <div style={{ position: 'absolute', top: '0', right: '0', zIndex: 10 }}>
+        <div className="absolute top-0 right-0 z-10">
           <ThemeSwitcher />
         </div>
         
         {/* Header */}
-        <div style={{ backgroundColor: 'var(--bg-secondary)', padding: '20px', borderRadius: '8px', marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: '1px solid var(--border-color)' }}>
+        <div className="bg-secondary p-5 rounded-lg mb-5 flex justify-between items-center border border-border">
           <button
             onClick={() => navigate({ to: '/' })}
-            style={{
-              padding: '10px 20px',
-              backgroundColor: 'var(--bg-tertiary)',
-              border: '1px solid var(--border-color)',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              color: 'var(--text-primary)',
-            }}
+            className="px-5 py-2.5 bg-tertiary border border-border rounded-md cursor-pointer text-primary"
           >
             ← Back to Home
           </button>
-          <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: 'var(--accent-color)', margin: 0 }}>High Scores</h1>
-          <div style={{ width: '120px' }}></div>
+          <h1 className="text-[32px] font-bold text-accent m-0">High Scores</h1>
+          <div className="w-[120px]"></div>
         </div>
 
         {/* Initials Form */}
         {showInitialsForm && (
-          <div style={{
-            backgroundColor: 'var(--bg-secondary)',
-            padding: '30px',
-            borderRadius: '8px',
-            marginBottom: '20px',
-            textAlign: 'center',
-            border: '1px solid var(--border-color)',
-          }}>
-            <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '20px', color: 'var(--text-primary)' }}>
+          <div className="bg-secondary p-8 rounded-lg mb-5 text-center border border-border">
+            <h2 className="text-2xl font-bold mb-5 text-primary">
               Enter Your Initials
             </h2>
-            <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', alignItems: 'center' }}>
+            <div className="flex gap-2.5 justify-center items-center">
               <input
                 type="text"
                 value={initials}
                 onChange={(e) => setInitials(e.target.value.slice(0, 3))}
                 placeholder="ABC"
                 maxLength={3}
-                style={{
-                  padding: '12px 20px',
-                  fontSize: '20px',
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                  textTransform: 'uppercase',
-                  border: '2px solid var(--border-color)',
-                  borderRadius: '6px',
-                  width: '120px',
-                  backgroundColor: 'var(--bg-tertiary)',
-                  color: 'var(--text-primary)',
-                }}
+                className="px-5 py-3 text-xl font-bold text-center uppercase border-2 border-border rounded-md w-[120px] bg-tertiary text-primary"
               />
               <button
                 onClick={handleSaveScore}
-                style={{
-                  padding: '12px 30px',
-                  backgroundColor: 'var(--accent-color)',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '6px',
-                  cursor: 'pointer',
-                  fontWeight: 'bold',
-                  fontSize: '16px',
-                }}
+                className="px-8 py-3 bg-accent text-white border-none rounded-md cursor-pointer font-bold text-base"
               >
                 Save
               </button>
               <button
                 onClick={() => setShowInitialsForm(false)}
-                style={{
-                  padding: '12px 30px',
-                  backgroundColor: 'var(--bg-tertiary)',
-                  color: 'var(--text-secondary)',
-                  border: '1px solid var(--border-color)',
-                  borderRadius: '6px',
-                  cursor: 'pointer',
-                  fontWeight: 'bold',
-                  fontSize: '16px',
-                }}
+                className="px-8 py-3 bg-tertiary text-secondary border border-border rounded-md cursor-pointer font-bold text-base"
               >
                 Cancel
               </button>
@@ -160,36 +117,32 @@ function HighScoresScreen() {
         )}
 
         {/* High Scores Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
+        <div className="grid grid-cols-3 gap-5">
           {/* Easy */}
-          <div style={{ backgroundColor: 'var(--bg-secondary)', padding: '20px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-            <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: '#10b981', marginBottom: '15px', textAlign: 'center' }}>
+          <div className="bg-secondary p-5 rounded-lg border border-border">
+            <h2 className="text-2xl font-bold text-difficulty-easy mb-4 text-center">
               Easy
             </h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div className="flex flex-col gap-2">
               {highScores.EASY.length === 0 ? (
-                <p style={{ textAlign: 'center', color: 'var(--text-secondary)', padding: '20px' }}>No scores yet</p>
+                <p className="text-center text-secondary p-5">No scores yet</p>
               ) : (
                 highScores.EASY.map((score, index) => {
                   const isHighlighted = highlightScore && difficulty === 'EASY' && score.getScore() === highlightScore;
                   return (
                     <div
                       key={index}
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        padding: '12px',
-                        backgroundColor: isHighlighted ? '#ddd6fe' : index === 0 ? '#fef3c7' : 'var(--bg-tertiary)',
-                        border: isHighlighted ? '3px solid #7c3aed' : '1px solid',
-                        borderColor: isHighlighted ? '#7c3aed' : index === 0 ? '#f59e0b' : 'var(--border-color)',
-                        borderRadius: '6px',
-                        transform: isHighlighted ? 'scale(1.05)' : 'scale(1)',
-                        transition: 'all 0.3s ease',
-                      }}
+                      className={`flex justify-between px-3 py-3 rounded-md transition-all duration-300 ${
+                        isHighlighted 
+                          ? 'bg-highlight-bg border-[3px] border-highlight scale-105' 
+                          : index === 0 
+                            ? 'bg-warning-light border border-warning' 
+                            : 'bg-tertiary border border-border'
+                      }`}
                     >
-                      <span style={{ fontWeight: 'bold', color: 'var(--text-secondary)' }}>#{index + 1}</span>
-                      <span style={{ fontWeight: 'bold', color: 'var(--text-primary)' }}>{score.getInitials()}</span>
-                      <span style={{ fontWeight: 'bold', color: '#10b981' }}>{score.getScore()}</span>
+                      <span className="font-bold text-secondary">#{index + 1}</span>
+                      <span className="font-bold text-primary">{score.getInitials()}</span>
+                      <span className="font-bold text-difficulty-easy">{score.getScore()}</span>
                     </div>
                   );
                 })
@@ -198,34 +151,30 @@ function HighScoresScreen() {
           </div>
 
           {/* Medium */}
-          <div style={{ backgroundColor: 'var(--bg-secondary)', padding: '20px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-            <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: '#f59e0b', marginBottom: '15px', textAlign: 'center' }}>
+          <div className="bg-secondary p-5 rounded-lg border border-border">
+            <h2 className="text-2xl font-bold text-difficulty-medium mb-4 text-center">
               Medium
             </h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div className="flex flex-col gap-2">
               {highScores.MEDIUM.length === 0 ? (
-                <p style={{ textAlign: 'center', color: 'var(--text-secondary)', padding: '20px' }}>No scores yet</p>
+                <p className="text-center text-secondary p-5">No scores yet</p>
               ) : (
                 highScores.MEDIUM.map((score, index) => {
                   const isHighlighted = highlightScore && difficulty === 'MEDIUM' && score.getScore() === highlightScore;
                   return (
                     <div
                       key={index}
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        padding: '12px',
-                        backgroundColor: isHighlighted ? '#ddd6fe' : index === 0 ? '#fef3c7' : 'var(--bg-tertiary)',
-                        border: isHighlighted ? '3px solid #7c3aed' : '1px solid',
-                        borderColor: isHighlighted ? '#7c3aed' : index === 0 ? '#f59e0b' : 'var(--border-color)',
-                        borderRadius: '6px',
-                        transform: isHighlighted ? 'scale(1.05)' : 'scale(1)',
-                        transition: 'all 0.3s ease',
-                      }}
+                      className={`flex justify-between px-3 py-3 rounded-md transition-all duration-300 ${
+                        isHighlighted 
+                          ? 'bg-highlight-bg border-[3px] border-highlight scale-105' 
+                          : index === 0 
+                            ? 'bg-warning-light border border-warning' 
+                            : 'bg-tertiary border border-border'
+                      }`}
                     >
-                      <span style={{ fontWeight: 'bold', color: 'var(--text-secondary)' }}>#{index + 1}</span>
-                      <span style={{ fontWeight: 'bold', color: 'var(--text-primary)' }}>{score.getInitials()}</span>
-                      <span style={{ fontWeight: 'bold', color: '#f59e0b' }}>{score.getScore()}</span>
+                      <span className="font-bold text-secondary">#{index + 1}</span>
+                      <span className="font-bold text-primary">{score.getInitials()}</span>
+                      <span className="font-bold text-difficulty-medium">{score.getScore()}</span>
                     </div>
                   );
                 })
@@ -234,34 +183,30 @@ function HighScoresScreen() {
           </div>
 
           {/* Hard */}
-          <div style={{ backgroundColor: 'var(--bg-secondary)', padding: '20px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-            <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: '#dc2626', marginBottom: '15px', textAlign: 'center' }}>
+          <div className="bg-secondary p-5 rounded-lg border border-border">
+            <h2 className="text-2xl font-bold text-difficulty-hard mb-4 text-center">
               Hard
             </h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div className="flex flex-col gap-2">
               {highScores.HARD.length === 0 ? (
-                <p style={{ textAlign: 'center', color: 'var(--text-secondary)', padding: '20px' }}>No scores yet</p>
+                <p className="text-center text-secondary p-5">No scores yet</p>
               ) : (
                 highScores.HARD.map((score, index) => {
                   const isHighlighted = highlightScore && difficulty === 'HARD' && score.getScore() === highlightScore;
                   return (
                     <div
                       key={index}
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        padding: '12px',
-                        backgroundColor: isHighlighted ? '#ddd6fe' : index === 0 ? '#fef3c7' : 'var(--bg-tertiary)',
-                        border: isHighlighted ? '3px solid #7c3aed' : '1px solid',
-                        borderColor: isHighlighted ? '#7c3aed' : index === 0 ? '#f59e0b' : 'var(--border-color)',
-                        borderRadius: '6px',
-                        transform: isHighlighted ? 'scale(1.05)' : 'scale(1)',
-                        transition: 'all 0.3s ease',
-                      }}
+                      className={`flex justify-between px-3 py-3 rounded-md transition-all duration-300 ${
+                        isHighlighted 
+                          ? 'bg-highlight-bg border-[3px] border-highlight scale-105' 
+                          : index === 0 
+                            ? 'bg-warning-light border border-warning' 
+                            : 'bg-tertiary border border-border'
+                      }`}
                     >
-                      <span style={{ fontWeight: 'bold', color: 'var(--text-secondary)' }}>#{index + 1}</span>
-                      <span style={{ fontWeight: 'bold', color: 'var(--text-primary)' }}>{score.getInitials()}</span>
-                      <span style={{ fontWeight: 'bold', color: '#dc2626' }}>{score.getScore()}</span>
+                      <span className="font-bold text-secondary">#{index + 1}</span>
+                      <span className="font-bold text-primary">{score.getInitials()}</span>
+                      <span className="font-bold text-difficulty-hard">{score.getScore()}</span>
                     </div>
                   );
                 })
