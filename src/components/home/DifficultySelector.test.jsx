@@ -57,7 +57,7 @@ describe('DifficultySelector', () => {
     const onDifficultySelect = vi.fn();
     render(<DifficultySelector selectedDifficulty={null} onDifficultySelect={onDifficultySelect} />);
     
-    expect(screen.getByText('8 words, no timer, horizontal and vertical only')).toBeInTheDocument();
+    expect(screen.getByText('8 words, 12 minute timer, horizontal and vertical only')).toBeInTheDocument();
     expect(screen.getByText('12 words, 5 minute timer, includes diagonals')).toBeInTheDocument();
     expect(screen.getByText('16 words, 3 minute timer, all eight directions')).toBeInTheDocument();
   });

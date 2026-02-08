@@ -74,10 +74,10 @@ describe('StartGameUseCase', () => {
       expect(gameSession.isEnded()).toBe(false);
     });
 
-    it('should set correct timer duration for EASY (no timer)', () => {
+    it('should set correct timer duration for EASY (720 seconds)', () => {
       const gameSession = useCase.execute('Animals', 'EASY');
       
-      expect(gameSession.getTimerDuration()).toBeNull();
+      expect(gameSession.getTimerDuration()).toBe(720);
     });
 
     it('should set correct timer duration for MEDIUM (300 seconds)', () => {
@@ -182,7 +182,7 @@ describe('Property-Based Tests', () => {
 
             // Property 6: Timer duration matches difficulty
             const expectedTimerDuration = {
-              'EASY': null,
+              'EASY': 720,
               'MEDIUM': 300,
               'HARD': 180
             };

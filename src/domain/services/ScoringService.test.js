@@ -69,7 +69,7 @@ describe('ScoringService', () => {
   });
 
   describe('calculateScore - EASY difficulty', () => {
-    it('should calculate score with no timer and all words found', () => {
+    it('should calculate score with 12 minute timer and all words found', () => {
       const grid = new Grid(8);
       const words = Array.from({ length: 8 }, (_, i) => 
         new Word(`${i}`, `WORD${i}`, new Position(0, 0), Direction.RIGHT)
@@ -78,17 +78,19 @@ describe('ScoringService', () => {
       const puzzle = new Puzzle(grid, words, 'Animals', 'EASY');
       words.forEach(w => puzzle.markWordFound(w.getId()));
       
-      const session = new GameSession(puzzle, 'EASY', Date.now());
-      session.endGame(Date.now());
+      const startTime = Date.now();
+      const session = new GameSession(puzzle, 'EASY', startTime);
+      // Simulate 1 second elapsed
+      session.endGame(startTime + 1000);
       
       const score = service.calculateScore(session);
       
       // 8 words * 100 = 800
       // Completion bonus = 500
-      // Time bonus = 0 (no timer)
+      // Time bonus = (720 - 1) * 10 = 7190
       // Multiplier = 1.0
-      // Total = (800 + 500 + 0) * 1.0 = 1300
-      expect(score).toBe(1300);
+      // Total = (800 + 500 + 7190) * 1.0 = 8490
+      expect(score).toBe(8490);
     });
 
     it('should calculate score with partial completion', () => {
@@ -104,17 +106,19 @@ describe('ScoringService', () => {
         puzzle.markWordFound(words[i].getId());
       }
       
-      const session = new GameSession(puzzle, 'EASY', Date.now());
-      session.endGame(Date.now());
+      const startTime = Date.now();
+      const session = new GameSession(puzzle, 'EASY', startTime);
+      // Simulate 2 seconds elapsed
+      session.endGame(startTime + 2000);
       
       const score = service.calculateScore(session);
       
       // 5 words * 100 = 500
       // Completion bonus = 0 (not all found)
-      // Time bonus = 0 (no timer)
+      // Time bonus = (720 - 2) * 10 = 7180
       // Multiplier = 1.0
-      // Total = (500 + 0 + 0) * 1.0 = 500
-      expect(score).toBe(500);
+      // Total = (500 + 0 + 7180) * 1.0 = 7680
+      expect(score).toBe(7680);
     });
   });
 
@@ -235,18 +239,24 @@ describe('ScoringService', () => {
   });
 
   describe('calculateScore - edge cases', () => {
-    it('should return 0 for no words found', () => {
+    it('should return time bonus only for no words found', () => {
       const grid = new Grid(8);
       const words = Array.from({ length: 8 }, (_, i) => 
         new Word(`${i}`, `WORD${i}`, new Position(0, 0), Direction.RIGHT)
       );
       
       const puzzle = new Puzzle(grid, words, 'Animals', 'EASY');
-      const session = new GameSession(puzzle, 'EASY', Date.now());
-      session.endGame(Date.now());
+      const startTime = Date.now();
+      const session = new GameSession(puzzle, 'EASY', startTime);
+      // Simulate 1 second elapsed
+      session.endGame(startTime + 1000);
       
       const score = service.calculateScore(session);
-      expect(score).toBe(0);
+      // 0 words * 100 = 0
+      // Completion bonus = 0
+      // Time bonus = (720 - 1) * 10 = 7190
+      // Total = 7190
+      expect(score).toBe(7190);
     });
 
     it('should never return negative score', () => {

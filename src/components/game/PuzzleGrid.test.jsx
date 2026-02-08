@@ -131,42 +131,47 @@ describe('PuzzleGrid', () => {
   });
 
   describe('found word highlighting', () => {
-    it('should highlight cells that are part of found words', () => {
+    it('should render SVG circles for found words', () => {
       const grid = createTestGrid(5);
       const word = createTestWord('1', 'ABC', 0, 0, Direction.RIGHT);
       word.markFound();
 
-      render(<PuzzleGrid grid={grid} foundWords={[word]} />);
+      const { container } = render(<PuzzleGrid grid={grid} foundWords={[word]} />);
 
-      const cellA = screen.getByText('A');
-      expect(cellA).toHaveClass('bg-green-500');
+      // Check that SVG overlay exists
+      const svg = container.querySelector('svg');
+      expect(svg).toBeInTheDocument();
+      
+      // Check that a rect element exists for the found word
+      const rect = container.querySelector('rect');
+      expect(rect).toBeInTheDocument();
     });
 
-    it('should not highlight cells that are not part of found words', () => {
+    it('should not render SVG circles when no words are found', () => {
       const grid = createTestGrid(5);
       const word = createTestWord('1', 'ABC', 0, 0, Direction.RIGHT);
-      word.markFound();
 
-      render(<PuzzleGrid grid={grid} foundWords={[word]} />);
+      const { container } = render(<PuzzleGrid grid={grid} foundWords={[]} />);
 
-      const cellD = screen.getByText('D');
-      expect(cellD).not.toHaveClass('bg-green-500');
+      // SVG should exist but have no rect elements
+      const svg = container.querySelector('svg');
+      expect(svg).toBeInTheDocument();
+      const rect = container.querySelector('rect');
+      expect(rect).not.toBeInTheDocument();
     });
 
-    it('should handle multiple found words', () => {
+    it('should handle multiple found words with multiple SVG circles', () => {
       const grid = createTestGrid(5);
       const word1 = createTestWord('1', 'ABC', 0, 0, Direction.RIGHT);
       const word2 = createTestWord('2', 'FGH', 1, 0, Direction.RIGHT);
       word1.markFound();
       word2.markFound();
 
-      render(<PuzzleGrid grid={grid} foundWords={[word1, word2]} />);
+      const { container } = render(<PuzzleGrid grid={grid} foundWords={[word1, word2]} />);
 
-      const cellA = screen.getByText('A');
-      const cellF = screen.getByText('F');
-
-      expect(cellA).toHaveClass('bg-green-500');
-      expect(cellF).toHaveClass('bg-green-500');
+      // Check that we have 2 rect elements (one for each found word)
+      const rects = container.querySelectorAll('rect');
+      expect(rects).toHaveLength(2);
     });
 
     it('should handle empty foundWords array', () => {

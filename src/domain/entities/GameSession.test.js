@@ -50,9 +50,9 @@ describe('GameSession', () => {
   });
 
   describe('getTimerDuration', () => {
-    it('should return null for EASY difficulty', () => {
+    it('should return 720 seconds (12 minutes) for EASY difficulty', () => {
       const session = new GameSession(puzzle, 'EASY');
-      expect(session.getTimerDuration()).toBeNull();
+      expect(session.getTimerDuration()).toBe(720);
     });
 
     it('should return 300 seconds for MEDIUM difficulty', () => {
@@ -67,9 +67,9 @@ describe('GameSession', () => {
   });
 
   describe('getRemainingTime', () => {
-    it('should return null for EASY (no timer)', () => {
+    it('should return remaining time for EASY (12 minute timer)', () => {
       const session = new GameSession(puzzle, 'EASY', 1000);
-      expect(session.getRemainingTime(2000)).toBeNull();
+      expect(session.getRemainingTime(2000)).toBe(719); // 720 - 1 second elapsed
     });
 
     it('should calculate remaining time for MEDIUM', () => {
@@ -100,9 +100,10 @@ describe('GameSession', () => {
   });
 
   describe('isTimeExpired', () => {
-    it('should return false for EASY (no timer)', () => {
+    it('should return false for EASY when time not expired', () => {
       const session = new GameSession(puzzle, 'EASY', 1000);
-      expect(session.isTimeExpired(1000000)).toBe(false);
+      // After 10 seconds, still have 710 seconds left
+      expect(session.isTimeExpired(11000)).toBe(false);
     });
 
     it('should return false when time remaining', () => {
@@ -124,7 +125,11 @@ describe('GameSession', () => {
       puzzle.markWordFound('1'); // 1 word found
       
       const score = session.calculateScore(2000);
-      expect(score).toBe(100); // 1 * 100 * 1.0 (EASY multiplier)
+      // 1 word * 100 = 100
+      // Completion bonus = 0
+      // Time bonus = (720 - 1) * 10 = 7190
+      // Total = (100 + 0 + 7190) * 1.0 = 7290
+      expect(score).toBe(7290);
     });
 
     it('should add completion bonus for all words found', () => {
@@ -134,7 +139,11 @@ describe('GameSession', () => {
       puzzle.markWordFound('3');
       
       const score = session.calculateScore(2000);
-      expect(score).toBe(800); // (3 * 100 + 500) * 1.0
+      // 3 words * 100 = 300
+      // Completion bonus = 500
+      // Time bonus = (720 - 1) * 10 = 7190
+      // Total = (300 + 500 + 7190) * 1.0 = 7990
+      expect(score).toBe(7990);
     });
 
     it('should add time bonus for timed games', () => {
@@ -151,31 +160,33 @@ describe('GameSession', () => {
     it('should apply difficulty multipliers', () => {
       const startTime = 1000;
       
-      // EASY: 1.0x (no timer, no time bonus)
+      // EASY: 1.0x (with 12 minute timer)
       const easySession = new GameSession(puzzle, 'EASY', startTime);
       puzzle.markWordFound('1');
-      expect(easySession.calculateScore(startTime + 1000)).toBe(100);
+      // After 1 second: (100 + 0 + 7190) * 1.0 = 7290
+      expect(easySession.calculateScore(startTime + 1000)).toBe(7290);
       
-      // MEDIUM: 1.5x (with time bonus)
+      // MEDIUM: 1.5x (with 5 minute timer)
       puzzle.reset();
       const mediumSession = new GameSession(puzzle, 'MEDIUM', startTime);
       puzzle.markWordFound('1');
       const mediumScore = mediumSession.calculateScore(startTime + 1000);
-      expect(mediumScore).toBeGreaterThan(100); // Should be higher due to multiplier and time bonus
+      // After 1 second: (100 + 0 + 2990) * 1.5 = 4635
+      expect(mediumScore).toBe(4635);
       
-      // HARD: 2.0x (with time bonus, but shorter timer)
+      // HARD: 2.0x (with 3 minute timer)
       puzzle.reset();
       const hardSession = new GameSession(puzzle, 'HARD', startTime);
       puzzle.markWordFound('1');
       const hardScore = hardSession.calculateScore(startTime + 1000);
-      expect(hardScore).toBeGreaterThan(100); // Should be higher due to multiplier
+      // After 1 second: (100 + 0 + 1790) * 2.0 = 3780
+      expect(hardScore).toBe(3780);
       
-      // Verify multipliers work correctly by comparing base scores without time
-      // End games immediately so time bonus is minimal
+      // Verify multipliers work correctly by comparing scores near end of timer
       puzzle.reset();
       const easySession2 = new GameSession(puzzle, 'EASY', startTime);
       puzzle.markWordFound('1');
-      const easyFinal = easySession2.calculateScore(startTime + 290000); // Near end
+      const easyFinal = easySession2.calculateScore(startTime + 710000); // 710 seconds elapsed, 10 remaining
       
       puzzle.reset();
       const mediumSession2 = new GameSession(puzzle, 'MEDIUM', startTime);
@@ -192,10 +203,14 @@ describe('GameSession', () => {
       expect(hardFinal).toBeGreaterThan(mediumFinal);
     });
 
-    it('should return 0 for no words found', () => {
+    it('should return time bonus only for no words found', () => {
       const session = new GameSession(puzzle, 'EASY', 1000);
       const score = session.calculateScore(2000);
-      expect(score).toBe(0);
+      // 0 words * 100 = 0
+      // Completion bonus = 0
+      // Time bonus = (720 - 1) * 10 = 7190
+      // Total = 7190
+      expect(score).toBe(7190);
     });
   });
 
