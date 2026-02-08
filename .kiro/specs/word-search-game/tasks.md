@@ -62,7 +62,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - **Validates: Requirements 3.6**
     - **Note:** Max grid size increased from 12x12 to 20x20 per Decision Record 002
   
-  - [ ] 3.7 Write unit tests for entities
+  - [x] 3.7 Write unit tests for entities
     - Test Grid cell access and validation
     - Test Word position calculation
     - Test Puzzle completion detection
