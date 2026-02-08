@@ -163,37 +163,92 @@ export function PuzzleGrid({ grid, foundWords = [], onSelectionComplete }) {
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
     >
-      <div 
-        className="grid gap-0.5 bg-tertiary p-0.5 rounded"
-        style={{
-          gridTemplateColumns: `repeat(${grid.size}, 1fr)`,
-        }}
-      >
-        {Array.from({ length: grid.size }).map((_, row) =>
-          Array.from({ length: grid.size }).map((_, col) => {
-            const cell = grid.getCell(row, col);
-            const isSelected = isCellSelected(row, col);
-            const isFound = isCellFound(row, col);
+      <div className="relative">
+        <div 
+          className="grid gap-0.5 bg-tertiary p-0.5 rounded"
+          style={{
+            gridTemplateColumns: `repeat(${grid.size}, 1fr)`,
+          }}
+        >
+          {Array.from({ length: grid.size }).map((_, row) =>
+            Array.from({ length: grid.size }).map((_, col) => {
+              const cell = grid.getCell(row, col);
+              const isSelected = isCellSelected(row, col);
+              const isFound = isCellFound(row, col);
 
+              return (
+                <div
+                  key={`${row}-${col}`}
+                  className={`
+                    aspect-square flex justify-center items-center
+                    text-xl font-bold cursor-pointer transition-all
+                    min-w-[40px] min-h-[40px]
+                    ${isSelected ? 'bg-blue-500 text-white' : ''}
+                    ${!isSelected && !isFound ? 'bg-secondary text-primary' : ''}
+                    ${!isSelected && isFound ? 'text-primary' : ''}
+                  `}
+                  onMouseDown={() => handleMouseDown(row, col)}
+                  onMouseEnter={() => handleMouseEnter(row, col)}
+                >
+                  {cell.letter}
+                </div>
+              );
+            })
+          )}
+        </div>
+
+        {/* SVG overlay for found word circles */}
+        <svg
+          className="absolute top-0 left-0 w-full h-full pointer-events-none"
+          style={{
+            overflow: 'visible',
+          }}
+          viewBox={`0 0 ${grid.size} ${grid.size}`}
+          preserveAspectRatio="none"
+        >
+          {foundWords.map((word, index) => {
+            const positions = word.getPositions();
+            if (positions.length === 0) return null;
+            
+            const start = positions[0];
+            const end = positions[positions.length - 1];
+            
+            // Calculate center points for start and end
+            const x1 = start.col + 0.5;
+            const y1 = start.row + 0.5;
+            const x2 = end.col + 0.5;
+            const y2 = end.row + 0.5;
+            
+            // Calculate center point of the word
+            const cx = (x1 + x2) / 2;
+            const cy = (y1 + y2) / 2;
+            
+            // Calculate length and angle
+            const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+            const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+            
+            // Rounded rectangle dimensions
+            const width = length + 0.7; // Extended length
+            const height = 0.7; // Height of the rounded rect
+            const radius = height / 2; // Fully rounded ends
+            
             return (
-              <div
-                key={`${row}-${col}`}
-                className={`
-                  aspect-square flex justify-center items-center
-                  text-xl font-bold cursor-pointer transition-all
-                  min-w-[40px] min-h-[40px]
-                  ${isSelected ? 'bg-blue-500 text-white' : ''}
-                  ${isFound ? 'bg-green-500 text-white' : ''}
-                  ${!isSelected && !isFound ? 'bg-secondary text-primary' : ''}
-                `}
-                onMouseDown={() => handleMouseDown(row, col)}
-                onMouseEnter={() => handleMouseEnter(row, col)}
-              >
-                {cell.letter}
-              </div>
+              <rect
+                key={`circle-${index}`}
+                x={cx - width / 2}
+                y={cy - height / 2}
+                width={width}
+                height={height}
+                rx={radius}
+                ry={radius}
+                fill="none"
+                stroke="#10b981"
+                strokeWidth="0.08"
+                transform={`rotate(${angle} ${cx} ${cy})`}
+              />
             );
-          })
-        )}
+          })}
+        </svg>
       </div>
     </div>
   );
