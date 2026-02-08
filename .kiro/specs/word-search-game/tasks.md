@@ -9,8 +9,8 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
 ## Tasks
 
 - [x] 1. Project setup and dependencies
-  - Already complete: React 19, Vite, TanStack Router, TanStack Query installed
-  - Note: Tailwind CSS v4 was initially installed but not used (see Decision Record 004)
+  - Already complete: React 19, Vite, TanStack Router, TanStack Query, Tailwind CSS v4 installed
+  - Note: Tailwind CSS v4 is now the official styling approach (see Decision Record 006)
 
 - [ ] 2. Create domain layer foundation
   - [x] 2.1 Implement core value objects and enums
@@ -381,19 +381,19 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
 
 - [ ] 17. Implement component styling
   - [x] 17.1 Define style constants and theme variables
-    - Create `src/presentation/styles/theme.js` with color schemes and spacing
-    - Define light/dark/system theme color palettes
-    - Create reusable style constants
+    - Create `src/index.css` with Tailwind CSS v4 configuration
+    - Define CSS variables for light/dark/system theme color palettes
+    - Create custom utility classes for theme-aware colors
     - _Requirements: 10.1, 11.3, 13.5_
-    - **Note:** Using inline styles per Decision Record 004
+    - **Note:** Using Tailwind CSS v4 per Decision Record 006
   
   - [x] 17.2 Style all components
-    - Apply inline styles to all components
-    - Ensure responsive design with JavaScript media queries
-    - Implement theme-aware styling (light/dark mode)
+    - Apply Tailwind CSS utility classes to all components
+    - Ensure responsive design with Tailwind responsive utilities
+    - Implement theme-aware styling using custom CSS variables
     - Style grid cells, word list, buttons, overlays
     - _Requirements: 10.4, 13.5_
-    - **Note:** Using inline styles instead of Tailwind CSS per Decision Record 004
+    - **Note:** Using Tailwind CSS v4 per Decision Record 006 (reverses Decision Record 004)
 
 - [ ] 18. Checkpoint - UI complete
   - Ensure all presentation tests pass, manually test UI flows, ask the user if questions arise.

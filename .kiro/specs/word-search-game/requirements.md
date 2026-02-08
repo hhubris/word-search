@@ -41,7 +41,7 @@ This document specifies the requirements for a browser-based word search game. T
 #### Acceptance Criteria
 
 1. THE Game_System SHALL provide exactly three difficulty levels: Easy, Medium, and Hard
-2. WHEN displaying Easy difficulty, THE Game_System SHALL show "8 words, no timer, horizontal and vertical only"
+2. WHEN displaying Easy difficulty, THE Game_System SHALL show "8 words, 12 minute timer, horizontal and vertical only"
 3. WHEN displaying Medium difficulty, THE Game_System SHALL show "12 words, 5 minute timer, includes diagonals"
 4. WHEN displaying Hard difficulty, THE Game_System SHALL show "16 words, 3 minute timer, all eight directions"
 5. WHEN a player selects a difficulty, THE Game_System SHALL highlight the selected difficulty
@@ -101,7 +101,7 @@ This document specifies the requirements for a browser-based word search game. T
 
 #### Acceptance Criteria
 
-1. WHEN Easy difficulty is selected, THE Game_System SHALL not display or run a Timer
+1. WHEN Easy difficulty is selected, THE Game_System SHALL initialize the Timer to 12 minutes
 2. WHEN Medium difficulty is selected, THE Game_System SHALL initialize the Timer to 5 minutes
 3. WHEN Hard difficulty is selected, THE Game_System SHALL initialize the Timer to 3 minutes
 4. WHILE the game is active, THE Game_System SHALL decrement the Timer every second
@@ -185,5 +185,5 @@ This document specifies the requirements for a browser-based word search game. T
 2. THE Game_System SHALL use Vite.js as the build tool
 3. THE Game_System SHALL use TanStack Router for navigation
 4. THE Game_System SHALL use TanStack Query for data management
-5. THE Game_System SHALL use inline styles for component styling
+5. THE Game_System SHALL use Tailwind CSS v4 for component styling
 6. THE Game_System SHALL follow Clean Architecture principles with clear separation of concerns

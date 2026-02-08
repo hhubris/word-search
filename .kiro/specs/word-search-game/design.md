@@ -20,7 +20,7 @@ This separation ensures testability, maintainability, and independence from fram
 - **Vite**: Fast build tool and development server
 - **TanStack Router**: Type-safe routing solution
 - **TanStack Query**: Data fetching and state management
-- **Inline Styles**: Component-level styling with JavaScript objects
+- **Tailwind CSS v4**: Utility-first CSS framework for component styling
 - **JavaScript**: Implementation language (no TypeScript)
 
 ## Architecture
@@ -187,7 +187,7 @@ const Difficulty = {
 };
 
 const DifficultyConfig = {
-  EASY: { wordCount: 8, timerSeconds: null, directions: ['RIGHT', 'DOWN'] },
+  EASY: { wordCount: 8, timerSeconds: 720, directions: ['RIGHT', 'DOWN'] },
   MEDIUM: { wordCount: 12, timerSeconds: 300, directions: ['RIGHT', 'DOWN', 'DOWN_RIGHT', 'DOWN_LEFT'] },
   HARD: { wordCount: 16, timerSeconds: 180, directions: Object.keys(Direction) }
 };
@@ -761,7 +761,7 @@ The system should provide exactly these three difficulties: Easy, Medium, Hard.
 **Validates: Requirements 2.1**
 
 **Example 3: Easy Difficulty Configuration**
-Easy difficulty should display "8 words, no timer, horizontal and vertical only" and have no timer.
+Easy difficulty should display "8 words, 12 minute timer, horizontal and vertical only" and initialize timer to 720 seconds (12 minutes).
 **Validates: Requirements 2.2, 7.1**
 
 **Example 4: Medium Difficulty Configuration**

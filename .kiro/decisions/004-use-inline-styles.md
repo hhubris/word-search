@@ -1,8 +1,10 @@
 # Decision Record: Use Inline Styles Instead of Tailwind CSS v4
 
 **Date:** 2026-02-08  
-**Status:** Accepted  
+**Status:** Reversed (see Decision Record 006)  
 **Decision Maker:** Development Team
+
+**NOTE**: This decision was reversed by Decision Record 006. The project now uses Tailwind CSS v4 for styling.
 
 ## Context
 
