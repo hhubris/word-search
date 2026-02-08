@@ -183,9 +183,7 @@ export function PuzzleGrid({ grid, foundWords = [], onSelectionComplete }) {
                     aspect-square flex justify-center items-center
                     text-xl font-bold cursor-pointer transition-all
                     min-w-[40px] min-h-[40px]
-                    ${isSelected ? 'bg-blue-500 text-white' : ''}
-                    ${!isSelected && !isFound ? 'bg-secondary text-primary' : ''}
-                    ${!isSelected && isFound ? 'text-primary' : ''}
+                    ${isSelected ? 'bg-blue-500 text-white' : 'bg-secondary text-primary'}
                   `}
                   onMouseDown={() => handleMouseDown(row, col)}
                   onMouseEnter={() => handleMouseEnter(row, col)}
