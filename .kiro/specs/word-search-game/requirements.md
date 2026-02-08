@@ -55,8 +55,8 @@ This document specifies the requirements for a browser-based word search game. T
 3. WHEN generating a puzzle for Hard difficulty, THE Puzzle_Generator SHALL place 16 words in any of the eight possible directions
 4. WHEN placing words, THE Puzzle_Generator SHALL ensure at least 50% of words intersect with at least one other word
 5. WHEN filling empty cells, THE Puzzle_Generator SHALL use random letters that do not accidentally create additional target words
-6. THE Puzzle_Generator SHALL create square grids with maximum dimensions of 12x12
-7. IF a generated puzzle exceeds 12x12 dimensions, THEN THE Puzzle_Generator SHALL regenerate the puzzle with different word placements
+6. THE Puzzle_Generator SHALL create square grids with maximum dimensions of 20x20
+7. IF a generated puzzle exceeds 20x20 dimensions, THEN THE Puzzle_Generator SHALL regenerate the puzzle with different word placements
 
 ### Requirement 4: Game Start Flow
 

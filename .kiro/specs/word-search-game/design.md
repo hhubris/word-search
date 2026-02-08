@@ -61,7 +61,7 @@ Dependencies flow inward: Presentation → Application → Domain. The domain la
 ```javascript
 class Grid {
   constructor(size, cells) {
-    this.size = size;           // number (e.g., 12 for 12x12)
+    this.size = size;           // number (e.g., 20 for 20x20)
     this.cells = cells;         // 2D array of Cell objects
   }
   
@@ -232,7 +232,7 @@ class PuzzleGeneratorService {
     // 3. Attempt to place words on grid
     // 4. Ensure at least 50% of words intersect
     // 5. Fill empty cells with random letters
-    // 6. Validate grid size <= 12x12
+    // 6. Validate grid size <= 20x20
     // 7. If invalid, retry with different words/placements
     // Returns Puzzle entity
   }
@@ -653,7 +653,7 @@ After analyzing all acceptance criteria, I identified several areas where proper
 **Validates: Requirements 3.5**
 
 **Property 5: Grid Size Constraint**
-*For any* generated puzzle, the grid dimensions should be square and not exceed 12x12.
+*For any* generated puzzle, the grid dimensions should be square and not exceed 20x20.
 **Validates: Requirements 3.6**
 
 **Property 6: Puzzle Matches Configuration**
@@ -793,7 +793,7 @@ When a player achieves a qualifying score, the system should prompt for initials
 - **Response**: Log error, retry with different word selection
 - **User Impact**: Show loading state, fallback to simpler word selection if needed
 
-**Scenario**: Selected words cannot fit in 12x12 grid
+**Scenario**: Selected words cannot fit in 20x20 grid
 - **Detection**: Grid size exceeds maximum during placement
 - **Response**: Remove longest word and retry, or select different words
 - **User Impact**: Transparent to user, may take slightly longer to generate
