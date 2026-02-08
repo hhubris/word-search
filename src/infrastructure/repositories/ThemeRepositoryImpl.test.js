@@ -190,3 +190,46 @@ describe('ThemeRepositoryImpl', () => {
     });
   });
 });
+
+// Property-based tests
+import * as fc from 'fast-check';
+
+describe('Property-Based Tests', () => {
+  let repository;
+  let storage;
+
+  beforeEach(() => {
+    storage = new MockStorageAdapter();
+    repository = new ThemeRepositoryImpl(storage);
+  });
+
+  // Feature: word-search-game, Property 20: Data Persistence Round Trip (Theme)
+  describe('Property 20: Data Persistence Round Trip (Theme)', () => {
+    it('should preserve theme value through save and retrieve', () => {
+      fc.assert(
+        fc.property(
+          // Generate random sequence of theme changes
+          fc.array(
+            fc.constantFrom(Theme.LIGHT, Theme.DARK, Theme.SYSTEM),
+            { minLength: 1, maxLength: 20 }
+          ),
+          (themes) => {
+            // Save and retrieve each theme in sequence
+            themes.forEach(theme => {
+              const saveResult = repository.saveTheme(theme);
+              expect(saveResult).toBe(true);
+              
+              const retrieved = repository.getTheme();
+              expect(retrieved).toBe(theme);
+            });
+
+            // Final theme should still be retrievable
+            const lastTheme = themes[themes.length - 1];
+            expect(repository.getTheme()).toBe(lastTheme);
+          }
+        ),
+        { numRuns: 100 }
+      );
+    });
+  });
+});

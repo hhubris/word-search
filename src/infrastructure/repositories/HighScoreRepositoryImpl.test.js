@@ -310,3 +310,220 @@ describe('HighScoreRepositoryImpl', () => {
     });
   });
 });
+
+// Property-based tests
+import * as fc from 'fast-check';
+
+describe('Property-Based Tests', () => {
+  let repository;
+  let storage;
+
+  beforeEach(() => {
+    storage = new MockStorageAdapter();
+    repository = new HighScoreRepositoryImpl(storage);
+  });
+
+  // Feature: word-search-game, Property 14: High Score Separation by Difficulty
+  describe('Property 14: High Score Separation by Difficulty', () => {
+    it('should never mix scores from different difficulties', () => {
+      fc.assert(
+        fc.property(
+          // Generate random high scores for all difficulties
+          fc.array(
+            fc.record({
+              initials: fc.constantFrom('AAA', 'BBB', 'CCC', 'XYZ', 'ABC', 'DEF'),
+              score: fc.integer({ min: 0, max: 100000 }),
+              difficulty: fc.constantFrom('EASY', 'MEDIUM', 'HARD'),
+              timestamp: fc.integer({ min: 1000000000000, max: 2000000000000 })
+            }),
+            { minLength: 10, maxLength: 50 }
+          ),
+          (scoreData) => {
+            // Clear and add all scores
+            repository.clearHighScores();
+            scoreData.forEach(data => {
+              const highScore = new HighScore(
+                data.initials,
+                data.score,
+                data.difficulty,
+                data.timestamp
+              );
+              repository.saveHighScore(highScore);
+            });
+
+            // Verify each difficulty only contains its own scores
+            const easyScores = repository.getHighScores('EASY');
+            const mediumScores = repository.getHighScores('MEDIUM');
+            const hardScores = repository.getHighScores('HARD');
+
+            easyScores.forEach(score => {
+              expect(score.getDifficulty()).toBe('EASY');
+            });
+
+            mediumScores.forEach(score => {
+              expect(score.getDifficulty()).toBe('MEDIUM');
+            });
+
+            hardScores.forEach(score => {
+              expect(score.getDifficulty()).toBe('HARD');
+            });
+          }
+        ),
+        { numRuns: 100 }
+      );
+    });
+  });
+
+  // Feature: word-search-game, Property 15: High Score List Size Limit
+  describe('Property 15: High Score List Size Limit', () => {
+    it('should never exceed 10 scores per difficulty', () => {
+      fc.assert(
+        fc.property(
+          // Generate random number of scores (up to 50) for each difficulty
+          fc.record({
+            easyScores: fc.array(
+              fc.record({
+                initials: fc.constantFrom('AAA', 'BBB', 'CCC', 'XYZ', 'ABC', 'DEF'),
+                score: fc.integer({ min: 0, max: 100000 }),
+                timestamp: fc.integer({ min: 1000000000000, max: 2000000000000 })
+              }),
+              { minLength: 0, maxLength: 50 }
+            ),
+            mediumScores: fc.array(
+              fc.record({
+                initials: fc.constantFrom('AAA', 'BBB', 'CCC', 'XYZ', 'ABC', 'DEF'),
+                score: fc.integer({ min: 0, max: 100000 }),
+                timestamp: fc.integer({ min: 1000000000000, max: 2000000000000 })
+              }),
+              { minLength: 0, maxLength: 50 }
+            ),
+            hardScores: fc.array(
+              fc.record({
+                initials: fc.constantFrom('AAA', 'BBB', 'CCC', 'XYZ', 'ABC', 'DEF'),
+                score: fc.integer({ min: 0, max: 100000 }),
+                timestamp: fc.integer({ min: 1000000000000, max: 2000000000000 })
+              }),
+              { minLength: 0, maxLength: 50 }
+            )
+          }),
+          ({ easyScores, mediumScores, hardScores }) => {
+            repository.clearHighScores();
+
+            // Add all scores
+            easyScores.forEach(data => {
+              repository.saveHighScore(new HighScore(data.initials, data.score, 'EASY', data.timestamp));
+            });
+            mediumScores.forEach(data => {
+              repository.saveHighScore(new HighScore(data.initials, data.score, 'MEDIUM', data.timestamp));
+            });
+            hardScores.forEach(data => {
+              repository.saveHighScore(new HighScore(data.initials, data.score, 'HARD', data.timestamp));
+            });
+
+            // Verify size limits
+            expect(repository.getHighScores('EASY').length).toBeLessThanOrEqual(10);
+            expect(repository.getHighScores('MEDIUM').length).toBeLessThanOrEqual(10);
+            expect(repository.getHighScores('HARD').length).toBeLessThanOrEqual(10);
+          }
+        ),
+        { numRuns: 100 }
+      );
+    });
+  });
+
+  // Feature: word-search-game, Property 16: High Score Sorting
+  describe('Property 16: High Score Sorting', () => {
+    it('should always return scores in descending order', () => {
+      fc.assert(
+        fc.property(
+          // Generate random scores
+          fc.array(
+            fc.record({
+              initials: fc.constantFrom('AAA', 'BBB', 'CCC', 'XYZ', 'ABC', 'DEF'),
+              score: fc.integer({ min: 0, max: 100000 }),
+              difficulty: fc.constantFrom('EASY', 'MEDIUM', 'HARD'),
+              timestamp: fc.integer({ min: 1000000000000, max: 2000000000000 })
+            }),
+            { minLength: 1, maxLength: 30 }
+          ),
+          (scoreData) => {
+            repository.clearHighScores();
+
+            // Add all scores
+            scoreData.forEach(data => {
+              repository.saveHighScore(new HighScore(
+                data.initials,
+                data.score,
+                data.difficulty,
+                data.timestamp
+              ));
+            });
+
+            // Check sorting for each difficulty
+            ['EASY', 'MEDIUM', 'HARD'].forEach(difficulty => {
+              const scores = repository.getHighScores(difficulty);
+              
+              // Verify descending order
+              for (let i = 0; i < scores.length - 1; i++) {
+                expect(scores[i].getScore()).toBeGreaterThanOrEqual(scores[i + 1].getScore());
+              }
+            });
+          }
+        ),
+        { numRuns: 100 }
+      );
+    });
+  });
+
+  // Feature: word-search-game, Property 19: Data Persistence Round Trip (High Scores)
+  describe('Property 19: Data Persistence Round Trip (High Scores)', () => {
+    it('should preserve all high score properties through save and retrieve', () => {
+      fc.assert(
+        fc.property(
+          // Generate random high scores
+          fc.array(
+            fc.record({
+              initials: fc.constantFrom('AAA', 'BBB', 'CCC', 'XYZ', 'ABC', 'DEF'),
+              score: fc.integer({ min: 0, max: 100000 }),
+              difficulty: fc.constantFrom('EASY', 'MEDIUM', 'HARD'),
+              timestamp: fc.integer({ min: 1000000000000, max: 2000000000000 })
+            }),
+            { minLength: 1, maxLength: 20 }
+          ),
+          (scoreData) => {
+            repository.clearHighScores();
+
+            // Save all scores
+            const savedScores = scoreData.map(data => 
+              new HighScore(data.initials, data.score, data.difficulty, data.timestamp)
+            );
+            
+            savedScores.forEach(score => {
+              repository.saveHighScore(score);
+            });
+
+            // Retrieve and verify each difficulty
+            ['EASY', 'MEDIUM', 'HARD'].forEach(difficulty => {
+              const retrievedScores = repository.getHighScores(difficulty);
+              const originalScoresForDifficulty = savedScores.filter(s => s.getDifficulty() === difficulty);
+
+              // Each retrieved score should match an original score
+              retrievedScores.forEach(retrieved => {
+                const matching = originalScoresForDifficulty.find(original =>
+                  original.getInitials() === retrieved.getInitials() &&
+                  original.getScore() === retrieved.getScore() &&
+                  original.getDifficulty() === retrieved.getDifficulty() &&
+                  original.getTimestamp() === retrieved.getTimestamp()
+                );
+
+                // Should find a matching original score
+                expect(matching).toBeDefined();
+              });
+            });
+          }
+        ),
+        { numRuns: 100 }
+      );
+    });
+  });
+});

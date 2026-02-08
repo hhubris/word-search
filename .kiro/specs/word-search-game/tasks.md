@@ -139,7 +139,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Implement getWordsByCategory() and getAllCategories()
     - _Requirements: 1.1, 1.4, 1.5_
   
-  - [ ] 7.3 Write unit tests for WordRepositoryImpl
+  - [x] 7.3 Write unit tests for WordRepositoryImpl
     - Test category retrieval
     - Test word filtering by length
     - _Requirements: 1.1, 1.4, 1.5_
@@ -150,7 +150,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Ensure top 10 limit per difficulty
     - _Requirements: 9.1, 9.2, 9.4, 12.1, 12.3_
   
-  - [ ] 7.5 Write property tests for high score repository
+  - [x] 7.5 Write property tests for high score repository
     - **Property 14: High Score Separation by Difficulty**
     - **Property 15: High Score List Size Limit**
     - **Property 16: High Score Sorting**
@@ -162,7 +162,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Implement getTheme() and saveTheme()
     - _Requirements: 10.5, 12.2, 12.4_
   
-  - [ ] 7.7 Write property test for theme persistence
+  - [x] 7.7 Write property test for theme persistence
     - **Property 20: Data Persistence Round Trip (Theme)**
     - **Validates: Requirements 10.5, 12.2, 12.4**
 
