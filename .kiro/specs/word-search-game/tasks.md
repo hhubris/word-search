@@ -251,7 +251,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Handle timer stop on game end
     - _Requirements: 7.4, 7.5_
   
-  - [ ]* 12.3 Write property test for timer countdown
+  - [x]* 12.3 Write property test for timer countdown
     - **Property 11: Timer Countdown**
     - **Validates: Requirements 7.4**
   
@@ -261,7 +261,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Integrate with GetHighScoresUseCase and SaveHighScoreUseCase
     - _Requirements: 9.1, 9.4, 13.4_
   
-  - [ ] 12.5 Create useTheme hook
+  - [x] 12.5 Create useTheme hook
     - Create `src/presentation/hooks/useTheme.js`
     - Manage theme state and apply to document
     - Integrate with ChangeThemeUseCase

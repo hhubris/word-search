@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useTimer } from './useTimer.js';
+import * as fc from 'fast-check';
 
 describe('useTimer', () => {
   beforeEach(() => {
@@ -401,6 +402,46 @@ describe('useTimer', () => {
 
       expect(result.current.timeRemaining).toBe(0);
       expect(result.current.timeRemaining).not.toBeLessThan(0);
+    });
+  });
+
+  describe('property-based tests', () => {
+    // Feature: word-search-game, Property 11: Timer Countdown
+    it('Property 11: remaining time decreases by 1 second for each second of elapsed time', () => {
+      fc.assert(
+        fc.property(
+          fc.integer({ min: 10, max: 600 }), // Initial duration (10s to 10min)
+          fc.integer({ min: 1, max: 10 }),   // Number of seconds to advance
+          (initialDuration, secondsToAdvance) => {
+            const { result } = renderHook(() => useTimer());
+
+            // Start timer with initial duration
+            act(() => {
+              result.current.start(initialDuration);
+            });
+
+            // Verify initial state
+            expect(result.current.timeRemaining).toBe(initialDuration);
+            expect(result.current.isRunning).toBe(true);
+
+            // Advance time by specified seconds
+            const actualSecondsToAdvance = Math.min(secondsToAdvance, initialDuration);
+            act(() => {
+              vi.advanceTimersByTime(actualSecondsToAdvance * 1000);
+            });
+
+            // Verify remaining time decreased by exactly the elapsed time
+            const expectedRemaining = initialDuration - actualSecondsToAdvance;
+            expect(result.current.timeRemaining).toBe(expectedRemaining);
+
+            // Cleanup
+            act(() => {
+              result.current.stop();
+            });
+          }
+        ),
+        { numRuns: 100 }
+      );
     });
   });
 });
