@@ -281,7 +281,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Test found word highlighting
     - _Requirements: 6.1, 6.5_
   
-  - [ ] 13.3 Create WordList component
+  - [x] 13.3 Create WordList component
     - Create `src/presentation/components/WordList.jsx`
     - Display words in alphabetical order
     - Cross out found words
