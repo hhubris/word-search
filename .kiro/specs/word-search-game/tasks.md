@@ -359,7 +359,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Include initials input form when qualifying
     - _Requirements: 9.1, 9.2, 9.3, 9.5, 9.6, 9.7, 9.8_
   
-  - [ ] 16.2 Write unit tests for HighScoresScreen
+  - [x] 16.2 Write unit tests for HighScoresScreen
     - Test score display and sorting
     - Test initials input validation (max 3 chars)
     - Test new score highlighting
