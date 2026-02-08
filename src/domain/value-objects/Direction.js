@@ -44,11 +44,25 @@ export function getDirectionsForDifficulty(difficulty) {
  * @returns {Object|null} Direction object or null if invalid
  */
 export function getDirection(start, end) {
-  const dx = Math.sign(end.col - start.col);
-  const dy = Math.sign(end.row - start.row);
+  const deltaCol = end.col - start.col;
+  const deltaRow = end.row - start.row;
 
   // If no movement, return null
-  if (dx === 0 && dy === 0) return null;
+  if (deltaCol === 0 && deltaRow === 0) return null;
+
+  // Check if this forms a valid straight line
+  const isHorizontal = deltaRow === 0 && deltaCol !== 0;
+  const isVertical = deltaCol === 0 && deltaRow !== 0;
+  const isDiagonal = Math.abs(deltaRow) === Math.abs(deltaCol) && deltaRow !== 0 && deltaCol !== 0;
+
+  // If not a valid straight line, return null
+  if (!isHorizontal && !isVertical && !isDiagonal) {
+    return null;
+  }
+
+  // Calculate normalized direction
+  const dx = Math.sign(deltaCol);
+  const dy = Math.sign(deltaRow);
 
   // Find matching direction
   for (const dir of Object.values(Direction)) {
