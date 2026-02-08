@@ -44,7 +44,7 @@ src/
     ├── components/      # React components
     ├── hooks/           # Custom React hooks
     ├── routes/          # Route definitions
-    └── styles/          # Tailwind configurations
+    └── styles/          # Style constants and theme definitions
 ```
 
 ### Dependency Flow
