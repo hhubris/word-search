@@ -77,7 +77,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Implement restrictToDirection() method
     - _Requirements: 6.2, 6.3, 6.4_
   
-  - [ ] 4.2 Write property tests for word selection
+  - [x] 4.2 Write property tests for word selection
     - **Property 10: Selection Direction Restriction**
     - **Property 11: Word Validation**
     - **Validates: Requirements 6.3, 6.4**

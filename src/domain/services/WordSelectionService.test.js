@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import * as fc from 'fast-check';
 import { WordSelectionService } from './WordSelectionService.js';
 import { Grid } from '../entities/Grid.js';
 import { Word } from '../entities/Word.js';
@@ -183,3 +184,162 @@ describe('WordSelectionService', () => {
     });
   });
 });
+
+  // Feature: word-search-game, Property 10: Selection Direction Restriction
+  describe('Property 10: Selection Direction Restriction', () => {
+    it('should restrict all positions to lie along the established direction', () => {
+      const service = new WordSelectionService();
+
+      fc.assert(
+        fc.property(
+          // Generate a start position and a direction
+          fc.record({
+            startRow: fc.integer({ min: 0, max: 11 }),
+            startCol: fc.integer({ min: 0, max: 11 }),
+            direction: fc.constantFrom(...Object.values(Direction)),
+            distance: fc.integer({ min: 1, max: 5 })
+          }),
+          ({ startRow, startCol, direction, distance }) => {
+            const startPos = new Position(startRow, startCol);
+            
+            // Calculate a position along the direction
+            const targetRow = startRow + (direction.dy * distance);
+            const targetCol = startCol + (direction.dx * distance);
+            const targetPos = new Position(targetRow, targetCol);
+            
+            // Test restrictToDirection
+            const result = service.restrictToDirection(startPos, direction, targetPos);
+            
+            // Should return the target position since it's along the direction
+            expect(result).toEqual(targetPos);
+            
+            // Now test a position NOT along the direction
+            // For horizontal/vertical, add perpendicular offset
+            // For diagonal, break the equal delta requirement
+            let offRow, offCol;
+            if (direction.dy === 0) {
+              // Horizontal - add vertical offset
+              offRow = targetRow + 1;
+              offCol = targetCol;
+            } else if (direction.dx === 0) {
+              // Vertical - add horizontal offset
+              offRow = targetRow;
+              offCol = targetCol + 1;
+            } else {
+              // Diagonal - break equal deltas
+              offRow = targetRow + 1;
+              offCol = targetCol; // Don't add to col, breaks diagonal
+            }
+            
+            const offPos = new Position(offRow, offCol);
+            
+            // Should return null for position not along direction
+            const offResult = service.restrictToDirection(startPos, direction, offPos);
+            expect(offResult).toBeNull();
+          }
+        ),
+        { numRuns: 100 }
+      );
+    });
+  });
+
+  // Feature: word-search-game, Property 11: Word Validation
+  describe('Property 11: Word Validation', () => {
+    it('should validate selection matches word in puzzle word list', () => {
+      const service = new WordSelectionService();
+
+      fc.assert(
+        fc.property(
+          // Generate a word and its placement
+          fc.record({
+            wordText: fc.string({ minLength: 3, maxLength: 8 }).filter(s => /^[A-Z]+$/.test(s)),
+            startRow: fc.integer({ min: 0, max: 5 }),
+            startCol: fc.integer({ min: 0, max: 5 }),
+            direction: fc.constantFrom(Direction.RIGHT, Direction.DOWN)
+          }),
+          ({ wordText, startRow, startCol, direction }) => {
+            // Create grid and place the word
+            const grid = new Grid(10);
+            const startPos = new Position(startRow, startCol);
+            
+            // Place letters in grid
+            const positions = [];
+            for (let i = 0; i < wordText.length; i++) {
+              const row = startRow + (direction.dy * i);
+              const col = startCol + (direction.dx * i);
+              
+              // Skip if out of bounds
+              if (row >= 10 || col >= 10) return;
+              
+              grid.setLetter(row, col, wordText[i]);
+              positions.push(new Position(row, col));
+            }
+            
+            // Create word and puzzle
+            const word = new Word('1', wordText, startPos, direction);
+            const puzzle = new Puzzle(grid, [word], 'Test', 'EASY');
+            
+            // Create selection matching the word
+            const selection = new Selection(positions);
+            
+            // Property: Selection matching word positions should validate
+            const result = service.validateSelection(selection, puzzle);
+            expect(result).not.toBeNull();
+            expect(result.getText()).toBe(wordText.toUpperCase());
+            
+            // Property: Selection with different text should not validate
+            // Modify first letter
+            const wrongPositions = [...positions];
+            grid.setLetter(positions[0].row, positions[0].col, 'X');
+            const wrongSelection = new Selection(wrongPositions);
+            const wrongResult = service.validateSelection(wrongSelection, puzzle);
+            
+            // Should not match if text is different
+            if (wordText[0] !== 'X') {
+              expect(wrongResult).toBeNull();
+            }
+          }
+        ),
+        { numRuns: 100 }
+      );
+    });
+
+    it('should return null for selections not matching any word', () => {
+      const service = new WordSelectionService();
+
+      fc.assert(
+        fc.property(
+          // Generate random positions that don't form a word
+          fc.record({
+            length: fc.integer({ min: 3, max: 8 }),
+            startRow: fc.integer({ min: 0, max: 5 }),
+            startCol: fc.integer({ min: 0, max: 5 })
+          }),
+          ({ length, startRow, startCol }) => {
+            const grid = new Grid(10);
+            
+            // Place random letters
+            const positions = [];
+            for (let i = 0; i < length; i++) {
+              const col = startCol + i;
+              if (col >= 10) return; // Skip if out of bounds
+              
+              grid.setLetter(startRow, col, 'Z');
+              positions.push(new Position(startRow, col));
+            }
+            
+            // Create puzzle with a different word
+            const word = new Word('1', 'CAT', new Position(8, 0), Direction.RIGHT);
+            const puzzle = new Puzzle(grid, [word], 'Test', 'EASY');
+            
+            // Selection of 'ZZZ...' should not match 'CAT'
+            const selection = new Selection(positions);
+            const result = service.validateSelection(selection, puzzle);
+            
+            expect(result).toBeNull();
+          }
+        ),
+        { numRuns: 100 }
+      );
+    });
+  });
