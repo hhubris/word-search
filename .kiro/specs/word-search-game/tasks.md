@@ -20,11 +20,11 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Create `src/domain/value-objects/Selection.js` with Selection class
     - _Requirements: 1.1, 2.1, 3.1, 3.2, 3.3_
   
-  - [ ]* 2.2 Write property test for Direction determination
+  - [x] 2.2 Write property test for Direction determination
     - **Property 9: Selection Direction Determination**
     - **Validates: Requirements 6.2**
   
-  - [ ]* 2.3 Write unit tests for value objects
+  - [x] 2.3 Write unit tests for value objects
     - Test Position equality and addition
     - Test Direction helpers for each difficulty
     - Test Selection text extraction
