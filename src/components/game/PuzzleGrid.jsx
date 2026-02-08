@@ -28,6 +28,7 @@ export function PuzzleGrid({ grid, foundWords = [], onSelectionComplete }) {
 
   /**
    * Determine direction between two cells
+   * More forgiving for diagonal selections
    */
   const determineDirection = useCallback((start, end) => {
     const rowDiff = end.row - start.row;
@@ -40,9 +41,13 @@ export function PuzzleGrid({ grid, foundWords = [], onSelectionComplete }) {
     const rowDir = rowDiff === 0 ? 0 : rowDiff / Math.abs(rowDiff);
     const colDir = colDiff === 0 ? 0 : colDiff / Math.abs(colDiff);
 
-    // Check if it's a valid straight line
-    if (rowDiff !== 0 && colDiff !== 0 && Math.abs(rowDiff) !== Math.abs(colDiff)) {
-      return null; // Not a valid diagonal
+    // For diagonals, be very forgiving - allow significant deviation
+    if (rowDiff !== 0 && colDiff !== 0) {
+      const ratio = Math.abs(rowDiff / colDiff);
+      // Allow diagonal if ratio is between 0.33 and 3 (very forgiving)
+      if (ratio < 0.33 || ratio > 3) {
+        return null; // Not a valid diagonal
+      }
     }
 
     return { row: rowDir, col: colDir };
@@ -94,9 +99,10 @@ export function PuzzleGrid({ grid, foundWords = [], onSelectionComplete }) {
 
     const currentCell = { row, col };
 
-    // If this is the start cell, just keep it selected
+    // If this is the start cell, reset direction to allow changing direction
     if (row === startCell.current.row && col === startCell.current.col) {
       setSelectedCells([startCell.current]);
+      selectionDirection.current = null; // Reset direction when back at start
       return;
     }
 
