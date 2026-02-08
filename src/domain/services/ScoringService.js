@@ -14,23 +14,20 @@ export class ScoringService {
     const totalWords = puzzle.getTotalWordCount();
     
     // Base score: 100 points per word found
-    const baseScore = wordsFound * 100;
+    const baseScore = this.calculateBaseScore(wordsFound);
     
     // Completion bonus: 500 points for finding all words
-    const completionBonus = wordsFound === totalWords ? 500 : 0;
+    const completionBonus = this.calculateCompletionBonus(wordsFound, totalWords);
     
-    // Time bonus: Square root scaling for balance between linear and exponential
-    // This rewards speed but not too aggressively
-    let timeBonus = 0;
+    // Time bonus: 10 points per second remaining
+    let remainingSeconds = null;
     const timerDuration = gameSession.getTimerDuration();
     if (timerDuration !== null) {
       const endTime = gameSession.getEndTime() || Date.now();
       const elapsedSeconds = Math.floor((endTime - gameSession.getStartTime()) / 1000);
-      const remainingSeconds = Math.max(0, timerDuration - elapsedSeconds);
-      // Use square root for a curve between linear and exponential
-      // Multiply by 30 to scale appropriately
-      timeBonus = Math.floor(Math.sqrt(remainingSeconds) * 30);
+      remainingSeconds = Math.max(0, timerDuration - elapsedSeconds);
     }
+    const timeBonus = this.calculateTimeBonus(remainingSeconds);
     
     // Difficulty multiplier: Easy 1.0x, Medium 1.5x, Hard 2.0x
     const multiplier = this.getDifficultyMultiplier(gameSession.getDifficulty());

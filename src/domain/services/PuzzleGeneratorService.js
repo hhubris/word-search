@@ -12,7 +12,7 @@ import { getDifficultyConfig } from '../value-objects/Difficulty.js';
  */
 export class PuzzleGeneratorService {
   constructor() {
-    this.maxAttempts = 10;
+    this.maxAttempts = 50; // Increased for better word placement success
   }
 
   /**
@@ -53,7 +53,7 @@ export class PuzzleGeneratorService {
     const ws = new WordSearch(options);
     
     // Convert library output to our domain entities
-    return this.convertToPuzzle(ws);
+    return this.convertToPuzzle(ws, category, difficulty);
   }
 
   /**
@@ -74,9 +74,20 @@ export class PuzzleGeneratorService {
    */
   calculateGridSize(words) {
     const longestWord = Math.max(...words.map(w => w.length));
-    // Add some padding for better word placement
-    const size = Math.min(12, Math.max(8, longestWord + 2));
-    return size;
+    const wordCount = words.length;
+    
+    // Calculate based on word count and longest word
+    // More words need more space
+    let size;
+    if (wordCount <= 8) {
+      size = Math.max(10, longestWord + 2);
+    } else if (wordCount <= 12) {
+      size = Math.max(12, longestWord + 3);
+    } else {
+      size = Math.max(14, longestWord + 4);
+    }
+    
+    return Math.min(20, size); // Cap at 20 for performance
   }
 
   /**
@@ -87,11 +98,13 @@ export class PuzzleGeneratorService {
   getDisabledDirections(difficulty) {
     switch (difficulty) {
       case 'EASY':
-        // Only horizontal and vertical (disable all diagonals and backwards)
-        return ['NE', 'NW', 'SE', 'SW', 'N', 'W'];
+        // Only horizontal and vertical (RIGHT and DOWN)
+        // Disable: LEFT, UP, and all diagonals
+        return ['W', 'N', 'NE', 'NW', 'SE', 'SW'];
       case 'MEDIUM':
-        // Horizontal, vertical, and diagonals (disable backwards)
-        return ['N', 'W', 'NW', 'SW'];
+        // Allow: RIGHT, DOWN, DOWN_RIGHT, DOWN_LEFT
+        // Disable: LEFT, UP, UP_RIGHT, UP_LEFT
+        return ['W', 'N', 'NE', 'NW'];
       case 'HARD':
         // All directions allowed
         return [];
@@ -103,9 +116,11 @@ export class PuzzleGeneratorService {
   /**
    * Convert WordSearch library output to our Puzzle entity
    * @param {WordSearch} ws - WordSearch instance
+   * @param {string} category - Word category
+   * @param {string} difficulty - Difficulty level
    * @returns {Puzzle} Puzzle entity
    */
-  convertToPuzzle(ws) {
+  convertToPuzzle(ws, category, difficulty) {
     const libraryGrid = ws.grid;
     const libraryWords = ws.words;
     
@@ -151,8 +166,8 @@ export class PuzzleGeneratorService {
       return word;
     });
     
-    // Create and return Puzzle
-    return new Puzzle(grid, words);
+    // Create and return Puzzle with category and difficulty
+    return new Puzzle(grid, words, category, difficulty);
   }
 
   /**

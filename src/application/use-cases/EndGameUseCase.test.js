@@ -27,8 +27,8 @@ describe('EndGameUseCase', () => {
 
     // Create test puzzle and game session
     const grid = new Grid(8, 8);
-    puzzle = new Puzzle(grid, []);
-    gameSession = new GameSession(puzzle, 'EASY', 'ANIMALS');
+    puzzle = new Puzzle(grid, [], 'ANIMALS', 'EASY');
+    gameSession = new GameSession(puzzle, 'EASY');
   });
 
   describe('execute', () => {
@@ -118,7 +118,7 @@ describe('EndGameUseCase', () => {
     });
 
     it('should work with different difficulty levels', () => {
-      const hardSession = new GameSession(puzzle, 'HARD', 'SCIENCE');
+      const hardSession = new GameSession(puzzle, 'HARD');
       
       mockScoringService.calculateScore.mockReturnValue(800);
       mockHighScoreRepository.isHighScore.mockReturnValue(true);

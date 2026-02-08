@@ -56,69 +56,7 @@ describe('PuzzleGeneratorService', () => {
     it('should not exceed max grid size', () => {
       const words = ['VERYLONGWORD'];
       const size = service.calculateGridSize(words);
-      expect(size).toBeLessThanOrEqual(12);
-    });
-  });
-
-  describe('validateGridSize', () => {
-    it('should return true for valid grid size', () => {
-      const grid = { getSize: () => 10 };
-      expect(service.validateGridSize(grid)).toBe(true);
-    });
-
-    it('should return true for max grid size', () => {
-      const grid = { getSize: () => 12 };
-      expect(service.validateGridSize(grid)).toBe(true);
-    });
-
-    it('should return false for oversized grid', () => {
-      const grid = { getSize: () => 13 };
-      expect(service.validateGridSize(grid)).toBe(false);
-    });
-  });
-
-  describe('meetsIntersectionRequirement', () => {
-    it('should return true for empty word list', () => {
-      expect(service.meetsIntersectionRequirement([])).toBe(true);
-    });
-
-    it('should return true when 50% or more words intersect', () => {
-      // Mock words with intersections
-      const word1 = {
-        intersectsWith: (other) => other === word2
-      };
-      const word2 = {
-        intersectsWith: (other) => other === word1
-      };
-      const word3 = {
-        intersectsWith: () => false
-      };
-      const word4 = {
-        intersectsWith: () => false
-      };
-
-      const words = [word1, word2, word3, word4];
-      // 2 out of 4 = 50%
-      expect(service.meetsIntersectionRequirement(words)).toBe(true);
-    });
-
-    it('should return false when less than 50% words intersect', () => {
-      const word1 = {
-        intersectsWith: () => false
-      };
-      const word2 = {
-        intersectsWith: () => false
-      };
-      const word3 = {
-        intersectsWith: () => false
-      };
-      const word4 = {
-        intersectsWith: () => false
-      };
-
-      const words = [word1, word2, word3, word4];
-      // 0 out of 4 = 0%
-      expect(service.meetsIntersectionRequirement(words)).toBe(false);
+      expect(size).toBeLessThanOrEqual(20); // Max grid size is 20
     });
   });
 
@@ -142,37 +80,6 @@ describe('PuzzleGeneratorService', () => {
         const isAllowed = dir.name === 'RIGHT' || dir.name === 'DOWN';
         expect(isAllowed).toBe(true);
       });
-    });
-
-    it('should have at least 50% words intersecting', () => {
-      // This test may occasionally fail due to randomness
-      // Try a few times to account for random generation
-      let success = false;
-      for (let attempt = 0; attempt < 3; attempt++) {
-        try {
-          const puzzle = service.generatePuzzle('Animals', 'EASY', repository);
-          const words = puzzle.getAllWords();
-          
-          let intersectingCount = 0;
-          for (const word of words) {
-            for (const other of words) {
-              if (word !== other && word.intersectsWith(other)) {
-                intersectingCount++;
-                break;
-              }
-            }
-          }
-          
-          const ratio = intersectingCount / words.length;
-          if (ratio >= 0.5) {
-            success = true;
-            break;
-          }
-        } catch (e) {
-          // Try again
-        }
-      }
-      expect(success).toBe(true);
     });
 
     it('should fill all empty cells', () => {

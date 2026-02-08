@@ -2,35 +2,35 @@ import { Cell } from './Cell.js';
 
 /**
  * Grid entity
- * Represents the puzzle grid containing cells
+ * Represents the word search grid containing cells
  */
 export class Grid {
   constructor(size) {
     this.size = size;
-    this.cells = this.initializeCells(size);
-  }
-
-  /**
-   * Initialize empty grid cells
-   * @param {number} size - Grid size (square)
-   * @returns {Array} 2D array of Cell objects
-   */
-  initializeCells(size) {
-    const cells = [];
+    this.cells = [];
+    
+    // Initialize 2D array of cells
     for (let row = 0; row < size; row++) {
-      cells[row] = [];
+      this.cells[row] = [];
       for (let col = 0; col < size; col++) {
-        cells[row][col] = new Cell('');
+        this.cells[row][col] = new Cell();
       }
     }
-    return cells;
   }
 
   /**
-   * Get a cell at a specific position
+   * Get the size of the grid
+   * @returns {number} Grid size (width/height)
+   */
+  getSize() {
+    return this.size;
+  }
+
+  /**
+   * Get a cell at the specified position
    * @param {number} row - Row index
    * @param {number} col - Column index
-   * @returns {Cell|null} Cell object or null if out of bounds
+   * @returns {Cell|null} Cell at position or null if invalid
    */
   getCell(row, col) {
     if (!this.isValidPosition(row, col)) {
@@ -40,80 +40,52 @@ export class Grid {
   }
 
   /**
-   * Set a cell at a specific position
+   * Set a cell at the specified position
    * @param {number} row - Row index
    * @param {number} col - Column index
-   * @param {Cell} cell - Cell object
+   * @param {Cell} cell - Cell to set
+   * @returns {boolean} True if successful
    */
   setCell(row, col, cell) {
-    if (this.isValidPosition(row, col)) {
-      this.cells[row][col] = cell;
+    if (!this.isValidPosition(row, col)) {
+      return false;
     }
+    this.cells[row][col] = cell;
+    return true;
   }
 
   /**
-   * Set a letter at a specific position
+   * Set a letter at the specified position
    * @param {number} row - Row index
    * @param {number} col - Column index
    * @param {string} letter - Letter to set
+   * @returns {boolean} True if successful
    */
   setLetter(row, col, letter) {
-    if (this.isValidPosition(row, col)) {
-      this.cells[row][col] = new Cell(letter);
+    const cell = this.getCell(row, col);
+    if (!cell) {
+      return false;
     }
+    cell.setLetter(letter);
+    return true;
   }
 
   /**
-   * Check if a position is valid (within grid bounds)
+   * Check if a position is valid within the grid
    * @param {number} row - Row index
    * @param {number} col - Column index
-   * @returns {boolean} True if valid
+   * @returns {boolean} True if position is valid
    */
   isValidPosition(row, col) {
     return row >= 0 && row < this.size && col >= 0 && col < this.size;
   }
 
   /**
-   * Get the grid size
-   * @returns {number} Grid size
+   * Get all cells in the grid
+   * @returns {Array<Array<Cell>>} 2D array of cells
    */
-  getSize() {
-    return this.size;
-  }
-
-  /**
-   * Check if grid is square and within max size
-   * @param {number} maxSize - Maximum allowed size
-   * @returns {boolean} True if valid
-   */
-  isValidSize(maxSize = 12) {
-    return this.size <= maxSize;
-  }
-
-  /**
-   * Get all cells as 2D array
-   * @returns {Array} 2D array of cells
-   */
-  getCells() {
-    return this.cells;
-  }
-
-  /**
-   * Fill empty cells with random letters
-   * @param {Array} excludeWords - Words to avoid creating
-   */
-  fillEmptyCells(excludeWords = []) {
-    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    
-    for (let row = 0; row < this.size; row++) {
-      for (let col = 0; col < this.size; col++) {
-        const cell = this.getCell(row, col);
-        if (cell && cell.isEmpty()) {
-          const randomLetter = letters[Math.floor(Math.random() * letters.length)];
-          this.setLetter(row, col, randomLetter);
-        }
-      }
-    }
+  getAllCells() {
+    return this.cells.map(row => [...row]);
   }
 
   /**

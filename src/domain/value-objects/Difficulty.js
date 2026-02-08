@@ -15,9 +15,9 @@ export const Difficulty = {
 export const DifficultyConfig = {
   EASY: {
     wordCount: 8,
-    timerSeconds: 600, // 10 minutes
+    timerSeconds: null, // No timer for EASY
     directions: ['RIGHT', 'DOWN'],
-    description: '8 words, 10 minute timer, horizontal and vertical only'
+    description: '8 words, no timer, horizontal and vertical only'
   },
   MEDIUM: {
     wordCount: 12,

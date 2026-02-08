@@ -94,34 +94,4 @@ export class Word {
   getLength() {
     return this.text.length;
   }
-
-  /**
-   * Check if this word intersects with another word at a position
-   * @param {Word} otherWord - Another word to check
-   * @returns {Array} Array of intersecting positions
-   */
-  getIntersections(otherWord) {
-    const thisPositions = this.getPositions();
-    const otherPositions = otherWord.getPositions();
-    const intersections = [];
-
-    for (const thisPos of thisPositions) {
-      for (const otherPos of otherPositions) {
-        if (thisPos.equals(otherPos)) {
-          intersections.push(thisPos);
-        }
-      }
-    }
-
-    return intersections;
-  }
-
-  /**
-   * Check if this word has any intersections with another word
-   * @param {Word} otherWord - Another word to check
-   * @returns {boolean} True if words intersect
-   */
-  intersectsWith(otherWord) {
-    return this.getIntersections(otherWord).length > 0;
-  }
 }

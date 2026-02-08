@@ -251,7 +251,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - **Property 13: Timer Countdown**
     - **Validates: Requirements 7.4**
   
-  - [ ] 12.4 Create useHighScores hook
+  - [x] 12.4 Create useHighScores hook
     - Create `src/presentation/hooks/useHighScores.js`
     - Use TanStack Query for high score data fetching and mutations
     - Integrate with GetHighScoresUseCase and SaveHighScoreUseCase

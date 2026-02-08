@@ -1,8 +1,10 @@
 # Mise configuration for Word Search Game project
 
 [tools]
+go = "latest"
 # Node.js - Required for React, Vite, and all npm packages
-node = "22"
+node = "latest"
+npm = "latest"
 
 # pnpm - Fast, disk space efficient package manager (alternative to npm)
 # Recommended for modern JavaScript projects
