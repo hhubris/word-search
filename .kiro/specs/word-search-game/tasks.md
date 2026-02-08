@@ -55,13 +55,13 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Create `src/domain/entities/HighScore.js` with HighScore class
     - _Requirements: 9.1, 9.2, 9.3, 9.4_
   
-  - [x]* 3.6 Write property test for Grid size constraint
+  - [x] 3.6 Write property test for Grid size constraint
     - **Property 5: Grid Size Constraint**
     - Validate that generated puzzles have square grids not exceeding 20x20
     - **Validates: Requirements 3.6**
     - **Note:** Max grid size increased from 12x12 to 20x20 per Decision Record 002
   
-  - [ ]* 3.7 Write unit tests for entities
+  - [ ] 3.7 Write unit tests for entities
     - Test Grid cell access and validation
     - Test Word position calculation
     - Test Puzzle completion detection
@@ -76,7 +76,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Implement restrictToDirection() method
     - _Requirements: 6.2, 6.3, 6.4_
   
-  - [ ]* 4.2 Write property tests for word selection
+  - [ ] 4.2 Write property tests for word selection
     - **Property 10: Selection Direction Restriction**
     - **Property 11: Word Validation**
     - **Validates: Requirements 6.3, 6.4**
@@ -86,7 +86,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Implement calculateScore() with difficulty multipliers and time bonuses
     - _Requirements: 8.1, 8.2_
   
-  - [ ]* 4.4 Write unit tests for ScoringService
+  - [ ] 4.4 Write unit tests for ScoringService
     - Test score calculation for each difficulty
     - Test time bonus calculations
     - Test score with all words found vs partial completion
@@ -100,7 +100,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Implement validateGridSize() method
     - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7_
   
-  - [ ]* 4.6 Write property tests for puzzle generation
+  - [ ] 4.6 Write property tests for puzzle generation
     - **Property 2: Puzzle Direction Constraints**
     - **Property 3: Word Intersection Requirement**
     - **Property 4: No Accidental Words**
@@ -111,18 +111,19 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
 
 - [ ] 6. Create infrastructure layer - word data
   - [x] 6.1 Generate word lists for all categories
-    - Create `src/infrastructure/word-data/animals.js` with 500+ words (3-8 chars)
-    - Create `src/infrastructure/word-data/sports.js` with 500+ words (3-8 chars)
-    - Create `src/infrastructure/word-data/science.js` with 500+ words (3-8 chars)
-    - Create `src/infrastructure/word-data/food.js` with 500+ words (3-8 chars)
-    - Create `src/infrastructure/word-data/geography.js` with 500+ words (3-8 chars)
-    - Create `src/infrastructure/word-data/technology.js` with 500+ words (3-8 chars)
-    - Create `src/infrastructure/word-data/music.js` with 500+ words (3-8 chars)
-    - Create `src/infrastructure/word-data/movies.js` with 500+ words (3-8 chars)
-    - Create `src/infrastructure/word-data/index.js` to export all word lists
+    - Create `src/infrastructure/wordLists/animals.json` with 150+ words (3-8 chars)
+    - Create `src/infrastructure/wordLists/sports.json` with 150+ words (3-8 chars)
+    - Create `src/infrastructure/wordLists/science.json` with 150+ words (3-8 chars)
+    - Create `src/infrastructure/wordLists/food.json` with 150+ words (3-8 chars)
+    - Create `src/infrastructure/wordLists/geography.json` with 150+ words (3-8 chars)
+    - Create `src/infrastructure/wordLists/technology.json` with 150+ words (3-8 chars)
+    - Create `src/infrastructure/wordLists/music.json` with 150+ words (3-8 chars)
+    - Create `src/infrastructure/wordLists/movies.json` with 150+ words (3-8 chars)
+    - Create `src/infrastructure/wordLists/index.js` to export all word lists
     - _Requirements: 1.4, 1.5_
+    - **Note:** Word count reduced from 500+ to 150+ per Decision Record 003
   
-  - [ ]* 6.2 Write property test for word data integrity
+  - [ ] 6.2 Write property test for word data integrity
     - **Property 1: Word Data Integrity**
     - **Validates: Requirements 1.4, 1.5**
 
@@ -137,7 +138,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Implement getWordsByCategory() and getAllCategories()
     - _Requirements: 1.1, 1.4, 1.5_
   
-  - [ ]* 7.3 Write unit tests for WordRepositoryImpl
+  - [ ] 7.3 Write unit tests for WordRepositoryImpl
     - Test category retrieval
     - Test word filtering by length
     - _Requirements: 1.1, 1.4, 1.5_
@@ -148,7 +149,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Ensure top 10 limit per difficulty
     - _Requirements: 9.1, 9.2, 9.4, 12.1, 12.3_
   
-  - [ ]* 7.5 Write property tests for high score repository
+  - [ ] 7.5 Write property tests for high score repository
     - **Property 16: High Score Separation by Difficulty**
     - **Property 17: High Score List Size Limit**
     - **Property 18: High Score Sorting**
@@ -160,7 +161,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Implement getTheme() and saveTheme()
     - _Requirements: 10.5, 12.2, 12.4_
   
-  - [ ]* 7.7 Write property test for theme persistence
+  - [ ] 7.7 Write property test for theme persistence
     - **Property 22: Data Persistence Round Trip (Theme)**
     - **Validates: Requirements 10.5, 12.2, 12.4**
 
@@ -170,7 +171,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Wire together puzzle generation and game session creation
     - _Requirements: 4.3, 4.4_
   
-  - [ ]* 8.2 Write property test for puzzle configuration matching
+  - [ ] 8.2 Write property test for puzzle configuration matching
     - **Property 6: Puzzle Matches Configuration**
     - **Validates: Requirements 4.4**
   
@@ -179,7 +180,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Integrate word selection validation and puzzle state updates
     - _Requirements: 6.4, 6.5, 6.6_
   
-  - [ ]* 8.4 Write property test for found word state update
+  - [ ] 8.4 Write property test for found word state update
     - **Property 12: Found Word State Update**
     - **Validates: Requirements 6.5, 6.6**
   
@@ -188,7 +189,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Integrate scoring and high score qualification check
     - _Requirements: 8.1, 8.2, 8.4_
   
-  - [ ]* 8.6 Write property tests for game end conditions
+  - [ ] 8.6 Write property tests for game end conditions
     - **Property 14: Game End Conditions**
     - **Property 15: High Score Qualification**
     - **Validates: Requirements 7.5, 7.6, 8.1, 8.2, 8.4**
@@ -332,10 +333,11 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
   
   - [ ] 15.4 Create HomeScreen component
     - Create `src/presentation/components/HomeScreen.jsx`
-    - Layout: Button bar at top, title, CategorySelector, DifficultySelector, Start button
+    - Layout: Theme switcher in top right, title, CategorySelector, DifficultySelector, Start button
     - Manage Start button enabled state
     - Handle Start button click to navigate to game
-    - _Requirements: 4.1, 4.2, 4.3, 11.1, 11.4, 11.7, 11.8, 11.9, 11.10_
+    - _Requirements: 4.1, 4.2, 4.3, 11.1, 11.2, 11.3, 11.4, 11.5, 11.6_
+    - **Note:** Button bar removed per Decision Record 001
   
   - [ ]* 15.5 Write property test for Start button enablement
     - **Property 23: Start Button Enablement**
@@ -366,27 +368,31 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Create `src/presentation/components/ThemeSwitcher.jsx`
     - Button to cycle through themes
     - Apply theme to document root
+    - Position in top right corner of screens
     - _Requirements: 10.1, 10.2, 10.4_
+    - **Note:** Standalone component, not in button bar per Decision Record 001
   
-  - [ ] 16.4 Create ButtonBar component
-    - Create `src/presentation/components/ButtonBar.jsx`
-    - Display high scores button and theme switcher
-    - Handle navigation to high scores screen
-    - _Requirements: 11.1, 11.2, 11.3_
+  - [ ]* 16.4 Create ButtonBar component (OBSOLETE)
+    - **Status:** Not implemented - removed per Decision Record 001
+    - Original plan was to create button bar with high scores and theme switcher
+    - Implementation uses standalone ThemeSwitcher in top right corner instead
+    - This task can be skipped
 
-- [ ] 17. Implement Tailwind CSS styling
-  - [ ] 17.1 Configure Tailwind theme
-    - Update `tailwind.config.js` with custom colors for light/dark/system themes
-    - Add custom fonts (Accidental Presidency if available)
-    - Configure responsive breakpoints
-    - _Requirements: 10.1, 11.5, 11.6, 13.5_
+- [ ] 17. Implement component styling
+  - [ ] 17.1 Define style constants and theme variables
+    - Create `src/presentation/styles/theme.js` with color schemes and spacing
+    - Define light/dark/system theme color palettes
+    - Create reusable style constants
+    - _Requirements: 10.1, 11.3, 13.5_
+    - **Note:** Using inline styles per Decision Record 004
   
   - [ ] 17.2 Style all components
-    - Apply Tailwind classes to all components
-    - Ensure responsive design
+    - Apply inline styles to all components
+    - Ensure responsive design with JavaScript media queries
     - Implement theme-aware styling (light/dark mode)
     - Style grid cells, word list, buttons, overlays
     - _Requirements: 10.4, 13.5_
+    - **Note:** Using inline styles instead of Tailwind CSS per Decision Record 004
 
 - [ ] 18. Checkpoint - UI complete
   - Ensure all presentation tests pass, manually test UI flows, ask the user if questions arise.

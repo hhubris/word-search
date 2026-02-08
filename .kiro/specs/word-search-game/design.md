@@ -20,7 +20,7 @@ This separation ensures testability, maintainability, and independence from fram
 - **Vite**: Fast build tool and development server
 - **TanStack Router**: Type-safe routing solution
 - **TanStack Query**: Data fetching and state management
-- **Tailwind CSS v4**: Utility-first styling framework
+- **Inline Styles**: Component-level styling with JavaScript objects
 - **JavaScript**: Implementation language (no TypeScript)
 
 ## Architecture
@@ -420,7 +420,7 @@ class LocalStorageAdapter {
 class WordRepositoryImpl {
   constructor() {
     this.wordData = {
-      [Category.ANIMALS]: [...],  // 500+ words
+      [Category.ANIMALS]: [...],  // 150+ words
       [Category.SPORTS]: [...],
       // ... other categories
     };
@@ -509,7 +509,7 @@ const routeTree = {
 #### Key Components
 
 **HomeScreen**
-- Renders button bar (high scores, theme switcher)
+- Displays theme switcher in top right corner
 - Displays application title
 - Shows category selection (8 buttons in 2 rows)
 - Shows difficulty selection (3 buttons with descriptions)
@@ -605,7 +605,7 @@ function useTheme() {
 
 ### Word Data Structure
 
-Each category contains an array of 500+ words:
+Each category contains an array of 150+ words:
 ```javascript
 {
   "Animals": ["cat", "dog", "elephant", ...],

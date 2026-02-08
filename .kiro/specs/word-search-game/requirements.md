@@ -29,7 +29,7 @@ This document specifies the requirements for a browser-based word search game. T
 1. THE Game_System SHALL provide exactly eight categories: Animals, Sports, Science, Food, Geography, Technology, Music, and Movies
 2. WHEN displaying categories, THE Game_System SHALL arrange category buttons across two rows
 3. WHEN a player selects a category, THE Game_System SHALL highlight the selected category
-4. THE Game_System SHALL maintain at least 500 words per category
+4. THE Game_System SHALL maintain at least 150 words per category
 5. THE Game_System SHALL ensure all words are between 3 and 8 characters in length
 
 ### Requirement 2: Difficulty Selection
@@ -152,16 +152,14 @@ This document specifies the requirements for a browser-based word search game. T
 
 #### Acceptance Criteria
 
-1. WHEN the home screen displays, THE Game_System SHALL show a button bar at the top with two buttons
-2. THE Game_System SHALL display the first button as a high scores navigation button
-3. THE Game_System SHALL display the second button as a theme switcher button
-4. WHEN the home screen displays, THE Game_System SHALL show the application title centered below the button bar
-5. THE Game_System SHALL display the application title in a large font
-6. WHERE the Accidental Presidency font is available, THE Game_System SHALL use it for the application title
-7. THE Game_System SHALL default the application title to "Word Search"
-8. WHEN the home screen displays, THE Game_System SHALL show the category selection section below the title
-9. WHEN the home screen displays, THE Game_System SHALL show the difficulty selection section below the categories
-10. WHEN the home screen displays, THE Game_System SHALL show the Start Game button below the difficulty selection
+1. WHEN the home screen displays, THE Game_System SHALL display a theme switcher in the top right corner
+2. WHEN the home screen displays, THE Game_System SHALL show the application title centered near the top
+3. THE Game_System SHALL display the application title in a large font
+4. WHERE the Accidental Presidency font is available, THE Game_System SHALL use it for the application title
+5. THE Game_System SHALL default the application title to "Word Search"
+6. WHEN the home screen displays, THE Game_System SHALL show the category selection section below the title
+7. WHEN the home screen displays, THE Game_System SHALL show the difficulty selection section below the categories
+8. WHEN the home screen displays, THE Game_System SHALL show the Start Game button below the difficulty selection
 
 ### Requirement 12: Data Persistence
 
@@ -185,5 +183,5 @@ This document specifies the requirements for a browser-based word search game. T
 2. THE Game_System SHALL use Vite.js as the build tool
 3. THE Game_System SHALL use TanStack Router for navigation
 4. THE Game_System SHALL use TanStack Query for data management
-5. THE Game_System SHALL use Tailwind CSS v4 for styling
+5. THE Game_System SHALL use inline styles for component styling
 6. THE Game_System SHALL follow Clean Architecture principles with clear separation of concerns
