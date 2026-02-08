@@ -316,23 +316,23 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - _Requirements: 6.4, 7.5, 8.4_
 
 - [ ] 15. Implement presentation layer - UI components (Home Screen)
-  - [ ] 15.1 Create CategorySelector component
+  - [x] 15.1 Create CategorySelector component
     - Create `src/presentation/components/CategorySelector.jsx`
     - Display 8 category buttons in 2 rows
     - Highlight selected category
     - _Requirements: 1.1, 1.2, 1.3_
   
-  - [ ] 15.2 Write property test for selection state
+  - [x] 15.2 Write property test for selection state
     - **Property 22: Selection State Management**
     - **Validates: Requirements 1.3, 2.5**
   
-  - [ ] 15.3 Create DifficultySelector component
+  - [x] 15.3 Create DifficultySelector component
     - Create `src/presentation/components/DifficultySelector.jsx`
     - Display 3 difficulty buttons with descriptions
     - Highlight selected difficulty
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5_
   
-  - [ ] 15.4 Create HomeScreen component
+  - [x] 15.4 Create HomeScreen component
     - Create `src/presentation/components/HomeScreen.jsx`
     - Layout: Theme switcher in top right, title, CategorySelector, DifficultySelector, Start button
     - Manage Start button enabled state
@@ -340,11 +340,11 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - _Requirements: 4.1, 4.2, 4.3, 11.1, 11.2, 11.3, 11.4, 11.5, 11.6_
     - **Note:** Button bar removed per Decision Record 001
   
-  - [ ] 15.5 Write property test for Start button enablement
+  - [x] 15.5 Write property test for Start button enablement
     - **Property 21: Start Button Enablement**
     - **Validates: Requirements 4.2**
   
-  - [ ] 15.6 Write unit tests for HomeScreen
+  - [x] 15.6 Write unit tests for HomeScreen
     - Test initial button state (disabled)
     - Test button enablement after selections
     - Test navigation on Start click
