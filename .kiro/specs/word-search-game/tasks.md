@@ -55,7 +55,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Create `src/domain/entities/HighScore.js` with HighScore class
     - _Requirements: 9.1, 9.2, 9.3, 9.4_
   
-  - [x]* 3.6 Write property test for Grid size constraint
+  - [ ]* 3.6 Write property test for Grid size constraint
     - **Property 5: Grid Size Constraint**
     - Validate that generated puzzles have square grids not exceeding 20x20
     - **Validates: Requirements 3.6**
