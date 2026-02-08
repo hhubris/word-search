@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import * as fc from 'fast-check';
 import { PuzzleGeneratorService } from './PuzzleGeneratorService.js';
 
 // Mock word repository
@@ -132,6 +133,53 @@ describe('PuzzleGeneratorService', () => {
         const dir = word.getDirection();
         expect(allDirections).toContain(dir.name);
       });
+    });
+  });
+
+  // Feature: word-search-game, Property 5: Grid Size Constraint
+  describe('Property 5: Grid Size Constraint', () => {
+    it('should generate puzzles with square grids not exceeding 20x20', () => {
+      const service = new PuzzleGeneratorService();
+      const repository = new MockWordRepository();
+
+      fc.assert(
+        fc.property(
+          // Generate random category and difficulty combinations
+          fc.record({
+            category: fc.constantFrom('Animals', 'Sports', 'Science'),
+            difficulty: fc.constantFrom('EASY', 'MEDIUM', 'HARD')
+          }),
+          ({ category, difficulty }) => {
+            // Generate a puzzle
+            const puzzle = service.generatePuzzle(category, difficulty, repository);
+            const grid = puzzle.getGrid();
+            const size = grid.getSize();
+
+            // Property 1: Grid should be square (width equals height)
+            // This is implicit in our Grid implementation which uses a single size value
+            expect(size).toBeGreaterThan(0);
+
+            // Property 2: Grid size should not exceed 20x20
+            expect(size).toBeLessThanOrEqual(20);
+
+            // Additional validation: Grid should be at least large enough for the words
+            const words = puzzle.getAllWords();
+            expect(words.length).toBeGreaterThan(0);
+            
+            // Verify all word positions are within grid bounds
+            words.forEach(word => {
+              const positions = word.getPositions();
+              positions.forEach(pos => {
+                expect(pos.row).toBeGreaterThanOrEqual(0);
+                expect(pos.row).toBeLessThan(size);
+                expect(pos.col).toBeGreaterThanOrEqual(0);
+                expect(pos.col).toBeLessThan(size);
+              });
+            });
+          }
+        ),
+        { numRuns: 100 }
+      );
     });
   });
 });
