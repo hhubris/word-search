@@ -122,3 +122,75 @@ describe('StartGameUseCase', () => {
     });
   });
 });
+
+// Property-based tests
+import * as fc from 'fast-check';
+
+describe('Property-Based Tests', () => {
+  let useCase;
+  let puzzleGenerator;
+  let wordRepository;
+
+  beforeEach(() => {
+    puzzleGenerator = new PuzzleGeneratorService();
+    wordRepository = new WordRepositoryImpl();
+    useCase = new StartGameUseCase(puzzleGenerator, wordRepository);
+  });
+
+  // Feature: word-search-game, Property 4: Puzzle Matches Configuration
+  describe('Property 4: Puzzle Matches Configuration', () => {
+    it('should generate puzzles matching selected category and difficulty', () => {
+      fc.assert(
+        fc.property(
+          // Generate random category and difficulty combinations
+          fc.record({
+            category: fc.constantFrom('Animals', 'Sports', 'Science', 'Food', 'Geography', 'Technology', 'Music', 'Movies'),
+            difficulty: fc.constantFrom('EASY', 'MEDIUM', 'HARD')
+          }),
+          ({ category, difficulty }) => {
+            const gameSession = useCase.execute(category, difficulty);
+            const puzzle = gameSession.getPuzzle();
+
+            // Property 1: Puzzle category matches selected category
+            expect(puzzle.getCategory()).toBe(category);
+
+            // Property 2: Puzzle difficulty matches selected difficulty
+            expect(puzzle.getDifficulty()).toBe(difficulty);
+
+            // Property 3: Word count is close to difficulty configuration
+            // Note: The puzzle generator library may not always place all words,
+            // so we check that we have at least 75% of the target word count
+            const targetWordCount = {
+              'EASY': 8,
+              'MEDIUM': 12,
+              'HARD': 16
+            };
+            const actualWordCount = puzzle.getAllWords().length;
+            const minWordCount = Math.floor(targetWordCount[difficulty] * 0.75);
+            expect(actualWordCount).toBeGreaterThanOrEqual(minWordCount);
+            expect(actualWordCount).toBeLessThanOrEqual(targetWordCount[difficulty]);
+
+            // Property 4: All words come from the selected category
+            const words = puzzle.getAllWords();
+            const categoryWords = wordRepository.getWordsByCategory(category);
+            words.forEach(word => {
+              expect(categoryWords).toContain(word.getText());
+            });
+
+            // Property 5: Game session has correct difficulty
+            expect(gameSession.getDifficulty()).toBe(difficulty);
+
+            // Property 6: Timer duration matches difficulty
+            const expectedTimerDuration = {
+              'EASY': null,
+              'MEDIUM': 300,
+              'HARD': 180
+            };
+            expect(gameSession.getTimerDuration()).toBe(expectedTimerDuration[difficulty]);
+          }
+        ),
+        { numRuns: 100 }
+      );
+    });
+  });
+});

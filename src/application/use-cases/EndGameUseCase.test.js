@@ -131,3 +131,106 @@ describe('EndGameUseCase', () => {
     });
   });
 });
+
+// Property-based tests
+import * as fc from 'fast-check';
+
+describe('Property-Based Tests', () => {
+  let endGameUseCase;
+  let mockScoringService;
+  let mockHighScoreRepository;
+
+  beforeEach(() => {
+    mockScoringService = {
+      calculateScore: vi.fn()
+    };
+
+    mockHighScoreRepository = {
+      isHighScore: vi.fn(),
+      getRank: vi.fn()
+    };
+
+    endGameUseCase = new EndGameUseCase(mockScoringService, mockHighScoreRepository);
+  });
+
+  // Feature: word-search-game, Property 12: Game End Conditions
+  describe('Property 12: Game End Conditions', () => {
+    it('should always end game session and calculate score', () => {
+      fc.assert(
+        fc.property(
+          // Generate random game parameters
+          fc.record({
+            difficulty: fc.constantFrom('EASY', 'MEDIUM', 'HARD'),
+            score: fc.integer({ min: 0, max: 100000 }),
+            startTime: fc.integer({ min: 1000000000000, max: 2000000000000 }),
+            duration: fc.integer({ min: 0, max: 600000 }) // 0-10 minutes
+          }),
+          ({ difficulty, score, startTime, duration }) => {
+            const grid = new Grid(8, 8);
+            const puzzle = new Puzzle(grid, [], 'Animals', difficulty);
+            const gameSession = new GameSession(puzzle, difficulty, startTime);
+            const endTime = startTime + duration;
+
+            mockScoringService.calculateScore.mockReturnValue(score);
+            mockHighScoreRepository.isHighScore.mockReturnValue(false);
+
+            const result = endGameUseCase.execute(gameSession, endTime);
+
+            // Property 1: Game session should be ended
+            expect(gameSession.isEnded()).toBe(true);
+            expect(gameSession.getEndTime()).toBe(endTime);
+
+            // Property 2: Score should be calculated
+            expect(mockScoringService.calculateScore).toHaveBeenCalledWith(gameSession);
+            expect(result.score).toBe(score);
+
+            // Property 3: High score check should be performed
+            expect(mockHighScoreRepository.isHighScore).toHaveBeenCalledWith(score, difficulty);
+          }
+        ),
+        { numRuns: 100 }
+      );
+    });
+  });
+
+  // Feature: word-search-game, Property 13: High Score Qualification
+  describe('Property 13: High Score Qualification', () => {
+    it('should correctly determine high score qualification', () => {
+      fc.assert(
+        fc.property(
+          // Generate random scores and high score status
+          fc.record({
+            difficulty: fc.constantFrom('EASY', 'MEDIUM', 'HARD'),
+            score: fc.integer({ min: 0, max: 100000 }),
+            isHighScore: fc.boolean(),
+            rank: fc.integer({ min: 1, max: 10 })
+          }),
+          ({ difficulty, score, isHighScore, rank }) => {
+            const grid = new Grid(8, 8);
+            const puzzle = new Puzzle(grid, [], 'Animals', difficulty);
+            const gameSession = new GameSession(puzzle, difficulty);
+
+            mockScoringService.calculateScore.mockReturnValue(score);
+            mockHighScoreRepository.isHighScore.mockReturnValue(isHighScore);
+            mockHighScoreRepository.getRank.mockReturnValue(rank);
+
+            const result = endGameUseCase.execute(gameSession);
+
+            // Property 1: isHighScore should match repository response
+            expect(result.isHighScore).toBe(isHighScore);
+
+            // Property 2: If high score, rank should be returned
+            if (isHighScore) {
+              expect(mockHighScoreRepository.getRank).toHaveBeenCalledWith(score, difficulty);
+              expect(result.rank).toBe(rank);
+            } else {
+              // Property 3: If not high score, rank should be null
+              expect(result.rank).toBeNull();
+            }
+          }
+        ),
+        { numRuns: 100 }
+      );
+    });
+  });
+});

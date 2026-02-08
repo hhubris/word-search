@@ -172,7 +172,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Wire together puzzle generation and game session creation
     - _Requirements: 4.3, 4.4_
   
-  - [ ] 8.2 Write property test for puzzle configuration matching
+  - [x] 8.2 Write property test for puzzle configuration matching
     - **Property 4: Puzzle Matches Configuration**
     - **Validates: Requirements 4.4**
   
@@ -181,7 +181,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Integrate word selection validation and puzzle state updates
     - _Requirements: 6.4, 6.5, 6.6_
   
-  - [ ] 8.4 Write property test for found word state update
+  - [x] 8.4 Write property test for found word state update
     - **Property 10: Found Word State Update**
     - **Validates: Requirements 6.5, 6.6**
   
@@ -190,7 +190,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Integrate scoring and high score qualification check
     - _Requirements: 8.1, 8.2, 8.4_
   
-  - [ ] 8.6 Write property tests for game end conditions
+  - [x] 8.6 Write property tests for game end conditions
     - **Property 12: Game End Conditions**
     - **Property 13: High Score Qualification**
     - **Validates: Requirements 7.5, 7.6, 8.1, 8.2, 8.4**

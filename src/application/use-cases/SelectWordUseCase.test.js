@@ -203,3 +203,84 @@ describe('SelectWordUseCase', () => {
     });
   });
 });
+
+// Property-based tests
+import * as fc from 'fast-check';
+
+describe('Property-Based Tests', () => {
+  let useCase;
+  let wordSelectionService;
+
+  beforeEach(() => {
+    wordSelectionService = new WordSelectionService();
+    useCase = new SelectWordUseCase(wordSelectionService);
+  });
+
+  function createTestGameSession() {
+    const grid = new Grid(5);
+    grid.setLetter(0, 0, 'C');
+    grid.setLetter(0, 1, 'A');
+    grid.setLetter(0, 2, 'T');
+    grid.setLetter(1, 0, 'D');
+    grid.setLetter(1, 1, 'O');
+    grid.setLetter(1, 2, 'G');
+
+    const word1 = new Word('1', 'CAT', new Position(0, 0), Direction.RIGHT);
+    const word2 = new Word('2', 'DOG', new Position(1, 0), Direction.RIGHT);
+    
+    const puzzle = new Puzzle(grid, [word1, word2], 'Animals', 'EASY');
+    return new GameSession(puzzle, 'EASY', Date.now());
+  }
+
+  // Feature: word-search-game, Property 10: Found Word State Update
+  describe('Property 10: Found Word State Update', () => {
+    it('should consistently update found word state across multiple selections', () => {
+      fc.assert(
+        fc.property(
+          // Generate random sequence of word selections (0 or 1 for word index)
+          fc.array(
+            fc.integer({ min: 0, max: 1 }),
+            { minLength: 1, maxLength: 10 }
+          ),
+          (wordIndices) => {
+            const gameSession = createTestGameSession();
+            const puzzle = gameSession.getPuzzle();
+            const words = puzzle.getAllWords();
+
+            // Track which words we've found
+            const foundWords = new Set();
+
+            wordIndices.forEach(wordIndex => {
+              const word = words[wordIndex];
+              const positions = word.getPositions();
+              const selection = new Selection(positions);
+
+              const result = useCase.execute(selection, gameSession);
+
+              if (!foundWords.has(word.getId())) {
+                // First time finding this word
+                expect(result.found).toBe(true);
+                expect(result.word).toBeDefined();
+                expect(result.word.getId()).toBe(word.getId());
+                expect(puzzle.isWordFound(word.getId())).toBe(true);
+                expect(word.isFound()).toBe(true);
+                foundWords.add(word.getId());
+              } else {
+                // Already found this word
+                expect(result.found).toBe(false);
+                expect(result.word).toBeNull();
+              }
+            });
+
+            // Verify final state
+            expect(puzzle.getFoundWordCount()).toBe(foundWords.size);
+            foundWords.forEach(wordId => {
+              expect(puzzle.isWordFound(wordId)).toBe(true);
+            });
+          }
+        ),
+        { numRuns: 100 }
+      );
+    });
+  });
+});
