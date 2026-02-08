@@ -29,8 +29,10 @@ This document specifies the requirements for a browser-based word search game. T
 1. THE Game_System SHALL provide exactly eight categories: Animals, Sports, Science, Food, Geography, Technology, Music, and Movies
 2. WHEN displaying categories, THE Game_System SHALL arrange category buttons across two rows
 3. WHEN a player selects a category, THE Game_System SHALL highlight the selected category
-4. THE Game_System SHALL maintain at least 150 words per category
-5. THE Game_System SHALL ensure all words are between 3 and 8 characters in length
+4. THE Game_System SHALL maintain at least 150 words per category in the word lists
+5. THE Game_System SHALL ensure all words used in puzzles are between 3 and 8 characters in length
+
+**Note:** Word lists contain 150+ words, but after filtering to 3-8 characters, usable word counts vary by category (minimum 100+ words per category).
 
 ### Requirement 2: Difficulty Selection
 

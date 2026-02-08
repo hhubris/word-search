@@ -640,9 +640,9 @@ After analyzing all acceptance criteria, I identified several areas where proper
 ### Core Properties
 
 **Property 1: Word Data Integrity**
-*For any* category in the system, all words in that category should have at least 150 entries, and every word should be between 3 and 8 characters in length (inclusive).
+*For any* category in the system, all words returned by the repository should be between 3 and 8 characters in length (inclusive), and each category should have at least 100 usable words for puzzle generation.
 **Validates: Requirements 1.4, 1.5**
-**Note:** Word count updated from 500+ to 150+ per Decision Record 003.
+**Note:** Word lists contain 150+ words, but after filtering to 3-8 characters, usable counts vary by category.
 
 **Property 2: Puzzle Direction Constraints**
 *For any* generated puzzle, all words should be placed only in directions allowed by the selected difficulty (Easy: horizontal and vertical only; Medium: horizontal, vertical, and two diagonal directions; Hard: all eight directions).

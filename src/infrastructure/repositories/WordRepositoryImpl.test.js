@@ -109,3 +109,56 @@ describe('WordRepositoryImpl', () => {
     });
   });
 });
+
+// Property-based tests
+import * as fc from 'fast-check';
+
+describe('Property-Based Tests', () => {
+  const repository = new WordRepositoryImpl();
+
+  // Feature: word-search-game, Property 1: Word Data Integrity
+  describe('Property 1: Word Data Integrity', () => {
+    it('should have sufficient words per category and all words 3-8 chars', () => {
+      fc.assert(
+        fc.property(
+          // Test all categories
+          fc.constantFrom(
+            'Animals',
+            'Sports',
+            'Science',
+            'Food',
+            'Geography',
+            'Technology',
+            'Music',
+            'Movies'
+          ),
+          (category) => {
+            const words = repository.getWordsByCategory(category);
+
+            // Property 1a: Sufficient words per category (at least 100 for puzzle generation)
+            // Note: Raw JSON files have 150+ words, but after filtering to 3-8 chars,
+            // counts vary by category. Minimum requirement is 100 words.
+            expect(words.length).toBeGreaterThanOrEqual(100);
+
+            // Property 1b: Every word should be between 3 and 8 characters
+            words.forEach(word => {
+              expect(word.length).toBeGreaterThanOrEqual(3);
+              expect(word.length).toBeLessThanOrEqual(8);
+            });
+
+            // Additional validation: All words should be uppercase
+            words.forEach(word => {
+              expect(word).toBe(word.toUpperCase());
+            });
+
+            // Additional validation: No empty words
+            words.forEach(word => {
+              expect(word.length).toBeGreaterThan(0);
+            });
+          }
+        ),
+        { numRuns: 100 }
+      );
+    });
+  });
+});

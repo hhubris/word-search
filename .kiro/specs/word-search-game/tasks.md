@@ -124,7 +124,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - _Requirements: 1.4, 1.5_
     - **Note:** Word count reduced from 500+ to 150+ per Decision Record 003
   
-  - [ ] 6.2 Write property test for word data integrity
+  - [x] 6.2 Write property test for word data integrity
     - **Property 1: Word Data Integrity**
     - **Validates: Requirements 1.4, 1.5**
 
