@@ -395,18 +395,18 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - _Requirements: 10.4, 13.5_
     - **Note:** Using Tailwind CSS v4 per Decision Record 006 (reverses Decision Record 004)
 
-- [ ] 18. Checkpoint - UI complete
+- [x] 18. Checkpoint - UI complete
   - Ensure all presentation tests pass, manually test UI flows, ask the user if questions arise.
 
-- [ ] 19. Wire everything together in main app
-  - [ ] 19.1 Set up main App component
+- [x] 19. Wire everything together in main app
+  - [x] 19.1 Set up main App component
     - Create/update `src/App.jsx`
     - Integrate TanStack Router
     - Set up TanStack Query provider
     - Apply initial theme from storage
     - _Requirements: 12.4, 13.1, 13.3, 13.4_
   
-  - [ ] 19.2 Update main entry point
+  - [x] 19.2 Update main entry point
     - Update `src/main.jsx`
     - Mount App component
     - _Requirements: 13.1, 13.2_
