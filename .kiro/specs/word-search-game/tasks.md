@@ -22,7 +22,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - _Requirements: 1.1, 2.1, 3.1, 3.2, 3.3_
   
   - [x] 2.2 Write property test for Direction determination
-    - **Property 9: Selection Direction Determination**
+    - **Property 7: Selection Direction Determination**
     - **Validates: Requirements 6.2**
   
   - [x] 2.3 Write unit tests for value objects
@@ -57,9 +57,9 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - _Requirements: 9.1, 9.2, 9.3, 9.4_
   
   - [x] 3.6 Write property test for Grid size constraint
-    - **Property 5: Grid Size Constraint**
+    - **Property 3: Grid Size Constraint**
     - Validate that generated puzzles have square grids not exceeding 20x20
-    - **Validates: Requirements 3.6**
+    - **Validates: Requirements 3.4**
     - **Note:** Max grid size increased from 12x12 to 20x20 per Decision Record 002
   
   - [x] 3.7 Write unit tests for entities
@@ -78,8 +78,8 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - _Requirements: 6.2, 6.3, 6.4_
   
   - [x] 4.2 Write property tests for word selection
-    - **Property 10: Selection Direction Restriction**
-    - **Property 11: Word Validation**
+    - **Property 8: Selection Direction Restriction**
+    - **Property 9: Word Validation**
     - **Validates: Requirements 6.3, 6.4**
   
   - [x] 4.3 Create ScoringService
@@ -87,7 +87,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Implement calculateScore() with difficulty multipliers and time bonuses
     - _Requirements: 8.1, 8.2_
   
-  - [ ] 4.4 Write unit tests for ScoringService
+  - [x] 4.4 Write unit tests for ScoringService
     - Test score calculation for each difficulty
     - Test time bonus calculations
     - Test score with all words found vs partial completion
@@ -101,11 +101,11 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - Implement validateGridSize() method
     - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7_
   
-  - [ ] 4.6 Write property tests for puzzle generation
+  - [x] 4.6 Write property tests for puzzle generation
     - **Property 2: Puzzle Direction Constraints**
-    - **Property 3: Word Intersection Requirement**
-    - **Property 4: No Accidental Words**
-    - **Validates: Requirements 3.1, 3.2, 3.3, 3.4, 3.5**
+    - **Property 3: Grid Size Constraint**
+    - **Validates: Requirements 3.1, 3.2, 3.3, 3.4**
+    - **Note:** Properties renumbered after removing intersection and accidental word tests per Decision Record 005
 
 - [x] 5. Checkpoint - Domain layer complete
   - Ensure all domain tests pass, ask the user if questions arise.
@@ -151,10 +151,10 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - _Requirements: 9.1, 9.2, 9.4, 12.1, 12.3_
   
   - [ ] 7.5 Write property tests for high score repository
-    - **Property 16: High Score Separation by Difficulty**
-    - **Property 17: High Score List Size Limit**
-    - **Property 18: High Score Sorting**
-    - **Property 21: Data Persistence Round Trip (High Scores)**
+    - **Property 14: High Score Separation by Difficulty**
+    - **Property 15: High Score List Size Limit**
+    - **Property 16: High Score Sorting**
+    - **Property 19: Data Persistence Round Trip (High Scores)**
     - **Validates: Requirements 9.1, 9.2, 9.6, 12.1, 12.3**
   
   - [x] 7.6 Implement ThemeRepositoryImpl
@@ -163,7 +163,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - _Requirements: 10.5, 12.2, 12.4_
   
   - [ ] 7.7 Write property test for theme persistence
-    - **Property 22: Data Persistence Round Trip (Theme)**
+    - **Property 20: Data Persistence Round Trip (Theme)**
     - **Validates: Requirements 10.5, 12.2, 12.4**
 
 - [ ] 8. Create application layer - use cases
@@ -173,7 +173,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - _Requirements: 4.3, 4.4_
   
   - [ ] 8.2 Write property test for puzzle configuration matching
-    - **Property 6: Puzzle Matches Configuration**
+    - **Property 4: Puzzle Matches Configuration**
     - **Validates: Requirements 4.4**
   
   - [x] 8.3 Implement SelectWordUseCase
@@ -182,7 +182,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - _Requirements: 6.4, 6.5, 6.6_
   
   - [ ] 8.4 Write property test for found word state update
-    - **Property 12: Found Word State Update**
+    - **Property 10: Found Word State Update**
     - **Validates: Requirements 6.5, 6.6**
   
   - [x] 8.5 Implement EndGameUseCase
@@ -191,8 +191,8 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - _Requirements: 8.1, 8.2, 8.4_
   
   - [ ] 8.6 Write property tests for game end conditions
-    - **Property 14: Game End Conditions**
-    - **Property 15: High Score Qualification**
+    - **Property 12: Game End Conditions**
+    - **Property 13: High Score Qualification**
     - **Validates: Requirements 7.5, 7.6, 8.1, 8.2, 8.4**
   
   - [x] 8.7 Implement SaveHighScoreUseCase
@@ -211,8 +211,8 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - _Requirements: 10.2, 10.4, 10.5_
   
   - [ ]* 8.10 Write property tests for theme management
-    - **Property 19: Theme Cycling**
-    - **Property 20: Theme Application**
+    - **Property 17: Theme Cycling**
+    - **Property 18: Theme Application**
     - **Validates: Requirements 10.2, 10.4**
 
 - [x] 9. Checkpoint - Core logic complete
@@ -252,7 +252,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - _Requirements: 7.4, 7.5_
   
   - [ ]* 12.3 Write property test for timer countdown
-    - **Property 13: Timer Countdown**
+    - **Property 11: Timer Countdown**
     - **Validates: Requirements 7.4**
   
   - [x] 12.4 Create useHighScores hook
@@ -288,7 +288,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - _Requirements: 5.2, 6.6_
   
   - [ ]* 13.4 Write property test for word list sorting
-    - **Property 7: Word List Alphabetical Sorting**
+    - **Property 5: Word List Alphabetical Sorting**
     - **Validates: Requirements 5.2**
 
 - [ ] 14. Implement presentation layer - UI components (Timer and Game Screen)
@@ -299,7 +299,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - _Requirements: 5.3, 7.2, 7.3, 7.4_
   
   - [ ]* 14.2 Write property test for timer display
-    - **Property 8: Timer Display Based on Difficulty**
+    - **Property 6: Timer Display Based on Difficulty**
     - **Validates: Requirements 5.3, 5.4**
   
   - [ ] 14.3 Create GameScreen component
@@ -323,7 +323,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - _Requirements: 1.1, 1.2, 1.3_
   
   - [ ]* 15.2 Write property test for selection state
-    - **Property 24: Selection State Management**
+    - **Property 22: Selection State Management**
     - **Validates: Requirements 1.3, 2.5**
   
   - [ ] 15.3 Create DifficultySelector component
@@ -341,7 +341,7 @@ The project setup (Task 1) is already complete with React 19, Vite, TanStack Rou
     - **Note:** Button bar removed per Decision Record 001
   
   - [ ]* 15.5 Write property test for Start button enablement
-    - **Property 23: Start Button Enablement**
+    - **Property 21: Start Button Enablement**
     - **Validates: Requirements 4.2**
   
   - [ ]* 15.6 Write unit tests for HomeScreen

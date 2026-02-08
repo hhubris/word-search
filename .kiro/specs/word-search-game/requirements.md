@@ -53,10 +53,10 @@ This document specifies the requirements for a browser-based word search game. T
 1. WHEN generating a puzzle for Easy difficulty, THE Puzzle_Generator SHALL place 8 words horizontally left-to-right or vertically top-to-bottom
 2. WHEN generating a puzzle for Medium difficulty, THE Puzzle_Generator SHALL place 12 words horizontally, vertically, or diagonally (top-left to bottom-right, bottom-left to top-right)
 3. WHEN generating a puzzle for Hard difficulty, THE Puzzle_Generator SHALL place 16 words in any of the eight possible directions
-4. WHEN placing words, THE Puzzle_Generator SHALL ensure at least 50% of words intersect with at least one other word
-5. WHEN filling empty cells, THE Puzzle_Generator SHALL use random letters that do not accidentally create additional target words
-6. THE Puzzle_Generator SHALL create square grids with maximum dimensions of 20x20
-7. IF a generated puzzle exceeds 20x20 dimensions, THEN THE Puzzle_Generator SHALL regenerate the puzzle with different word placements
+4. THE Puzzle_Generator SHALL create square grids with maximum dimensions of 20x20
+5. WHEN filling empty cells, THE Puzzle_Generator SHALL use random letters to complete the grid
+
+**Note:** Puzzle generation is handled by the `@blex41/word-search` library. See Decision Record 005 for details.
 
 ### Requirement 4: Game Start Flow
 

@@ -224,25 +224,28 @@ class Selection {
 #### Domain Services
 
 **PuzzleGeneratorService**
+**PuzzleGeneratorService**
 ```javascript
 class PuzzleGeneratorService {
   generatePuzzle(category, difficulty, wordRepository) {
+    // Wrapper around @blex41/word-search library
     // 1. Get word list for category
     // 2. Select required number of words based on difficulty
-    // 3. Attempt to place words on grid
-    // 4. Ensure at least 50% of words intersect
-    // 5. Fill empty cells with random letters
-    // 6. Validate grid size <= 20x20
-    // 7. If invalid, retry with different words/placements
+    // 3. Configure library with direction constraints
+    // 4. Calculate appropriate grid size (max 20x20)
+    // 5. Generate puzzle using library
+    // 6. Convert library output to domain entities
     // Returns Puzzle entity
   }
   
-  placeWord(grid, word, direction, maxAttempts) { }
-  findIntersections(grid, word, direction) { }
-  fillEmptyCells(grid, words) { }
-  validateGridSize(grid) { }
+  selectRandomWords(words, count) { }
+  calculateGridSize(words) { }
+  getDisabledDirections(difficulty) { }
+  convertToPuzzle(ws, category, difficulty) { }
+  determineDirection(start, end) { }
 }
 ```
+**Note:** Puzzle generation uses the `@blex41/word-search` library. See Decision Record 005.
 
 **ScoringService**
 ```javascript
@@ -637,100 +640,113 @@ After analyzing all acceptance criteria, I identified several areas where proper
 ### Core Properties
 
 **Property 1: Word Data Integrity**
-*For any* category in the system, all words in that category should have at least 500 entries, and every word should be between 3 and 8 characters in length (inclusive).
+*For any* category in the system, all words in that category should have at least 150 entries, and every word should be between 3 and 8 characters in length (inclusive).
 **Validates: Requirements 1.4, 1.5**
+**Note:** Word count updated from 500+ to 150+ per Decision Record 003.
 
 **Property 2: Puzzle Direction Constraints**
 *For any* generated puzzle, all words should be placed only in directions allowed by the selected difficulty (Easy: horizontal and vertical only; Medium: horizontal, vertical, and two diagonal directions; Hard: all eight directions).
 **Validates: Requirements 3.1, 3.2, 3.3**
 
-**Property 3: Word Intersection Requirement**
-*For any* generated puzzle, at least 50% of the placed words should intersect with at least one other word.
-**Validates: Requirements 3.4**
-
-**Property 4: No Accidental Words**
-*For any* generated puzzle, searching the grid in all valid directions should not find any words that are not in the target word list.
-**Validates: Requirements 3.5**
-
-**Property 5: Grid Size Constraint**
+**Property 3: Grid Size Constraint**
 *For any* generated puzzle, the grid dimensions should be square and not exceed 20x20.
-**Validates: Requirements 3.6**
+**Validates: Requirements 3.4**
+**Note:** Previously Property 5, renumbered after removing intersection and accidental word properties.
 
-**Property 6: Puzzle Matches Configuration**
+**Property 4: Puzzle Matches Configuration**
 *For any* category and difficulty selection, the generated puzzle should contain exactly the number of words specified for that difficulty (Easy: 8, Medium: 12, Hard: 16) and all words should come from the selected category.
 **Validates: Requirements 4.4**
+**Note:** Previously Property 6, renumbered.
 
-**Property 7: Word List Alphabetical Sorting**
+**Property 5: Word List Alphabetical Sorting**
 *For any* word list displayed in the game screen, the words should be sorted in alphabetical order.
 **Validates: Requirements 5.2**
+**Note:** Previously Property 7, renumbered.
 
-**Property 8: Timer Display Based on Difficulty**
+**Property 6: Timer Display Based on Difficulty**
 *For any* game session, a timer should be displayed if and only if the difficulty is Medium or Hard.
 **Validates: Requirements 5.3, 5.4**
+**Note:** Previously Property 8, renumbered.
 
-**Property 9: Selection Direction Determination**
+**Property 7: Selection Direction Determination**
 *For any* two positions in the grid, the direction between them should be correctly identified as one of the eight cardinal/diagonal directions or null if they don't form a valid line.
 **Validates: Requirements 6.2**
+**Note:** Previously Property 9, renumbered.
 
-**Property 10: Selection Direction Restriction**
+**Property 8: Selection Direction Restriction**
 *For any* selection in progress with an established direction, all subsequent positions added to the selection should lie along that same direction from the starting position.
 **Validates: Requirements 6.3**
+**Note:** Previously Property 10, renumbered.
 
-**Property 11: Word Validation**
+**Property 9: Word Validation**
 *For any* selection of grid positions, the selection should be marked as valid if and only if the text formed by those positions matches a word in the puzzle's word list.
 **Validates: Requirements 6.4**
+**Note:** Previously Property 11, renumbered.
 
-**Property 12: Found Word State Update**
+**Property 10: Found Word State Update**
 *For any* valid word selection, the word should be marked as found in both the puzzle state and reflected in the UI (circled in grid, crossed out in list).
 **Validates: Requirements 6.5, 6.6**
+**Note:** Previously Property 12, renumbered.
 
-**Property 13: Timer Countdown**
+**Property 11: Timer Countdown**
 *For any* active game session with a timer, the remaining time should decrease by 1 second for each second of elapsed time until it reaches zero.
 **Validates: Requirements 7.4**
+**Note:** Previously Property 13, renumbered.
 
-**Property 14: Game End Conditions**
+**Property 12: Game End Conditions**
 *For any* game session, the game should end (timer stops, score calculated) if and only if either all words are found or the timer reaches zero (for timed difficulties).
 **Validates: Requirements 7.5, 7.6, 8.1, 8.2**
+**Note:** Previously Property 14, renumbered.
 
-**Property 15: High Score Qualification**
+**Property 13: High Score Qualification**
 *For any* completed game score and existing high scores for that difficulty, the score should qualify as a high score if and only if there are fewer than 10 existing scores or the score is greater than the lowest existing score.
 **Validates: Requirements 8.4**
+**Note:** Previously Property 15, renumbered.
 
-**Property 16: High Score Separation by Difficulty**
+**Property 14: High Score Separation by Difficulty**
 *For any* high score list, scores should be grouped by difficulty level, and scores from one difficulty should never appear in another difficulty's list.
 **Validates: Requirements 9.1**
+**Note:** Previously Property 16, renumbered.
 
-**Property 17: High Score List Size Limit**
+**Property 15: High Score List Size Limit**
 *For any* difficulty level, the stored high scores should never exceed 10 entries.
 **Validates: Requirements 9.2**
+**Note:** Previously Property 17, renumbered.
 
-**Property 18: High Score Sorting**
+**Property 16: High Score Sorting**
 *For any* high score list for a given difficulty, the scores should be sorted in descending order (highest to lowest).
 **Validates: Requirements 9.6**
+**Note:** Previously Property 18, renumbered.
 
-**Property 19: Theme Cycling**
+**Property 17: Theme Cycling**
 *For any* current theme, clicking the theme button should cycle to the next theme in the sequence: Light → Dark → System → Light.
 **Validates: Requirements 10.2**
+**Note:** Previously Property 19, renumbered.
 
-**Property 20: Theme Application**
+**Property 18: Theme Application**
 *For any* theme change, the new theme should be immediately reflected in the application state.
 **Validates: Requirements 10.4**
+**Note:** Previously Property 20, renumbered.
 
-**Property 21: Data Persistence Round Trip (High Scores)**
+**Property 19: Data Persistence Round Trip (High Scores)**
 *For any* high score saved to storage, retrieving high scores from storage should include that score with all its properties (initials, score, difficulty, timestamp) intact.
 **Validates: Requirements 9.4, 12.1, 12.3**
+**Note:** Previously Property 21, renumbered.
 
-**Property 22: Data Persistence Round Trip (Theme)**
+**Property 20: Data Persistence Round Trip (Theme)**
 *For any* theme saved to storage, retrieving the theme from storage should return the same theme value.
 **Validates: Requirements 10.5, 12.2, 12.4**
+**Note:** Previously Property 22, renumbered.
 
-**Property 23: Start Button Enablement**
+**Property 21: Start Button Enablement**
 *For any* combination of category and difficulty selections, the Start Game button should be enabled if and only if both a category and a difficulty have been selected.
 **Validates: Requirements 4.2**
+**Note:** Previously Property 23, renumbered.
 
-**Property 24: Selection State Management**
+**Property 22: Selection State Management**
 *For any* user selection (category or difficulty), the selected item should be marked as active in the application state.
 **Validates: Requirements 1.3, 2.5**
+**Note:** Previously Property 24, renumbered.
 
 ### Edge Cases and Examples
 

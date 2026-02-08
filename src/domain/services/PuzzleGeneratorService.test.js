@@ -136,8 +136,8 @@ describe('PuzzleGeneratorService', () => {
     });
   });
 
-  // Feature: word-search-game, Property 5: Grid Size Constraint
-  describe('Property 5: Grid Size Constraint', () => {
+  // Feature: word-search-game, Property 3: Grid Size Constraint
+  describe('Property 3: Grid Size Constraint', () => {
     it('should generate puzzles with square grids not exceeding 20x20', () => {
       const service = new PuzzleGeneratorService();
       const repository = new MockWordRepository();
@@ -175,6 +175,43 @@ describe('PuzzleGeneratorService', () => {
                 expect(pos.col).toBeGreaterThanOrEqual(0);
                 expect(pos.col).toBeLessThan(size);
               });
+            });
+          }
+        ),
+        { numRuns: 100 }
+      );
+    });
+  });
+
+  // Feature: word-search-game, Property 2: Puzzle Direction Constraints
+  describe('Property 2: Puzzle Direction Constraints', () => {
+    it('should place words only in directions allowed by difficulty', () => {
+      const service = new PuzzleGeneratorService();
+      const repository = new MockWordRepository();
+
+      fc.assert(
+        fc.property(
+          fc.record({
+            category: fc.constantFrom('Animals', 'Sports', 'Science'),
+            difficulty: fc.constantFrom('EASY', 'MEDIUM', 'HARD')
+          }),
+          ({ category, difficulty }) => {
+            const puzzle = service.generatePuzzle(category, difficulty, repository);
+            const words = puzzle.getAllWords();
+
+            // Define allowed directions for each difficulty
+            const allowedDirections = {
+              'EASY': ['RIGHT', 'DOWN'],
+              'MEDIUM': ['RIGHT', 'DOWN', 'DOWN_RIGHT', 'DOWN_LEFT'],
+              'HARD': ['RIGHT', 'LEFT', 'DOWN', 'UP', 'DOWN_RIGHT', 'DOWN_LEFT', 'UP_RIGHT', 'UP_LEFT']
+            };
+
+            const allowed = allowedDirections[difficulty];
+
+            // Verify all words use only allowed directions
+            words.forEach(word => {
+              const direction = word.getDirection();
+              expect(allowed).toContain(direction.name);
             });
           }
         ),
